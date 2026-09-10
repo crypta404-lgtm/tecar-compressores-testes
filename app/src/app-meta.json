@@ -1,8 +1,8 @@
 {
-  "og_title": null,
-  "og_description": null,
-  "og_image_url": null,
-  "favicon_url": null,
+  "og_title": "TecAr Compressores | Ar comprimido sob controle",
+  "og_description": "Compressores, manutenção, locação, engenharia e monitoramento conectados à operação industrial.",
+  "og_image_url": "/assets/tecar/banner-03.png",
+  "favicon_url": "/favicon.gif",
   "og_video_url": null,
-  "marketplace_cover_url": null
+  "marketplace_cover_url": "/assets/tecar/banner-03.png"
 }
