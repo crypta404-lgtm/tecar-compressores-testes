@@ -1,36 +1,33 @@
-# TecAr Compressores redesign
+# TecAr Compressores redesign v2
 
-Design read: site B2B industrial para gestores, manutenção, engenharia e compras, com precisão técnica e confiança operacional.
-Concept spine: Centro de controle do ar. O visitante acompanha equipamento, dados, manutenção e engenharia como partes do mesmo ciclo.
-Delivery tier: cinema, com scroll-scrub no hero e microinterações técnicas no restante.
-Locked palette: #0F2638 navy industrial, #F4F7F8 branco frio, #D71920 vermelho institucional, #8A969F aço, #07131D fundo profundo. O vermelho é o único accent.
-Locked type: Oswald para display e DM Sans para texto, preservando a linguagem da marca.
+Design read: site B2B industrial limpo para clientes que precisam pesquisar, comparar e entender soluções antes de entrar em contato.
+Concept spine: catálogo técnico orientado à decisão. A Home resume a empresa e distribui o cliente para páginas especializadas.
+Delivery tier: cinema contido, com microanimações, vídeo oficial, hover técnico e uma única seção scroll-scrub.
+Locked palette: branco #FFFFFF dominante, cinza técnico #F5F7F8, texto #22292F, linhas #DFE4E7 e vermelho institucional #D71920 como único acento.
+Locked type: Oswald para títulos e DM Sans para leitura, preservando a identidade atual.
 Animation mode: animated-website
 Journey shape: single-shot.
 Journey:
-- Abertura: compressor e operação industrial. Headline: Ar comprimido sob controle.
-- Monitoramento: leitura contínua dos sinais do sistema.
-- Assistência: dados e histórico se transformam em ação técnica.
-- Engenharia: consumo, perdas e infraestrutura entram na decisão.
-- Porto: o ciclo termina em disponibilidade para operações críticas.
-World grammar: fotografia industrial realista, aço, tubulação, máquinas, baixa saturação, contraste frio e vermelho restrito aos detalhes.
-Mobile framing: assunto central, overlays compactos e vídeo leve.
-Journey intent: a rolagem funciona como leitura operacional, não como decoração.
+- A Home começa estática, clara e objetiva com resumo da empresa.
+- O scrub aparece somente como seção visual secundária sobre operação industrial.
+- As páginas internas usam movimento discreto e interações funcionais.
+World grammar: fotografia industrial real, interface branca, linhas finas, vermelho restrito a chamadas e estado.
+Mobile framing: navegação compacta, conteúdo em coluna, cards sem dependência de hover.
+Journey intent: movimento explica operação e estado, sem competir com a leitura.
 
-Section plan:
-1. Hero scroll-scrub.
-2. Faixa de provas.
-3. Ecossistema de serviços em matriz irregular.
-4. TecAr Connect com telemetria demonstrativa.
-5. Processo operacional horizontal.
-6. Manutenção em split editorial.
-7. Locação em painel diagonal.
-8. Engenharia com calculadora funcional.
-9. Produtos em faixa horizontal.
-10. TecAr Portuária em imagem full bleed.
-11. Empresa, história, missão, visão, valores e compromissos.
-12. Conteúdo técnico.
-13. Contato e Trabalhe Conosco.
+Section plan Home:
+1. Header com abas e dropdowns.
+2. Hero branco com resumo TecAr.
+3. Credenciais.
+4. Serviços.
+5. Simulador de desperdício.
+6. Monitoramento interativo.
+7. Produtos.
+8. Simulador de parada.
+9. Scrub industrial secundário.
+10. Vídeos oficiais.
+11. TecAr Portuária.
+12. Contato.
 
-Asset plan: logo original, banners originais, fotografia institucional existente, vídeo já usado no site atual reencodado para scrub, posters derivados do clipe e favicon derivado do logo.
-CTA inventory: Solicitar atendimento; Conhecer monitoramento; Solicitar diagnóstico; Falar com a TecAr; Enviar currículo.
+Asset plan: imagens já publicadas pela TecAr, vídeos públicos do canal Tecar Compressores incorporados por YouTube, fotos complementares Pexels marcadas como free to use, e infográficos/interações desenhados em código.
+CTA inventory: Solicitar orçamento; Conhecer serviços; Falar com especialista; Dimensionar; Consultar disponibilidade; Abrir WhatsApp.

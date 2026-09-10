@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
+import siteV2Css from "../site-v2.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import appMetaJson from "../app-meta.json";
 import { scrollScrubTheme } from "../scroll-scrub-scenes";
@@ -23,8 +24,10 @@ function buildHead(meta: AppMeta) {
       { name: "theme-color", content: scrollScrubTheme.background },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://tecar-compressores-lab.higgsfield.app/" },
+      { property: "og:site_name", content: "TecAr Compressores" },
+      { property: "og:locale", content: "pt_BR" },
       ...(meta.og_image_url ? [
         { property: "og:image", content: meta.og_image_url },
         { name: "twitter:card", content: "summary_large_image" },
@@ -32,7 +35,11 @@ function buildHead(meta: AppMeta) {
       ] : [{ name: "twitter:card", content: "summary" }]),
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" },
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: siteV2Css },
       { rel: "icon", href: "/favicon-32.png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },

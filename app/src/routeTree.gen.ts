@@ -9,14 +9,54 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrabalheConoscoRouteImport } from './routes/trabalhe-conosco'
+import { Route as TecarConnectRouteImport } from './routes/tecar-connect'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as SecadoresRouteImport } from './routes/secadores'
+import { Route as SafetyAirRouteImport } from './routes/safety-air'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as ProdutosRouteImport } from './routes/produtos'
+import { Route as ManutencaoRouteImport } from './routes/manutencao'
+import { Route as LocacaoRouteImport } from './routes/locacao'
+import { Route as LinhasDeArRouteImport } from './routes/linhas-de-ar'
+import { Route as EngenhariaRouteImport } from './routes/engenharia'
+import { Route as EmpresaRouteImport } from './routes/empresa'
+import { Route as ConteudoRouteImport } from './routes/conteudo'
+import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as CompressoresRouteImport } from './routes/compressores'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AcessoriosRouteImport } from './routes/acessorios'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TrabalheConoscoRoute = TrabalheConoscoRouteImport.update({
+  id: '/trabalhe-conosco',
+  path: '/trabalhe-conosco',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TecarConnectRoute = TecarConnectRouteImport.update({
+  id: '/tecar-connect',
+  path: '/tecar-connect',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecadoresRoute = SecadoresRouteImport.update({
+  id: '/secadores',
+  path: '/secadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyAirRoute = SafetyAirRouteImport.update({
+  id: '/safety-air',
+  path: '/safety-air',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
@@ -24,9 +64,59 @@ const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProdutosRoute = ProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManutencaoRoute = ManutencaoRouteImport.update({
+  id: '/manutencao',
+  path: '/manutencao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocacaoRoute = LocacaoRouteImport.update({
+  id: '/locacao',
+  path: '/locacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinhasDeArRoute = LinhasDeArRouteImport.update({
+  id: '/linhas-de-ar',
+  path: '/linhas-de-ar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EngenhariaRoute = EngenhariaRouteImport.update({
+  id: '/engenharia',
+  path: '/engenharia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmpresaRoute = EmpresaRouteImport.update({
+  id: '/empresa',
+  path: '/empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConteudoRoute = ConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressoresRoute = CompressoresRouteImport.update({
+  id: '/compressores',
+  path: '/compressores',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcessoriosRoute = AcessoriosRouteImport.update({
+  id: '/acessorios',
+  path: '/acessorios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,45 +127,198 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/compressores': typeof CompressoresRoute
+  '/contato': typeof ContatoRoute
+  '/conteudo': typeof ConteudoRoute
+  '/empresa': typeof EmpresaRoute
+  '/engenharia': typeof EngenhariaRoute
+  '/linhas-de-ar': typeof LinhasDeArRoute
+  '/locacao': typeof LocacaoRoute
+  '/manutencao': typeof ManutencaoRoute
+  '/produtos': typeof ProdutosRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/safety-air': typeof SafetyAirRoute
+  '/secadores': typeof SecadoresRoute
+  '/servicos': typeof ServicosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tecar-connect': typeof TecarConnectRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/compressores': typeof CompressoresRoute
+  '/contato': typeof ContatoRoute
+  '/conteudo': typeof ConteudoRoute
+  '/empresa': typeof EmpresaRoute
+  '/engenharia': typeof EngenhariaRoute
+  '/linhas-de-ar': typeof LinhasDeArRoute
+  '/locacao': typeof LocacaoRoute
+  '/manutencao': typeof ManutencaoRoute
+  '/produtos': typeof ProdutosRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/safety-air': typeof SafetyAirRoute
+  '/secadores': typeof SecadoresRoute
+  '/servicos': typeof ServicosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tecar-connect': typeof TecarConnectRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/compressores': typeof CompressoresRoute
+  '/contato': typeof ContatoRoute
+  '/conteudo': typeof ConteudoRoute
+  '/empresa': typeof EmpresaRoute
+  '/engenharia': typeof EngenhariaRoute
+  '/linhas-de-ar': typeof LinhasDeArRoute
+  '/locacao': typeof LocacaoRoute
+  '/manutencao': typeof ManutencaoRoute
+  '/produtos': typeof ProdutosRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/safety-air': typeof SafetyAirRoute
+  '/secadores': typeof SecadoresRoute
+  '/servicos': typeof ServicosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tecar-connect': typeof TecarConnectRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/robots.txt' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/acessorios'
+    | '/app'
+    | '/compressores'
+    | '/contato'
+    | '/conteudo'
+    | '/empresa'
+    | '/engenharia'
+    | '/linhas-de-ar'
+    | '/locacao'
+    | '/manutencao'
+    | '/produtos'
+    | '/robots.txt'
+    | '/safety-air'
+    | '/secadores'
+    | '/servicos'
+    | '/sitemap.xml'
+    | '/tecar-connect'
+    | '/trabalhe-conosco'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/robots.txt' | '/sitemap.xml'
-  id: '__root__' | '/' | '/app' | '/robots.txt' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/acessorios'
+    | '/app'
+    | '/compressores'
+    | '/contato'
+    | '/conteudo'
+    | '/empresa'
+    | '/engenharia'
+    | '/linhas-de-ar'
+    | '/locacao'
+    | '/manutencao'
+    | '/produtos'
+    | '/robots.txt'
+    | '/safety-air'
+    | '/secadores'
+    | '/servicos'
+    | '/sitemap.xml'
+    | '/tecar-connect'
+    | '/trabalhe-conosco'
+  id:
+    | '__root__'
+    | '/'
+    | '/acessorios'
+    | '/app'
+    | '/compressores'
+    | '/contato'
+    | '/conteudo'
+    | '/empresa'
+    | '/engenharia'
+    | '/linhas-de-ar'
+    | '/locacao'
+    | '/manutencao'
+    | '/produtos'
+    | '/robots.txt'
+    | '/safety-air'
+    | '/secadores'
+    | '/servicos'
+    | '/sitemap.xml'
+    | '/tecar-connect'
+    | '/trabalhe-conosco'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AcessoriosRoute: typeof AcessoriosRoute
   AppRoute: typeof AppRoute
+  CompressoresRoute: typeof CompressoresRoute
+  ContatoRoute: typeof ContatoRoute
+  ConteudoRoute: typeof ConteudoRoute
+  EmpresaRoute: typeof EmpresaRoute
+  EngenhariaRoute: typeof EngenhariaRoute
+  LinhasDeArRoute: typeof LinhasDeArRoute
+  LocacaoRoute: typeof LocacaoRoute
+  ManutencaoRoute: typeof ManutencaoRoute
+  ProdutosRoute: typeof ProdutosRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SafetyAirRoute: typeof SafetyAirRoute
+  SecadoresRoute: typeof SecadoresRoute
+  ServicosRoute: typeof ServicosRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TecarConnectRoute: typeof TecarConnectRoute
+  TrabalheConoscoRoute: typeof TrabalheConoscoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trabalhe-conosco': {
+      id: '/trabalhe-conosco'
+      path: '/trabalhe-conosco'
+      fullPath: '/trabalhe-conosco'
+      preLoaderRoute: typeof TrabalheConoscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tecar-connect': {
+      id: '/tecar-connect'
+      path: '/tecar-connect'
+      fullPath: '/tecar-connect'
+      preLoaderRoute: typeof TecarConnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/secadores': {
+      id: '/secadores'
+      path: '/secadores'
+      fullPath: '/secadores'
+      preLoaderRoute: typeof SecadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-air': {
+      id: '/safety-air'
+      path: '/safety-air'
+      fullPath: '/safety-air'
+      preLoaderRoute: typeof SafetyAirRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/robots.txt': {
@@ -85,11 +328,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/produtos': {
+      id: '/produtos'
+      path: '/produtos'
+      fullPath: '/produtos'
+      preLoaderRoute: typeof ProdutosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manutencao': {
+      id: '/manutencao'
+      path: '/manutencao'
+      fullPath: '/manutencao'
+      preLoaderRoute: typeof ManutencaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locacao': {
+      id: '/locacao'
+      path: '/locacao'
+      fullPath: '/locacao'
+      preLoaderRoute: typeof LocacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/linhas-de-ar': {
+      id: '/linhas-de-ar'
+      path: '/linhas-de-ar'
+      fullPath: '/linhas-de-ar'
+      preLoaderRoute: typeof LinhasDeArRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engenharia': {
+      id: '/engenharia'
+      path: '/engenharia'
+      fullPath: '/engenharia'
+      preLoaderRoute: typeof EngenhariaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empresa': {
+      id: '/empresa'
+      path: '/empresa'
+      fullPath: '/empresa'
+      preLoaderRoute: typeof EmpresaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conteudo': {
+      id: '/conteudo'
+      path: '/conteudo'
+      fullPath: '/conteudo'
+      preLoaderRoute: typeof ConteudoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compressores': {
+      id: '/compressores'
+      path: '/compressores'
+      fullPath: '/compressores'
+      preLoaderRoute: typeof CompressoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acessorios': {
+      id: '/acessorios'
+      path: '/acessorios'
+      fullPath: '/acessorios'
+      preLoaderRoute: typeof AcessoriosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,9 +417,24 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AcessoriosRoute: AcessoriosRoute,
   AppRoute: AppRoute,
+  CompressoresRoute: CompressoresRoute,
+  ContatoRoute: ContatoRoute,
+  ConteudoRoute: ConteudoRoute,
+  EmpresaRoute: EmpresaRoute,
+  EngenhariaRoute: EngenhariaRoute,
+  LinhasDeArRoute: LinhasDeArRoute,
+  LocacaoRoute: LocacaoRoute,
+  ManutencaoRoute: ManutencaoRoute,
+  ProdutosRoute: ProdutosRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  SafetyAirRoute: SafetyAirRoute,
+  SecadoresRoute: SecadoresRoute,
+  ServicosRoute: ServicosRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TecarConnectRoute: TecarConnectRoute,
+  TrabalheConoscoRoute: TrabalheConoscoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

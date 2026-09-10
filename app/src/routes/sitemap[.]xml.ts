@@ -1,28 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+const ROUTES = ["/", "/empresa", "/produtos", "/compressores", "/secadores", "/linhas-de-ar", "/acessorios", "/safety-air", "/servicos", "/manutencao", "/engenharia", "/locacao", "/tecar-connect", "/conteudo", "/contato", "/trabalhe-conosco"];
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
         const origin = new URL(request.url).origin;
         const today = new Date().toISOString().split("T")[0];
-        const xml = [
-          '<?xml version="1.0" encoding="UTF-8"?>',
-          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        const urls = ROUTES.map((path, i) => [
           "  <url>",
-          `    <loc>${origin}/</loc>`,
+          `    <loc>${origin}${path === "/" ? "" : path}</loc>`,
           `    <lastmod>${today}</lastmod>`,
-          "    <changefreq>weekly</changefreq>",
-          "    <priority>1.0</priority>",
+          `    <changefreq>${i === 0 ? "weekly" : "monthly"}</changefreq>`,
+          `    <priority>${i === 0 ? "1.0" : "0.8"}</priority>`,
           "  </url>",
-          "</urlset>",
-        ].join("\n");
-        return new Response(xml, {
-          headers: {
-            "Content-Type": "application/xml; charset=utf-8",
-            "Cache-Control": "public, max-age=3600",
-          },
-        });
+        ].join("\n")).join("\n");
+        const xml = ['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',urls,'</urlset>'].join("\n");
+        return new Response(xml,{headers:{"Content-Type":"application/xml; charset=utf-8","Cache-Control":"public, max-age=3600"}});
       },
     },
   },
