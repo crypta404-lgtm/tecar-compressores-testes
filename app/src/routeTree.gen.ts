@@ -22,6 +22,7 @@ import { Route as LocacaoRouteImport } from './routes/locacao'
 import { Route as LinhasDeArRouteImport } from './routes/linhas-de-ar'
 import { Route as EngenhariaRouteImport } from './routes/engenharia'
 import { Route as EmpresaRouteImport } from './routes/empresa'
+import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
 import { Route as ConteudoRouteImport } from './routes/conteudo'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CompressoresRouteImport } from './routes/compressores'
@@ -94,6 +95,11 @@ const EmpresaRoute = EmpresaRouteImport.update({
   path: '/empresa',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiagnosticoRoute = DiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConteudoRoute = ConteudoRouteImport.update({
   id: '/conteudo',
   path: '/conteudo',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
   '/linhas-de-ar': typeof LinhasDeArRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
   '/linhas-de-ar': typeof LinhasDeArRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
+  '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
   '/linhas-de-ar': typeof LinhasDeArRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/compressores'
     | '/contato'
     | '/conteudo'
+    | '/diagnostico'
     | '/empresa'
     | '/engenharia'
     | '/linhas-de-ar'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/compressores'
     | '/contato'
     | '/conteudo'
+    | '/diagnostico'
     | '/empresa'
     | '/engenharia'
     | '/linhas-de-ar'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/compressores'
     | '/contato'
     | '/conteudo'
+    | '/diagnostico'
     | '/empresa'
     | '/engenharia'
     | '/linhas-de-ar'
@@ -262,6 +274,7 @@ export interface RootRouteChildren {
   CompressoresRoute: typeof CompressoresRoute
   ContatoRoute: typeof ContatoRoute
   ConteudoRoute: typeof ConteudoRoute
+  DiagnosticoRoute: typeof DiagnosticoRoute
   EmpresaRoute: typeof EmpresaRoute
   EngenhariaRoute: typeof EngenhariaRoute
   LinhasDeArRoute: typeof LinhasDeArRoute
@@ -370,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmpresaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/diagnostico': {
+      id: '/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/diagnostico'
+      preLoaderRoute: typeof DiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/conteudo': {
       id: '/conteudo'
       path: '/conteudo'
@@ -422,6 +442,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompressoresRoute: CompressoresRoute,
   ContatoRoute: ContatoRoute,
   ConteudoRoute: ConteudoRoute,
+  DiagnosticoRoute: DiagnosticoRoute,
   EmpresaRoute: EmpresaRoute,
   EngenhariaRoute: EngenhariaRoute,
   LinhasDeArRoute: LinhasDeArRoute,

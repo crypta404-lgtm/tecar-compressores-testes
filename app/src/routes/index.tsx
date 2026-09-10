@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageFrame, SectionHead, ContactBand, VideoEmbed } from "@/components/site-v2";
 import { EnergyLossTool, MonitoringDemo, DowntimeTool } from "@/components/client-tools";
+import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
 import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
 import { pageMeta } from "@/lib/page-meta";
@@ -44,6 +45,18 @@ function Home(){
         <div><strong>500+</strong><span>clientes atendidos</span></div>
         <div><strong>IR</strong><span>assistência e revenda autorizada Ingersoll Rand</span></div>
         <div><strong>2</strong><span>unidades: Curitiba e Paranaguá</span></div>
+      </div>
+    </section>
+
+    <section className="v2-diagnostic-home">
+      <div className="v2-container v2-diagnostic-home-grid">
+        <div className="v2-diagnostic-home-copy">
+          <span className="v2-kicker">DIAGNÓSTICO TECAR</span>
+          <h2>Não sabe por onde começar?</h2>
+          <p>Responda algumas perguntas sobre o que está acontecendo na sua operação. O site organiza as respostas, indica a rota inicial e prepara tudo para enviar direto ao WhatsApp da TecAr.</p>
+          <Link to="/diagnostico" className="v2-secondary">Diagnóstico completo</Link>
+        </div>
+        <DiagnosticQuestionnaire variant="compact"/>
       </div>
     </section>
 

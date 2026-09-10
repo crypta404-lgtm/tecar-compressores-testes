@@ -3,6 +3,7 @@ import { PageFrame, PageHero, SectionHead, ContactBand } from "@/components/site
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/servicos")({head:()=>pageMeta("/servicos","Serviços | TecAr Compressores","Manutenção, engenharia, locação e monitoramento remoto para sistemas industriais de ar comprimido."),component:Page});
 const items=[
+ ["/diagnostico","Diagnóstico","Triagem guiada para organizar sintomas, impacto, dados do equipamento e direcionar o primeiro contato técnico."],
  ["/manutencao","Manutenção","Assistência multimarcas, preventivas, corretivas, diagnóstico, planejamento e NR13."],
  ["/engenharia","Engenharia","Eficiência energética, auditorias, redes, dimensionamento e projetos de casa de máquinas."],
  ["/locacao","Locação","Soluções emergenciais e contratos de longo prazo com geração de ar sob demanda."],

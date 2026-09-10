@@ -12,6 +12,7 @@ const productLinks = [
 
 const serviceLinks = [
   ["/servicos","Visão geral"],
+  ["/diagnostico","Diagnóstico"],
   ["/manutencao","Manutenção"],
   ["/engenharia","Engenharia"],
   ["/locacao","Locação"],

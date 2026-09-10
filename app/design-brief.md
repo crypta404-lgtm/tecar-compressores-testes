@@ -19,15 +19,19 @@ Section plan Home:
 1. Header com abas e dropdowns.
 2. Hero branco com resumo TecAr.
 3. Credenciais.
-4. Serviços.
-5. Simulador de desperdício.
-6. Monitoramento interativo.
-7. Produtos.
-8. Simulador de parada.
-9. Scrub industrial secundário.
-10. Vídeos oficiais.
-11. TecAr Portuária.
-12. Contato.
+4. Diagnóstico TecAr com questionário compacto e envio ao WhatsApp.
+5. Serviços.
+6. Simulador de desperdício.
+7. Monitoramento interativo.
+8. Produtos.
+9. Simulador de parada.
+10. Scrub industrial secundário.
+11. Vídeos oficiais.
+12. TecAr Portuária.
+13. Contato.
+
+Added route:
+- /diagnostico: página de diagnóstico industrial com triagem aprofundada, resumo automático e envio ao WhatsApp.
 
 Asset plan: imagens já publicadas pela TecAr, vídeos públicos do canal Tecar Compressores incorporados por YouTube, fotos complementares Pexels marcadas como free to use, e infográficos/interações desenhados em código.
 CTA inventory: Solicitar orçamento; Conhecer serviços; Falar com especialista; Dimensionar; Consultar disponibilidade; Abrir WhatsApp.
