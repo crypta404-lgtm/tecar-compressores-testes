@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import appMetaJson from "../app-meta.json";
+import { scrollScrubTheme } from "../scroll-scrub-scenes";
 
 declare const __HF_DESIGN_INSPECTOR__: boolean;
 type AppMeta = { og_title?: string|null; og_description?: string|null; og_image_url?: string|null; favicon_url?: string|null; og_video_url?: string|null; marketplace_cover_url?: string|null };
@@ -19,7 +20,7 @@ function buildHead(meta: AppMeta) {
       { title },
       { name: "description", content: description },
       { name: "author", content: "TecAr Compressores" },
-      { name: "theme-color", content: "#07131D" },
+      { name: "theme-color", content: scrollScrubTheme.background },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
