@@ -5,9 +5,14 @@ Concept spine: Centro de controle do ar. O visitante acompanha equipamento, dado
 Delivery tier: cinema, com scroll-scrub no hero e microinterações técnicas no restante.
 Locked palette: #0F2638 navy industrial, #F4F7F8 branco frio, #D71920 vermelho institucional, #8A969F aço, #07131D fundo profundo. O vermelho é o único accent.
 Locked type: Oswald para display e DM Sans para texto, preservando a linguagem da marca.
-Animation mode: animated-website.
+Animation mode: animated-website
 Journey shape: single-shot.
-Journey: um filme industrial abre o site e conduz ao ecossistema de monitoramento, assistência, locação, engenharia e porto.
+Journey:
+- Abertura: compressor e operação industrial. Headline: Ar comprimido sob controle.
+- Monitoramento: leitura contínua dos sinais do sistema.
+- Assistência: dados e histórico se transformam em ação técnica.
+- Engenharia: consumo, perdas e infraestrutura entram na decisão.
+- Porto: o ciclo termina em disponibilidade para operações críticas.
 World grammar: fotografia industrial realista, aço, tubulação, máquinas, baixa saturação, contraste frio e vermelho restrito aos detalhes.
 Mobile framing: assunto central, overlays compactos e vídeo leve.
 Journey intent: a rolagem funciona como leitura operacional, não como decoração.

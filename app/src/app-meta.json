@@ -1,8 +1,8 @@
 {
   "og_title": "TecAr Compressores | Ar comprimido sob controle",
-  "og_description": "Compressores, manutenção, locação, engenharia e monitoramento conectados à operação industrial.",
-  "og_image_url": "/assets/tecar/banner-03.png",
-  "favicon_url": "/favicon.gif",
+  "og_description": "Compressores, manutencao, locacao, engenharia e monitoramento conectados a operacao industrial.",
+  "og_image_url": "https://tecar-compressores-lab.higgsfield.app/assets/tecar/banner-03.png",
+  "favicon_url": "https://tecar-compressores-lab.higgsfield.app/favicon-32.png",
   "og_video_url": null,
-  "marketplace_cover_url": "/assets/tecar/banner-03.png"
+  "marketplace_cover_url": "https://tecar-compressores-lab.higgsfield.app/assets/tecar/banner-03.png"
 }
