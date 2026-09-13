@@ -41,4 +41,19 @@ export const VERIFIED_MODELS:CompressorReference[]=[
  {id:'rs110i-a125',family:'Next Gen RS',model:'RS110I-A125',hp:150,nominalKw:112,pressurePsi:125,flowCfm:735,flowM3Min:20.8,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial RS 90–160 kW',sourceUrl:TECH_SOURCES.irRs90.url},
 ];
 
+
+export const INGERSOLL_FAMILIES=[
+ {name:'UP6',range:'5–15 hp'},
+ {name:'UP6S',range:'20–30 hp'},
+ {name:'UP6S',range:'75–100 hp'},
+ {name:'Next Gen RS',range:'4–11 kW'},
+ {name:'Next Gen RS',range:'15–22 kW'},
+ {name:'Next Gen RS',range:'30–37 kW'},
+ {name:'Next Gen RS',range:'45–75 kW'},
+ {name:'Next Gen RS',range:'90–160 kW'},
+ {name:'Next Gen RS',range:'185–260 kW'},
+ {name:'Next Gen RS',range:'300–375 kW'},
+ {name:'SSR',range:'dois estágios'}
+];
+
 export const HP_ROWS=[5,7.5,10,15,20,25,30,40,50,60,75,100,125,150,200].map(hp=>({hp,kw:hp*0.7456999}));
