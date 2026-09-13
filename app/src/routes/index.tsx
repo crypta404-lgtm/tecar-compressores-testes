@@ -68,7 +68,7 @@ function Home(){
 
     <section className="v2-split-section">
       <div className="v2-container v2-split-grid">
-        <div><SectionHead kicker="EFICIÊNCIA" title="O ar que escapa também aparece na conta." text="A TecAr trabalha com diagnóstico e auditoria para localizar desperdícios, gargalos e perdas de carga."/><Link to="/engenharia" className="v2-textlink">Entender engenharia e auditoria</Link></div>
+        <div><SectionHead kicker="EFICIÊNCIA" title="Energia deixa de ser chute quando a referência é técnica." text="A ferramenta parte da potência total de pacote publicada em ficha CAGI e de tarifa regulatória ANEEL/COPEL. O cliente informa apenas as horas reais de operação."/><Link to="/engenharia" className="v2-textlink">Entender engenharia e auditoria</Link></div>
         <EnergyLossTool/>
       </div>
     </section>

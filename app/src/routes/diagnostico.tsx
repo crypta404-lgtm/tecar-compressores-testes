@@ -1,13 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageFrame, PageHero, SectionHead, ContactBand } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
+import { DiagnosticToolsGrid, TariffReferencePanel } from "@/components/engineering-diagnostics";
 import { pageMeta } from "@/lib/page-meta";
 
 export const Route=createFileRoute("/diagnostico")({
   head:()=>pageMeta(
     "/diagnostico",
     "Diagnóstico de Ar Comprimido | TecAr",
-    "Triagem guiada para falhas, consumo, pressão, qualidade do ar, manutenção, monitoramento e dimensionamento do sistema.",
+    "Diagnósticos de ar comprimido com dados publicados por Ingersoll Rand, CAGI, ANEEL, Copel, DOE e NIST, além de triagem técnica guiada.",
     "/assets/v2/tecar-engineering.png"
   ),
   component:Page
@@ -25,7 +26,7 @@ function Page(){
     <PageHero
       kicker="DIAGNÓSTICO TECAR"
       title="Comece pelo problema. A TecAr ajuda a encontrar o próximo passo."
-      text="Uma triagem orientada organiza as informações da sua operação antes do primeiro contato técnico. Você responde o questionário e, ao final, o resumo já segue pronto para o WhatsApp da TecAr."
+      text="Ferramentas técnicas com memória de cálculo e fonte visível: desempenho de compressores Ingersoll Rand, energia, pressão, vazamentos, queda de pressão, recuperação de calor e triagem do atendimento."
       image="/assets/v2/tecar-engineering.png"
     >
       <a href="#questionario" className="v2-primary">Iniciar diagnóstico</a>
@@ -41,6 +42,28 @@ function Page(){
         <div className="v2-diagnostic-fronts">
           {fronts.map(([title,text],index)=><article key={title}><strong>0{index+1}</strong><h3>{title}</h3><p>{text}</p></article>)}
         </div>
+      </div>
+    </section>
+
+    <section className="v2-section v2-soft v2-evidence-section">
+      <div className="v2-container">
+        <SectionHead
+          kicker="BASE TÉCNICA"
+          title="Se o número não tem fonte, ele não entra."
+          text="Os diagnósticos abaixo separam dado publicado, dado informado pelo cliente e regra técnica de triagem. Cada ferramenta mostra sua memória de cálculo e permite abrir a fonte original."
+        />
+        <TariffReferencePanel/>
+      </div>
+    </section>
+
+    <section className="v2-section">
+      <div className="v2-container">
+        <SectionHead
+          kicker="DIAGNÓSTICOS QUANTITATIVOS"
+          title="Ferramentas para chegar à conversa técnica com números melhores."
+          text="Use horas reais, pressões medidas e tempos observados. O site calcula apenas o que consegue sustentar com documentação publicada ou fórmula explícita."
+        />
+        <DiagnosticToolsGrid/>
       </div>
     </section>
 

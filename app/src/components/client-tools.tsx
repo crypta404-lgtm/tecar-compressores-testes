@@ -1,47 +1,49 @@
 import { useMemo, useState } from "react";
+import { CAGI_UP6S, COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
+
+const money=(value:number)=>value.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const number=(value:number,digits=0)=>value.toLocaleString("pt-BR",{maximumFractionDigits:digits,minimumFractionDigits:digits});
 
 export function EnergyLossTool(){
-  const [power,setPower]=useState(100);
-  const [hours,setHours]=useState(16);
-  const [days,setDays]=useState(250);
-  const [tariff,setTariff]=useState(0.7);
-  const [loss,setLoss]=useState(20);
-  const annual=power*hours*days*tariff*(loss/100);
-  return <div className="v2-tool">
-    <div className="v2-tool-head"><span>Simulador de desperdício</span><strong>{annual.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0})}<small>/ano</small></strong></div>
-    <div className="v2-rangegrid">
-      <label>Potência <b>{power} kW</b><input type="range" min="10" max="300" value={power} onChange={e=>setPower(Number(e.target.value))}/></label>
-      <label>Horas/dia <b>{hours} h</b><input type="range" min="1" max="24" value={hours} onChange={e=>setHours(Number(e.target.value))}/></label>
-      <label>Dias/ano <b>{days}</b><input type="range" min="50" max="365" value={days} onChange={e=>setDays(Number(e.target.value))}/></label>
-      <label>Tarifa <b>R$ {tariff.toFixed(2)}</b><input type="range" min="0.3" max="2" step="0.05" value={tariff} onChange={e=>setTariff(Number(e.target.value))}/></label>
-      <label>Perda estimada <b>{loss}%</b><input type="range" min="1" max="40" value={loss} onChange={e=>setLoss(Number(e.target.value))}/></label>
+  const [modelId,setModelId]=useState("up6s-30-125");
+  const [hours,setHours]=useState(4000);
+  const [tariffId,setTariffId]=useState("a4-offpeak");
+  const model=CAGI_UP6S.find(x=>x.id===modelId) ?? CAGI_UP6S[4];
+  const tariff=COPEL_A4_TARIFFS.find(x=>x.id===tariffId) ?? COPEL_A4_TARIFFS[0];
+  const annualKwh=(model.packageKw ?? 0)*hours;
+  const annual=annualKwh*tariff.value;
+  return <div className="v2-tool v2-tool-evidence">
+    <div className="v2-tool-head"><span>Referência anual de energia</span><strong>{money(annual)}<small>/ano</small></strong></div>
+    <div className="v2-evidence-badge">Cálculo reproduzível: potência total do pacote CAGI × horas informadas × tarifa regulatória</div>
+    <div className="v2-inputgrid v2-inputgrid-stack">
+      <label>Compressor verificado<select value={modelId} onChange={e=>setModelId(e.target.value)}>{CAGI_UP6S.map(x=><option key={x.id} value={x.id}>{x.model} · {x.hp} hp · {x.flowCfm} cfm</option>)}</select></label>
+      <label>Horas reais de operação no ano<input type="number" min="1" max="8760" value={hours} onChange={e=>setHours(Math.min(8760,Math.max(0,Number(e.target.value)||0)))}/></label>
+      <label>Referência tarifária<select value={tariffId} onChange={e=>setTariffId(e.target.value)}>{COPEL_A4_TARIFFS.map(x=><option key={x.id} value={x.id}>{x.label} · R$ {x.value.toFixed(5)}/kWh</option>)}</select></label>
     </div>
-    <p className="v2-tool-note">Estimativa simplificada de custo energético. O diagnóstico real depende de medições em campo.</p>
+    <div className="v2-tool-facts"><span><b>{number(model.packageKw ?? 0,2)} kW</b>entrada total em plena carga</span><span><b>{number(annualKwh)} kWh</b>energia anual calculada</span><span><b>{number(model.specificKw100Cfm ?? 0,2)}</b>kW/100 cfm CAGI</span></div>
+    <p className="v2-tool-note">Não é uma simulação da fatura. A referência ANEEL usada aqui considera apenas TE + TUSD de energia do subgrupo A4; demanda, tributos, bandeiras e demais itens não entram no resultado.</p>
+    <details className="v2-source"><summary>Base técnica e fontes</summary><p>{model.sourceLabel}. A potência usada é a entrada total do pacote no ponto de ensaio informado na ficha, não uma conversão de HP.</p><a href={model.sourceUrl} target="_blank" rel="noreferrer">Ficha CAGI do modelo</a><a href={TECH_SOURCES.copel.url} target="_blank" rel="noreferrer">Copel: tarifas vigentes</a><a href={TECH_SOURCES.aneel.url} target="_blank" rel="noreferrer">ANEEL: base tarifária oficial</a></details>
   </div>
 }
 
 export function DowntimeTool(){
   const [value,setValue]=useState(15000);
   const [hours,setHours]=useState(4);
-  const loss=value*hours;
+  const total=value*hours;
   return <div className="v2-tool v2-tool-compact">
-    <div className="v2-tool-head"><span>Impacto de uma parada</span><strong>{loss.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0})}</strong></div>
-    <div className="v2-inputgrid"><label>Valor estimado de produção por hora<input type="number" min="0" value={value} onChange={e=>setValue(Number(e.target.value)||0)}/></label><label>Horas paradas<input type="number" min="0" value={hours} onChange={e=>setHours(Number(e.target.value)||0)}/></label></div>
-    <p className="v2-tool-note">Ferramenta ilustrativa para visualizar risco operacional. Não representa cálculo contábil de lucro cessante.</p>
+    <div className="v2-tool-head"><span>Impacto informado pela própria operação</span><strong>{money(total)}</strong></div>
+    <div className="v2-inputgrid"><label>Valor atribuído pela sua empresa a 1 h parada<input type="number" min="0" value={value} onChange={e=>setValue(Number(e.target.value)||0)}/></label><label>Horas paradas<input type="number" min="0" value={hours} onChange={e=>setHours(Number(e.target.value)||0)}/></label></div>
+    <p className="v2-tool-note">Aqui não existe taxa de mercado: o valor por hora é fornecido pelo cliente. A ferramenta apenas multiplica os dois dados e não representa cálculo contábil de lucro cessante.</p>
   </div>
 }
 
 export function MonitoringDemo(){
   const [mode,setMode]=useState<"normal"|"alerta">("normal");
-  const data=useMemo(()=>mode==="normal"?[
-    ["Pressão","7,4 bar",74],["Temperatura","71 °C",59],["Ponto de orvalho","+2 °C",36],["Energia","43,8 kW",55]
-  ]:[
-    ["Pressão","6,2 bar",62],["Temperatura","94 °C",90],["Ponto de orvalho","+9 °C",68],["Energia","58,1 kW",78]
-  ],[mode]);
+  const data=useMemo(()=>mode==="normal"?[["Pressão","7,4 bar",74],["Temperatura","71 °C",59],["Ponto de orvalho","+2 °C",36],["Energia","43,8 kW",55]]:[["Pressão","6,2 bar",62],["Temperatura","94 °C",90],["Ponto de orvalho","+9 °C",68],["Energia","58,1 kW",78]],[mode]);
   return <div className={"v2-monitor-demo "+(mode==="alerta"?"is-alert":"")}>
     <div className="v2-monitor-top"><div><span>Exemplo visual</span><strong>COMPRESSOR 03</strong></div><div className="v2-segmented"><button className={mode==="normal"?"active":""} onClick={()=>setMode("normal")}>Normal</button><button className={mode==="alerta"?"active":""} onClick={()=>setMode("alerta")}>Simular alerta</button></div></div>
     <div className="v2-monitor-status"><i/><span>{mode==="normal"?"Operação dentro da faixa simulada":"Atenção: parâmetro fora da faixa simulada"}</span></div>
-    <div className="v2-monitor-rows">{data.map(([label,value,pct])=><div className="v2-monitor-row" key={label}><div><span>{label}</span><b>{value}</b></div><div className="v2-bar"><i style={{width:pct+"%"}}/></div></div>)}</div>
-    <p>Interface demonstrativa para explicar o conceito ao cliente. Não exibe dados reais de equipamentos.</p>
+    <div className="v2-monitor-rows">{data.map(([label,value,pct])=><div className="v2-monitor-row" key={String(label)}><div><span>{label}</span><b>{value}</b></div><div className="v2-bar"><i style={{width:pct+"%"}}/></div></div>)}</div>
+    <p>Esta interface continua deliberadamente demonstrativa. Ela explica monitoramento remoto, mas não apresenta leituras reais de um cliente.</p>
   </div>
 }
