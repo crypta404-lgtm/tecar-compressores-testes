@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport } from './routes/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
 import { Route as TrabalheConoscoRouteImport } from './routes/trabalhe-conosco'
 import { Route as TecarConnectRouteImport } from './routes/tecar-connect'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -26,10 +27,21 @@ import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
 import { Route as ConteudoRouteImport } from './routes/conteudo'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CompressoresRouteImport } from './routes/compressores'
+import { Route as BlogListRouteImport } from './routes/blog-list'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AcessoriosRouteImport } from './routes/acessorios'
+import { Route as AEmpresaRouteImport } from './routes/a-empresa'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute =
+  VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport.update(
+    {
+      id: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria',
+      path: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria',
+      getParentRoute: () => rootRouteImport,
+    } as any,
+  )
 const TrabalheConoscoRoute = TrabalheConoscoRouteImport.update({
   id: '/trabalhe-conosco',
   path: '/trabalhe-conosco',
@@ -115,6 +127,16 @@ const CompressoresRoute = CompressoresRouteImport.update({
   path: '/compressores',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogListRoute = BlogListRouteImport.update({
+  id: '/blog-list',
+  path: '/blog-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -125,6 +147,11 @@ const AcessoriosRoute = AcessoriosRouteImport.update({
   path: '/acessorios',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AEmpresaRoute = AEmpresaRouteImport.update({
+  id: '/a-empresa',
+  path: '/a-empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -133,8 +160,11 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/blog': typeof BlogRoute
+  '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
@@ -152,11 +182,15 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tecar-connect': typeof TecarConnectRoute
   '/trabalhe-conosco': typeof TrabalheConoscoRoute
+  '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/blog': typeof BlogRoute
+  '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
@@ -174,12 +208,16 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tecar-connect': typeof TecarConnectRoute
   '/trabalhe-conosco': typeof TrabalheConoscoRoute
+  '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
   '/app': typeof AppRoute
+  '/blog': typeof BlogRoute
+  '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
   '/contato': typeof ContatoRoute
   '/conteudo': typeof ConteudoRoute
@@ -197,13 +235,17 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tecar-connect': typeof TecarConnectRoute
   '/trabalhe-conosco': typeof TrabalheConoscoRoute
+  '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-empresa'
     | '/acessorios'
     | '/app'
+    | '/blog'
+    | '/blog-list'
     | '/compressores'
     | '/contato'
     | '/conteudo'
@@ -221,11 +263,15 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tecar-connect'
     | '/trabalhe-conosco'
+    | '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-empresa'
     | '/acessorios'
     | '/app'
+    | '/blog'
+    | '/blog-list'
     | '/compressores'
     | '/contato'
     | '/conteudo'
@@ -243,11 +289,15 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tecar-connect'
     | '/trabalhe-conosco'
+    | '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
   id:
     | '__root__'
     | '/'
+    | '/a-empresa'
     | '/acessorios'
     | '/app'
+    | '/blog'
+    | '/blog-list'
     | '/compressores'
     | '/contato'
     | '/conteudo'
@@ -265,12 +315,16 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tecar-connect'
     | '/trabalhe-conosco'
+    | '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AEmpresaRoute: typeof AEmpresaRoute
   AcessoriosRoute: typeof AcessoriosRoute
   AppRoute: typeof AppRoute
+  BlogRoute: typeof BlogRoute
+  BlogListRoute: typeof BlogListRoute
   CompressoresRoute: typeof CompressoresRoute
   ContatoRoute: typeof ContatoRoute
   ConteudoRoute: typeof ConteudoRoute
@@ -288,10 +342,18 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TecarConnectRoute: typeof TecarConnectRoute
   TrabalheConoscoRoute: typeof TrabalheConoscoRoute
+  VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute: typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': {
+      id: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      path: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      fullPath: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      preLoaderRoute: typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trabalhe-conosco': {
       id: '/trabalhe-conosco'
       path: '/trabalhe-conosco'
@@ -411,6 +473,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompressoresRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog-list': {
+      id: '/blog-list'
+      path: '/blog-list'
+      fullPath: '/blog-list'
+      preLoaderRoute: typeof BlogListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -425,6 +501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcessoriosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-empresa': {
+      id: '/a-empresa'
+      path: '/a-empresa'
+      fullPath: '/a-empresa'
+      preLoaderRoute: typeof AEmpresaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -437,8 +520,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AEmpresaRoute: AEmpresaRoute,
   AcessoriosRoute: AcessoriosRoute,
   AppRoute: AppRoute,
+  BlogRoute: BlogRoute,
+  BlogListRoute: BlogListRoute,
   CompressoresRoute: CompressoresRoute,
   ContatoRoute: ContatoRoute,
   ConteudoRoute: ConteudoRoute,
@@ -456,6 +542,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TecarConnectRoute: TecarConnectRoute,
   TrabalheConoscoRoute: TrabalheConoscoRoute,
+  VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute:
+    VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

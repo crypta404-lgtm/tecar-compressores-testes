@@ -4,9 +4,12 @@ export type CompressorReference={id:string;family:string;model:string;hp:number;
 export const TECH_SOURCES={
   copel:{label:'Copel • Tarifas vigentes',url:'https://www.copel.com/site/copel-distribuicao/tarifas-de-energia-eletrica/'},
   aneel:{label:'ANEEL • Tarifas homologadas por distribuidora',url:'https://dadosabertos.aneel.gov.br/dataset/5a583f3e-1646-4f67-bf0f-69db4203e89e/resource/fcf2906c-7c32-4b9b-a637-054e7a5234f4/download/tarifas-homologadas-distribuidoras-energia-eletrica.csv'},
-  doe:{label:'U.S. DOE • Improving Compressed Air System Performance',url:'https://www.energy.gov/sites/default/files/2014/05/f16/compressed_air_sourcebook.pdf'},
+  doe:{label:'DOE / Compressed Air Challenge • Improving Compressed Air System Performance',url:'https://www.compressedairchallenge.org/data/sites/1/media/library/sourcebook/Improving_Compressed_Air-Sourcebook.pdf'},
   nist:{label:'NIST • Guide to SI conversion factors',url:'https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9'},
   irCagi:{label:'Ingersoll Rand • CAGI Data Sheets',url:'https://www.ingersollrand.com/en-us/resources/cagi-data-sheets/'},
+  cagiVerify:{label:'CAGI • Performance Verification Program',url:'https://www.cagi.org/performance-verification'},
+  iso8573:{label:'ISO • ISO 8573-1:2010',url:'https://www.iso.org/standard/46418.html'},
+  irOptimization:{label:'Ingersoll Rand • Compressed Air System Optimization',url:'https://www.ingersollrand.com/en/products/air-compressors/controls-and-automation/system-optimization/'},
   irUp6s:{label:'Ingersoll Rand • UP6S 20–30 HP',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/up6s-20-30-hp/'},
   irRs37:{label:'Ingersoll Rand • R-Series 30–37 kW',url:'https://www.ingersollrand.com/pt-br/air-compressor/oil-flooded-ac/ng-r-series-30-37-vsd-hrm'},
   irR90:{label:'Ingersoll Rand • R90ix 90 kW',url:'https://www.ingersollrand.com/pt-br/products/air-compressors/oil-flooded-rotary-air-compressors/r-series-90-kw-125-hp/'},

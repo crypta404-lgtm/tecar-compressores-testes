@@ -1,4 +1,4 @@
-export const SITE_ORIGIN="https://tecar-compressores-lab.higgsfield.app";
+export const SITE_ORIGIN="https://www.tecarcompressores.com.br";
 export function pageMeta(path:string,title:string,description:string,image="/assets/v2/compressors.jpg"){
   const url=SITE_ORIGIN+(path==="/"?"":path);
   return {
