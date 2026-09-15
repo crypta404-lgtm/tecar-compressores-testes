@@ -1,9 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageFrame, SectionHead, ContactBand, VideoEmbed } from "@/components/site-v2";
-import { EnergyLossTool, MonitoringDemo, DowntimeTool } from "@/components/client-tools";
+import { PageFrame, SectionHead, ContactBand } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
-import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
-import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
 import { pageMeta } from "@/lib/page-meta";
 
 export const Route=createFileRoute("/")({
@@ -11,94 +8,62 @@ export const Route=createFileRoute("/")({
   component:Home
 });
 
-const serviceCards=[
-  ["/manutencao","Manutenção","Preventiva, corretiva, assistência multimarcas, diagnóstico e gestão do histórico técnico.","/assets/v2/tecar-service.png"],
-  ["/locacao","Locação","Geração de ar por locação emergencial ou contratos de longo prazo, incluindo venda de ar.","/assets/v2/rental.png"],
-  ["/engenharia","Engenharia","Auditoria, eficiência energética, redes de ar comprimido, projetos e casa de máquinas.","/assets/v2/tecar-engineering.png"],
-  ["/tecar-connect","Monitoramento","Acompanhamento remoto de variáveis críticas, alarmes, consumo e condições operacionais.","/assets/v2/tecar-connect.png"]
-] as const;
-
-const productCards=[
-  ["/compressores","Compressores","Parafuso, alta pressão, isentos de óleo, geradores de gases e outras configurações.","/assets/v2/compressors.jpg"],
-  ["/secadores","Secadores","Tecnologias refrigeradas e por adsorção para controle da qualidade do ar.","/assets/v2/dryers.jpg"],
-  ["/linhas-de-ar","Linhas de ar","Projeto e instalação de redes com foco em vazão, velocidade e perda de carga.","/assets/v2/lines.jpg"],
-  ["/acessorios","Acessórios","Filtros, drenos, separadores, gerenciadores e controle do sistema.","/assets/v2/accessories.webp"]
+const capabilities=[
+  ["Equipamentos","Compressores, secadores, linhas e acessórios dimensionados para a necessidade real da planta."],
+  ["Assistência técnica","Manutenção preventiva e corretiva, atendimento multimarcas e gestão do histórico técnico."],
+  ["Engenharia","Auditorias, eficiência energética, projetos de rede e organização da casa de máquinas."],
+  ["Continuidade","Locação emergencial, contratos de longo prazo e monitoramento remoto da operação."]
 ] as const;
 
 function Home(){
   return <PageFrame>
-    <section className="v2-homehero">
-      <div className="v2-container v2-homehero-grid">
-        <div className="v2-homehero-copy">
-          <span className="v2-kicker">COMPRESSORES & COMPETÊNCIA</span>
-          <h1>Soluções completas para o seu sistema de ar comprimido.</h1>
-          <p>A TecAr atua desde 1999 com venda de equipamentos, assistência técnica, locação, engenharia e monitoramento para manter a operação industrial confiável e eficiente.</p>
-          <div className="v2-hero-actions"><Link to="/contato" className="v2-primary">Solicitar orçamento</Link><Link to="/servicos" className="v2-secondary">Conhecer serviços</Link></div>
-        </div>
-        <div className="v2-homehero-media"><img src="/assets/v2/compressors.jpg" alt="Sistema industrial de ar comprimido"/></div>
+    <section className="v2-clean-hero">
+      <img src="/assets/v2/compressors.jpg" alt="Compressores industriais instalados em ambiente técnico"/>
+      <div className="v2-clean-hero-shade"/>
+      <div className="v2-container v2-clean-hero-content">
+        <span className="v2-kicker">TECAR COMPRESSORES · DESDE 1999</span>
+        <h1>Ar comprimido com engenharia, resposta e continuidade.</h1>
+        <p>Equipamentos, assistência, locação e diagnóstico para decisões industriais mais seguras em Curitiba, Paranaguá e região.</p>
+        <div className="v2-clean-hero-actions"><Link to="/diagnostico">Iniciar diagnóstico</Link><Link to="/contato">Falar com a TecAr</Link></div>
       </div>
     </section>
 
-    <section className="v2-proof">
+    <section className="v2-proof v2-proof-clean">
       <div className="v2-container v2-proof-grid">
         <div><strong>1999</strong><span>presença no mercado</span></div>
         <div><strong>500+</strong><span>clientes atendidos</span></div>
-        <div><strong>IR</strong><span>assistência e revenda autorizada Ingersoll Rand</span></div>
-        <div><strong>2</strong><span>unidades: Curitiba e Paranaguá</span></div>
+        <div><strong>IR</strong><span>assistência e revenda autorizada</span></div>
+        <div><strong>2</strong><span>unidades no Paraná</span></div>
       </div>
     </section>
 
-    <section className="v2-diagnostic-home">
-      <div className="v2-container v2-diagnostic-home-grid">
-        <div className="v2-diagnostic-home-copy">
-          <span className="v2-kicker">DIAGNÓSTICO TECAR</span>
-          <h2>Não sabe por onde começar?</h2>
-          <p>Responda algumas perguntas sobre o que está acontecendo na sua operação. O site organiza as respostas, indica a rota inicial e prepara tudo para enviar direto ao WhatsApp da TecAr.</p>
-          <Link to="/diagnostico" className="v2-secondary">Diagnóstico completo</Link>
+    <section className="v2-home-report">
+      <div className="v2-container v2-home-report-grid">
+        <div>
+          <span className="v2-kicker">RELATÓRIO DIRETO</span>
+          <h2>Descreva o cenário. A TecAr recebe a triagem pronta.</h2>
+          <p>O formulário organiza condição do equipamento, pressão, urgência e impacto na produção. Ao final, o relatório segue pelo WhatsApp para a equipe técnica.</p>
+          <div className="v2-home-report-facts"><span><b>01</b> Respostas objetivas</span><span><b>02</b> Resumo automático</span><span><b>03</b> Envio pelo WhatsApp</span></div>
         </div>
         <DiagnosticQuestionnaire variant="compact"/>
       </div>
     </section>
 
-    <section className="v2-section">
-      <div className="v2-container"><SectionHead kicker="SERVIÇOS" title="Uma empresa para cuidar do sistema inteiro." text="Do fornecimento do equipamento ao acompanhamento da operação, cada frente possui uma página própria para o cliente pesquisar com calma."/>
-        <div className="v2-service-grid">{serviceCards.map(([to,title,text,img])=><Link to={to} className="v2-service-card" key={to}><img src={img} alt=""/><div><h3>{title}</h3><p>{text}</p><span>Ver detalhes</span></div></Link>)}</div>
+    <section className="v2-section v2-home-capabilities">
+      <div className="v2-container">
+        <SectionHead kicker="SISTEMA COMPLETO" title="Uma equipe para cuidar do ar comprimido de ponta a ponta." text="A TecAr combina fornecimento, serviço e engenharia em uma visão única da operação."/>
+        <div className="v2-home-capability-grid">{capabilities.map(([title,text],index)=><article key={title}><span>0{index+1}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
+        <Link to="/servicos" className="v2-home-inline-link">Conhecer todas as soluções</Link>
       </div>
     </section>
 
-    <section className="v2-split-section">
-      <div className="v2-container v2-split-grid">
-        <div><SectionHead kicker="EFICIÊNCIA" title="Energia deixa de ser chute quando a referência é técnica." text="A ferramenta parte da potência total de pacote publicada em ficha CAGI e de tarifa regulatória ANEEL/COPEL. O cliente informa apenas as horas reais de operação."/><Link to="/engenharia" className="v2-textlink">Entender engenharia e auditoria</Link></div>
-        <EnergyLossTool/>
+    <section className="v2-home-presence">
+      <img src="/assets/v2/tecar-service.png" alt="Equipe técnica TecAr em atendimento industrial"/>
+      <div className="v2-container v2-home-presence-content">
+        <div><span className="v2-kicker">PRESENÇA TÉCNICA</span><h2>Proximidade para responder. Método para resolver.</h2><p>Atendimento industrial com unidades em Curitiba e Paranaguá, suporte autorizado Ingersoll Rand e experiência construída desde 1999.</p><Link to="/empresa">Conhecer a TecAr</Link></div>
       </div>
     </section>
 
-    <section className="v2-section v2-soft">
-      <div className="v2-container"><SectionHead kicker="MONITORAMENTO" title="Visibilidade antes da emergência." text="O monitoramento remoto ajuda a transformar sinais do equipamento em informação útil para manutenção e tomada de decisão."/>
-        <div className="v2-monitor-section"><MonitoringDemo/><div className="v2-monitor-copy"><h3>O que pode ser acompanhado</h3><ul><li>Temperatura e condições operacionais</li><li>Pressão e comportamento de carga</li><li>Ponto de orvalho e qualidade do ar</li><li>Energia e consumo</li><li>Alarmes e histórico</li></ul><Link to="/tecar-connect" className="v2-primary">Conhecer monitoramento</Link></div></div>
-      </div>
-    </section>
-
-    <section className="v2-section">
-      <div className="v2-container"><SectionHead kicker="PRODUTOS" title="Pesquise antes de pedir orçamento." text="As páginas de produto explicam aplicações e critérios de escolha para ajudar o cliente a chegar mais preparado à conversa técnica."/>
-        <div className="v2-product-grid">{productCards.map(([to,title,text,img])=><Link to={to} className="v2-product-card" key={to}><div className="v2-product-image"><img src={img} alt=""/></div><h3>{title}</h3><p>{text}</p><span>Explorar categoria</span></Link>)}</div>
-      </div>
-    </section>
-
-    <section className="v2-risk-section">
-      <div className="v2-container v2-risk-grid"><div><SectionHead kicker="RISCO OPERACIONAL" title="Parada de compressor não é só custo de manutenção." text="Quando o ar comprimido participa diretamente da produção, tempo de inatividade pode significar produção não realizada, atraso e horas improdutivas."/><Link to="/manutencao" className="v2-secondary">Ver assistência técnica</Link></div><DowntimeTool/></div>
-    </section>
-
-    <section className="v2-section v2-scrub-clean"><div className="v2-container"><SectionHead title="A operação em movimento." text="Uma camada visual discreta mostra a relação entre equipamento, processo e continuidade operacional."/></div><div className="v2-scrub-frame"><ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme}/></div></section>
-
-    <section className="v2-section">
-      <div className="v2-container"><SectionHead kicker="TECAR EM VÍDEO" title="Conheça a empresa e as soluções."/>
-        <div className="v2-video-grid"><VideoEmbed id="vSjkXQut3jQ" title="Institucional TecAr"/><VideoEmbed id="clxX-mMdwYQ" title="Motores HPM"/></div>
-      </div>
-    </section>
-
-    <section className="v2-port-preview"><img src="/assets/v2/free-port.jpg" alt="Operação portuária"/><div className="v2-container"><div className="v2-port-card"><span className="v2-kicker">TECAR PORTUÁRIA</span><h2>Presença próxima à operação de Paranaguá.</h2><p>Atendimento para demandas industriais e portuárias com unidade local e suporte técnico.</p><Link to="/empresa" className="v2-primary">Conhecer a TecAr</Link></div></div></section>
-
-    <ContactBand/>
+    <ContactBand title="Sua operação precisa de uma resposta objetiva?" text="Envie o cenário pelo diagnóstico ou fale diretamente com a equipe TecAr."/>
   </PageFrame>
 }

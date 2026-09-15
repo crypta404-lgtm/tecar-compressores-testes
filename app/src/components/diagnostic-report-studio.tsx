@@ -50,7 +50,7 @@ export function DiagnosticHero(){
       <h1>Transforme sinais da operação em uma decisão técnica.</h1>
       <p>Simule vazão, energia, vazamentos, pressão e qualidade do ar. Ao final, gere um pré-laudo com memória de cálculo e fontes técnicas visíveis.</p>
       <div className="v2-dx-hero-actions"><a href="#estudio-diagnostico">Gerar pré-laudo</a><a href="#ensaios-tecnicos">Abrir calculadoras</a></div>
-      <div className="v2-dx-proof"><span><b>7</b> módulos de relatório</span><span><b>CAGI</b> desempenho verificado</span><span><b>DOE</b> métodos de referência</span></div>
+      <div className="v2-dx-proof"><span><b>5 eixos</b> no pré-laudo 360</span><span><b>CAGI</b> desempenho verificado</span><span><b>DOE</b> métodos de referência</span></div>
     </div>
     <div className="v2-dx-hero-media">
       <video autoPlay muted loop playsInline poster="/assets/world/scene-01-poster.png" aria-label="Sistema industrial de ar comprimido"><source src="/assets/world/scene-01.mp4" type="video/mp4"/></video>
@@ -87,7 +87,7 @@ export function DiagnosticReportStudio(){
     const specificPower=model.specificKw100Cfm??packageKw/Math.max(model.flowCfm,1)*100;
     const leakPower=Math.max(0,leakCfm)*specificPower/100,leakCost=leakPower*hours*tariff.value,leakPercent=demandCfm>0?Math.max(0,leakCfm)/demandCfm*100:0;
     const pressureDrop=Math.max(0,supplyBar-pointBar),pressureDropPercent=supplyBar>0?pressureDrop/supplyBar*100:0;
-    const pressureSavingPercent=Math.max(0,supplyBar-targetBar)*14.5038/2,pressureSaving=packageKw*pressureSavingPercent/100*hours*tariff.value;
+    const pressureSavingPercent=Math.max(0,supplyBar-targetBar)/0.1378952,pressureSaving=packageKw*pressureSavingPercent/100*hours*tariff.value;
     const pdpGap=pdpMeasured-pdpRequired;
     const score=(reservePercent<0?30:reservePercent<10?18:0)+(leakPercent>=20?25:leakPercent>=10?15:0)+(pressureDropPercent>=10?25:pressureDropPercent>=5?12:0)+(pdpGap>10?20:pdpGap>0?10:0);
     return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap,score};
@@ -110,6 +110,7 @@ export function DiagnosticReportStudio(){
 
   return <div className="v2-dx-studio">
     <div className="v2-dx-studio-head"><div><span className="v2-kicker">PAINEL INTERATIVO</span><h2>Pré-laudo técnico em poucos minutos.</h2><p>Ajuste os dados disponíveis. Todos os resultados mudam em tempo real e permanecem identificados como estimativas até a validação técnica.</p></div><div className="v2-dx-score"><span>Índice de investigação</span><strong>{result.score}<small>/100</small></strong><b>{scoreLabel}</b><i><em style={{width:result.score+"%"}}/></i></div></div>
+    <div className="v2-dx-benchmarks"><article><b>&lt;10%</b><span>vazamentos em sistema bem mantido</span></article><article><b>20–30%</b><span>perdas possíveis em sistema mal mantido</span></article><article><b>0,14 bar</b><span>redução associada a cerca de 1% de energia</span></article><article><b>&lt;10%</b><span>referência máxima de queda na distribuição</span></article></div>
     <div className="v2-dx-context">
       <label><span>Tipo de indústria</span><select value={industryId} onChange={e=>setIndustryId(e.target.value)}>{Object.entries(INDUSTRIES).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
       <label><span>Compressor de referência CAGI</span><select value={modelId} onChange={e=>setModelId(e.target.value)}>{CAGI_UP6S.map(item=><option key={item.id} value={item.id}>{item.model}</option>)}</select></label>
@@ -123,7 +124,7 @@ export function DiagnosticReportStudio(){
         {active==="flow"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Balanço de vazão e demanda</h3></div></div>
           <div className="v2-dx-inputs"><Input label="Demanda medida ou estimada" suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Vazamento já identificado" suffix="cfm" value={leakCfm} min={0} onChange={setLeakCfm}/></div>
-          <div className="v2-dx-kpis"><div><span>Capacidade publicada</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda informada</span><b>{number(demandCfm,0)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva calculada</span><b>{number(result.reserveCfm,0)} cfm</b></div></div>
+          <div className="v2-dx-kpis v2-dx-kpis-four"><div><span>Capacidade publicada</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda informada</span><b>{number(demandCfm,0)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva calculada</span><b>{number(result.reserveCfm,0)} cfm</b></div><div className={result.reservePercent<10?"is-risk":""}><span>Reserva percentual</span><b>{number(result.reservePercent,1)}%</b></div></div>
           <div className="v2-dx-chart"><Meter label="Capacidade CAGI" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda da planta" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Vazamento informado" value={leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(leakCfm,1)+" cfm"} tone={result.leakPercent>=10?"risk":"default"}/></div>
           <div className={"v2-dx-finding "+(result.reserveCfm<0?"risk":"ok")}><ClipboardCheck size={20}/><p><b>{result.reserveCfm<0?"Demanda acima da capacidade publicada.":"Existe reserva nominal no cenário informado."}</b>A confirmação exige medição de vazão e perfil de demanda ao longo do turno.</p></div>
           <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.cagiVerify]}/>
@@ -131,7 +132,7 @@ export function DiagnosticReportStudio(){
         {active==="energy"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Bolt/><div><span>RELATÓRIO 02</span><h3>Uso e custo de energia</h3></div></div>
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas de operação no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo estimado em carga" suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
-          <div className="v2-dx-energy-visual"><div><Activity/><span>Potência média estimada</span><strong>{number(result.averageKw,2)} kW</strong></div><div><Bolt/><span>Energia anual</span><strong>{number(result.annualKwh,0)} kWh</strong></div><div><FileText/><span>Custo anual de referência</span><strong>{money(result.annualCost)}</strong></div></div>
+          <div className="v2-dx-energy-visual v2-dx-energy-visual-four"><div><Activity/><span>Potência média estimada</span><strong>{number(result.averageKw,2)} kW</strong></div><div><Bolt/><span>Energia anual</span><strong>{number(result.annualKwh,0)} kWh</strong></div><div><FileText/><span>Custo anual de referência</span><strong>{money(result.annualCost)}</strong></div><div><Gauge/><span>Perfil informado</span><strong>{number(loadPercent,0)}% carga</strong></div></div>
           <div className="v2-dx-formula"><b>Memória de cálculo</b><code>kW médio = kW em carga × % carga + kW em alívio × % alívio</code><code>custo anual = kW médio × horas/ano × tarifa de referência</code></div>
           <p className="v2-dx-disclaimer">A tarifa considera TE + TUSD de energia do subgrupo A4. Demanda, tributos, bandeiras e outros itens da fatura não estão incluídos.</p>
           <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.copel,TECH_SOURCES.aneel]}/>
@@ -148,7 +149,7 @@ export function DiagnosticReportStudio(){
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Saída do reservatório" suffix="bar" value={supplyBar} min={0} step={.1} onChange={setSupplyBar}/><Input label="Ponto crítico de uso" suffix="bar" value={pointBar} min={0} step={.1} onChange={setPointBar}/><Input label="Setpoint alvo" suffix="bar" value={targetBar} min={0} step={.1} onChange={setTargetBar}/></div>
           <div className="v2-dx-pressure-line"><div><Gauge/><span>Origem</span><b>{number(supplyBar,1)} bar</b></div><i><em style={{width:clamp(100-result.pressureDropPercent,5,100)+"%"}}/></i><div><ArrowDownRight/><span>Ponto de uso</span><b>{number(pointBar,1)} bar</b></div></div>
           <div className="v2-dx-kpis"><div className={result.pressureDropPercent>=10?"is-risk":""}><span>Queda na rede</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Redução avaliada</span><b>{number(result.pressureSavingPercent,1)}%</b></div><div><span>Referência anual</span><b>{money(result.pressureSaving)}</b></div></div>
-          <div className="v2-dx-finding"><Gauge size={20}/><p><b>Regra de triagem próxima de 100 psig.</b>O Sourcebook relaciona cada redução de 2 psi a aproximadamente 1% de economia em plena vazão. A curva e o controle real do compressor prevalecem.</p></div>
+          <div className="v2-dx-finding"><Gauge size={20}/><p><b>Regra de triagem próxima de 6,9 bar.</b>O Sourcebook relaciona cada redução de aproximadamente 0,14 bar a cerca de 1% de economia em plena vazão. A curva e o controle real do compressor prevalecem.</p></div>
           <SourceLinks links={[TECH_SOURCES.doe,TECH_SOURCES.irOptimization]}/>
         </div>}
         {active==="quality"&&<div className="v2-dx-report-panel">
@@ -164,7 +165,7 @@ export function DiagnosticReportStudio(){
 
     <section className="v2-dx-prelaudo">
       <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><a href={whatsapp} target="_blank" rel="noreferrer"><FileText size={17}/>Enviar à TecAr</a></div></div>
-      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Prioridade</span><b>{scoreLabel}</b></div></div>
+      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div><div><span>Prioridade</span><b>{scoreLabel}</b></div></div>
       <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>2. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>3. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
       <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e dados CAGI devem ser confirmados por avaliação técnica.</p>
     </section>
@@ -174,7 +175,7 @@ export function DiagnosticReportStudio(){
 export function DiagnosticSourceLibrary(){
   const sources=[
     {icon:ShieldCheck,name:"CAGI",text:"Dados verificados de vazão, potência e desempenho de compressores.",source:TECH_SOURCES.cagiVerify},
-    {icon:FileText,name:"Sourcebook",text:"Métodos para vazamentos, pressão, eficiência e recuperação de calor.",source:TECH_SOURCES.doe},
+    {icon:FileText,name:"Sourcebook",text:"Métodos para vazamentos, pressão, eficiência e avaliação do sistema.",source:TECH_SOURCES.doe},
     {icon:Gauge,name:"Ingersoll Rand",text:"Avaliação de sistema, pressão, amperagem e linha de base operacional.",source:TECH_SOURCES.irOptimization},
     {icon:Droplets,name:"ISO 8573-1",text:"Estrutura de classes de pureza para partículas, água e óleo.",source:TECH_SOURCES.iso8573},
     {icon:Bolt,name:"Copel e ANEEL",text:"Tarifa homologada usada como referência comparativa de energia.",source:TECH_SOURCES.copel},
