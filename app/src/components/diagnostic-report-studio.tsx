@@ -89,10 +89,8 @@ export function DiagnosticReportStudio(){
     const pressureDrop=Math.max(0,supplyBar-pointBar),pressureDropPercent=supplyBar>0?pressureDrop/supplyBar*100:0;
     const pressureSavingPercent=Math.max(0,supplyBar-targetBar)/0.1378952,pressureSaving=packageKw*pressureSavingPercent/100*hours*tariff.value;
     const pdpGap=pdpMeasured-pdpRequired;
-    const score=(reservePercent<0?30:reservePercent<10?18:0)+(leakPercent>=20?25:leakPercent>=10?15:0)+(pressureDropPercent>=10?25:pressureDropPercent>=5?12:0)+(pdpGap>10?20:pdpGap>0?10:0);
-    return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap,score};
+    return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap};
   },[demandCfm,hours,leakCfm,loadPercent,model,pdpMeasured,pdpRequired,pointBar,supplyBar,targetBar,tariff.value]);
-  const scoreLabel=result.score>=61?"Prioridade alta":result.score>=31?"Oportunidade relevante":"Acompanhar";
   const reportText=useMemo(()=>[
     "PRÉ-LAUDO TECAR 360","Indústria: "+industry.label,"Modelo: "+model.model,
     "Vazão publicada / demanda: "+number(model.flowCfm,0)+" / "+number(demandCfm,0)+" cfm",
@@ -101,15 +99,14 @@ export function DiagnosticReportStudio(){
     "Vazamento: "+number(leakCfm,1)+" cfm | "+money(result.leakCost)+"/ano",
     "Queda de pressão: "+number(result.pressureDrop,2)+" bar","Oportunidade por setpoint: "+money(result.pressureSaving)+"/ano",
     "PDP medido / requerido: "+number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C",
-    "Índice de investigação: "+result.score+"/100 - "+scoreLabel,"",
     "Resultado preliminar baseado em dados informados e referências públicas. Requer validação em campo."
-  ].join("\n"),[demandCfm,industry.label,leakCfm,model,result,scoreLabel,pdpMeasured,pdpRequired]);
+  ].join("\n"),[demandCfm,industry.label,leakCfm,model,result,pdpMeasured,pdpRequired]);
 
   const whatsapp="https://wa.me/5541996441330?text="+encodeURIComponent("Olá, gerei um pré-laudo no Diagnóstico TecAr 360.\n\n"+reportText);
   const copyReport=async()=>{if(typeof navigator==="undefined"||!navigator.clipboard)return;await navigator.clipboard.writeText(reportText);setCopied(true);window.setTimeout(()=>setCopied(false),1800)};
 
   return <div className="v2-dx-studio">
-    <div className="v2-dx-studio-head"><div><span className="v2-kicker">PAINEL INTERATIVO</span><h2>Pré-laudo técnico em poucos minutos.</h2><p>Ajuste os dados disponíveis. Todos os resultados mudam em tempo real e permanecem identificados como estimativas até a validação técnica.</p></div><div className="v2-dx-score"><span>Índice de investigação</span><strong>{result.score}<small>/100</small></strong><b>{scoreLabel}</b><i><em style={{width:result.score+"%"}}/></i></div></div>
+    <div className="v2-dx-studio-head"><div><span className="v2-kicker">PAINEL INTERATIVO</span><h2>Pré-laudo técnico em poucos minutos.</h2><p>Ajuste os dados disponíveis. Todos os resultados mudam em tempo real e permanecem identificados como estimativas até a validação técnica.</p></div></div>
     <div className="v2-dx-benchmarks"><article><b>&lt;10%</b><span>vazamentos em sistema bem mantido</span></article><article><b>20–30%</b><span>perdas possíveis em sistema mal mantido</span></article><article><b>0,14 bar</b><span>redução associada a cerca de 1% de energia</span></article><article><b>&lt;10%</b><span>referência máxima de queda na distribuição</span></article></div>
     <div className="v2-dx-context">
       <label><span>Tipo de indústria</span><select value={industryId} onChange={e=>setIndustryId(e.target.value)}>{Object.entries(INDUSTRIES).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
@@ -165,7 +162,7 @@ export function DiagnosticReportStudio(){
 
     <section className="v2-dx-prelaudo">
       <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><a href={whatsapp} target="_blank" rel="noreferrer"><FileText size={17}/>Enviar à TecAr</a></div></div>
-      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div><div><span>Prioridade</span><b>{scoreLabel}</b></div></div>
+      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
       <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>2. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>3. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
       <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e dados CAGI devem ser confirmados por avaliação técnica.</p>
     </section>
