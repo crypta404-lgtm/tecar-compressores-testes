@@ -7,7 +7,7 @@ export function applySecurityHeaders(response: Response): Response {
       "script-src 'self' 'unsafe-inline'; " +
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
       "font-src 'self' https://fonts.gstatic.com; " +
-      "img-src 'self' data:; " +
+      "img-src 'self' data: https://assets.zyrosite.com https://azure-na-images.contentstack.com; " +
       "media-src 'self' blob:; " +
       "connect-src 'self'; " +
       "frame-src https://www.youtube-nocookie.com https://www.youtube.com; " +

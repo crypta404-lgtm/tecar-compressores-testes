@@ -13,7 +13,7 @@ export function AirLineExplorer(){
  return <div className="v2-line-explorer">
    <div className="v2-line-tabs">{steps.map(s=><button key={s.id} type="button" className={s.id===id?"is-active":""} onClick={()=>setId(s.id)}>{s.label}</button>)}</div>
    <div className="v2-line-stage">
-     <div className="v2-line-photo"><img src="/assets/products/line-aluminum.jpg" alt="Rede industrial em alumínio"/><span>{current.fact}</span></div>
+     <div className="v2-line-photo"><img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YZ9EgGEK8zh4Pjl4/piping-application-6-1200x800-1-mePg6NWzlRFonDzk.jpg" alt="Rede industrial em alumínio"/><span>{current.fact}</span></div>
      <div className="v2-line-copy"><small>ETAPA SELECIONADA</small><h2>{current.title}</h2><p>{current.text}</p><div className="v2-line-schematic" aria-hidden="true"><i className={id==="principal"?"active":""}/><i className={id==="anel"?"active":""}/><i className={id==="descidas"?"active":""}/><i className={id==="pontos"?"active":""}/></div></div>
    </div>
  </div>

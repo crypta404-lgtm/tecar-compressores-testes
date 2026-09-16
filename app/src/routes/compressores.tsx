@@ -40,14 +40,14 @@ const groups:ProductGroup[]=[
     id:"centrifugal",label:"Centrífugos",intro:"Soluções para grandes vazões e operações contínuas de maior porte.",
     items:[
       {name:"Centac C700",tag:"Centrífugo · isento de óleo",image:"/assets/products/centac-c700-official.jpg",summary:"Compressor centrífugo integrado para grande vazão e ar isento de óleo.",facts:["Grande vazão","Classe 0","Pacote integrado"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/60-115-m3min-2000-4100-cfm/"},
-      {name:"MSG Turbo-Air 2040",tag:"Centrífugo de alta pressão",image:"/assets/products/turbo-air-2040-official.webp",summary:"Centrífugo de alta pressão para aplicações de processo e sopro de embalagens PET.",facts:["Alta pressão","PET","Isento de óleo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
+      {name:"MSG Turbo-Air 2040",tag:"Centrífugo de alta pressão",image:"https://azure-na-images.contentstack.com/v3/assets/blta3c1d56420975795/blt73ff6f49d3b0cbeb/67b716f3dd97b1710cdbdedb/IRP-Product-Photo-turbo-air-2040.webp?auto=webp&format=pjpeg&quality=80&width=1600",summary:"Centrífugo de alta pressão para aplicações de processo e sopro de embalagens PET.",facts:["Alta pressão","PET","Isento de óleo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
     ]
   },
   {
     id:"pet",label:"PET / alta pressão",intro:"Famílias para sopro de embalagens, boosters e processos que exigem pressão elevada.",
     items:[
       {name:"Compressor de alta pressão",tag:"Processo especial",image:"/assets/products/compressor-high-pressure.png",summary:"Pacote dedicado a aplicações de pressão elevada, selecionado conforme vazão e pressão final do processo.",facts:["Alta pressão","Processos especiais","Dimensionamento dedicado"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/high-pressure-compressors/"},
-      {name:"MSG Turbo-Air 2040",tag:"PET · centrífugo",image:"/assets/products/turbo-air-2040-official.webp",summary:"Centrífugo de alta pressão desenvolvido para grandes fluxos e aplicações como sopro PET.",facts:["Até alta pressão","PET","Grande fluxo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
+      {name:"MSG Turbo-Air 2040",tag:"PET · centrífugo",image:"https://azure-na-images.contentstack.com/v3/assets/blta3c1d56420975795/blt73ff6f49d3b0cbeb/67b716f3dd97b1710cdbdedb/IRP-Product-Photo-turbo-air-2040.webp?auto=webp&format=pjpeg&quality=80&width=1600",summary:"Centrífugo de alta pressão desenvolvido para grandes fluxos e aplicações como sopro PET.",facts:["Até alta pressão","PET","Grande fluxo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
       {name:"T30 alta pressão",tag:"Pistão multiestágio",image:"/assets/products/t30-high-official.jpg",summary:"Alternativo de alta pressão para processos que exigem solução robusta e vazões menores.",facts:["Pistão","Alta pressão","Multiestágio"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/reciprocating-air-compressors/high-pressure/"},
     ]
   },
