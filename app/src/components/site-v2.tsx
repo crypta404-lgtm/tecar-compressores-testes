@@ -40,7 +40,7 @@ export function SiteHeader(){
       <Link to="/" className="v2-logo"><img src="/assets/tecar/logo.gif" alt="TecAr Compressores"/></Link>
       <nav className="v2-mainnav" aria-label="Navegação principal">
         <Link to="/">Home</Link>
-        <Link to="/diagnostico" className="v2-diagnostic-navlink">Diagnóstico</Link>
+        <Link to="/diagnostico" className="v2-diagnostic-navlink">Diagnósticos</Link>
         <Link to="/empresa">Empresa</Link>
         <div className="v2-navgroup"><button type="button">Produtos <span>⌄</span></button><div className="v2-dropdown">{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
         <div className="v2-navgroup"><button type="button">Serviços <span>⌄</span></button><div className="v2-dropdown v2-service-dropdown"><Link to="/servicos" className="v2-dropdown-overview">Visão geral de serviços</Link><ServicePeek/></div></div>
@@ -48,7 +48,7 @@ export function SiteHeader(){
         <Link to="/contato">Contato</Link>
       </nav>
       <Link to="/contato" className="v2-navcta">Solicitar orçamento</Link>
-      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/">Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnóstico</Link><Link to="/empresa">Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link><ServicePeek/><Link to="/conteudo">Conteúdo</Link><Link to="/contato">Contato</Link><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
+      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/">Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnósticos</Link><Link to="/empresa">Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link><ServicePeek/><Link to="/conteudo">Conteúdo</Link><Link to="/contato">Contato</Link><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
     </div>
   </header>
 }
