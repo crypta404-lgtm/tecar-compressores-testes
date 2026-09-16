@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageFrame, PageHero, SectionHead, ContactBand } from "@/components/site-v2";
+import { PageFrame, PageHero, ContactBand } from "@/components/site-v2";
+import { AirLineExplorer } from "@/components/air-line-explorer";
 import { pageMeta } from "@/lib/page-meta";
-export const Route=createFileRoute("/linhas-de-ar")({head:()=>pageMeta("/linhas-de-ar","Linhas de Ar Comprimido | TecAr","Projeto e instalação de linhas de ar comprimido em alumínio com dimensionamento de vazão, velocidade e perda de carga.","/assets/v2/lines.jpg"),component:Page});
-function Page(){return <PageFrame><PageHero kicker="LINHAS DE AR" title="Uma rede bem projetada preserva pressão e eficiência." text="A distribuição do ar comprimido precisa ser dimensionada para a vazão real, com velocidade adequada e perda de carga controlada." image="/assets/v2/lines.jpg"><Link to="/contato" className="v2-primary">Projetar rede</Link></PageHero>
-<section className="v2-section"><div className="v2-container v2-image-copy"><img src="/assets/v2/lines.jpg" alt="Tubulação de ar comprimido"/><div><SectionHead title="Linha em alumínio"/><p>Redes modulares em alumínio facilitam instalação, expansão e manutenção, além de reduzir problemas associados à corrosão interna de sistemas antigos.</p><div className="v2-feature-list"><div><b>Dimensionamento</b><span>Diâmetro calculado para a demanda real.</span></div><div><b>Perda de carga</b><span>Traçado e velocidade avaliados para preservar pressão.</span></div><div><b>Expansão</b><span>Planejamento para futuras alterações da planta.</span></div><div><b>Qualidade</b><span>Material adequado à distribuição de ar tratado.</span></div></div></div></div></section>
-<section className="v2-section v2-soft"><div className="v2-container"><SectionHead title="O que uma rede inadequada pode provocar"/><div className="v2-problem-grid"><article><strong>↓</strong><h3>Queda de pressão</h3><p>Ferramentas e processos recebem menos pressão do que precisam.</p></article><article><strong>↑</strong><h3>Consumo energético</h3><p>Elevar a pressão do compressor para compensar uma rede ruim aumenta o consumo.</p></article><article><strong>↯</strong><h3>Instabilidade</h3><p>Picos de demanda podem comprometer pontos mais distantes da rede.</p></article></div></div></section><ContactBand/></PageFrame>}
+
+export const Route=createFileRoute("/linhas-de-ar")({head:()=>pageMeta("/linhas-de-ar","Linhas de Ar Comprimido | TecAr","Rede em alumínio organizada por etapas de projeto e distribuição.","/assets/products/line-aluminum.jpg"),component:Page});
+
+function Page(){return <PageFrame>
+ <PageHero kicker="LINHAS DE AR" title="Veja como a rede é organizada." text="Clique em cada etapa da distribuição e entenda o papel dela no sistema." image="/assets/products/line-aluminum.jpg"><Link to="/contato" className="v2-primary">Projetar rede</Link></PageHero>
+ <section className="v2-section"><div className="v2-container"><AirLineExplorer/></div></section>
+ <ContactBand/>
+</PageFrame>}
