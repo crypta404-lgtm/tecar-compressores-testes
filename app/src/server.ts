@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { applySecurityHeaders } from "./lib/security-headers.server";
+import { handleAutoatendimento } from "./lib/autoatendimento.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -41,8 +42,16 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     const method = request.method.toUpperCase();
+    const url = new URL(request.url);
     if (method === "OPTIONS") {
-      return applySecurityHeaders(new Response(null, { status: 204, headers: { Allow: "GET, HEAD, OPTIONS" } }));
+      return applySecurityHeaders(new Response(null, { status: 204, headers: { Allow: "GET, HEAD, POST, OPTIONS" } }));
+    }
+    if (method === "GET" && url.pathname === "/api/autoatendimento/status") {
+      const active = Boolean((env as { OPENAI_API_KEY?: string })?.OPENAI_API_KEY);
+      return applySecurityHeaders(new Response(JSON.stringify({ active }), { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } }));
+    }
+    if (method === "POST" && url.pathname === "/api/autoatendimento") {
+      return applySecurityHeaders(await handleAutoatendimento(request, env));
     }
     if (method !== "GET" && method !== "HEAD") {
       return applySecurityHeaders(new Response("Method Not Allowed", { status: 405, headers: { Allow: "GET, HEAD, OPTIONS", "Content-Type": "text/plain; charset=utf-8" } }));

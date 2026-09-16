@@ -11,10 +11,10 @@ const productLinks = [
 ] as const;
 
 const serviceLinks = [
-  {to:"/manutencao",label:"Manutenção",summary:"Preventiva, corretiva e assistência técnica para manter a operação disponível."},
-  {to:"/engenharia",label:"Engenharia",summary:"Medições, eficiência, redes e dimensionamento do sistema de ar comprimido."},
-  {to:"/locacao",label:"Locação",summary:"Ar comprimido temporário para contingência, obra ou demanda adicional."},
-  {to:"/tecar-connect",label:"TecAr Connect",summary:"Monitoramento remoto para acompanhar condição e operação do equipamento."},
+  ["/manutencao","Manutenção"],
+  ["/engenharia","Engenharia"],
+  ["/locacao","Locação"],
+  ["/tecar-connect","TecAr Connect"],
 ] as const;
 
 export function WhatsAppLink({href,children,className}:{href:string;children:ReactNode;className?:string}){
@@ -27,12 +27,6 @@ export function WhatsAppLink({href,children,className}:{href:string;children:Rea
   return <a href={href} target="_blank" rel="noopener noreferrer" className={className} aria-disabled={locked} data-locked={locked?"true":"false"} onClick={handleClick}>{children}</a>
 }
 
-function ServicePeek(){
-  return <div className="v2-service-peek-list">
-    {serviceLinks.map(item=><details key={item.to} className="v2-service-peek"><summary>{item.label}<span>+</span></summary><div><p>{item.summary}</p><Link to={item.to}>Ver detalhes</Link></div></details>)}
-  </div>
-}
-
 export function SiteHeader(){
   return <header className="v2-header">
     <div className="v2-topline"><div className="v2-container v2-topline-inner"><span>Curitiba: (41) 3376-9966</span><span>Paranaguá: (41) 3422-7855</span><WhatsAppLink href="https://wa.me/5541996441330">WhatsApp</WhatsAppLink></div></div>
@@ -41,14 +35,15 @@ export function SiteHeader(){
       <nav className="v2-mainnav" aria-label="Navegação principal">
         <Link to="/">Home</Link>
         <Link to="/diagnostico" className="v2-diagnostic-navlink">Diagnósticos</Link>
+        <Link to="/autoatendimento">Autoatendimento</Link>
         <Link to="/empresa">Empresa</Link>
         <div className="v2-navgroup"><button type="button">Produtos <span>⌄</span></button><div className="v2-dropdown">{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
-        <div className="v2-navgroup"><button type="button">Serviços <span>⌄</span></button><div className="v2-dropdown v2-service-dropdown"><Link to="/servicos" className="v2-dropdown-overview">Visão geral de serviços</Link><ServicePeek/></div></div>
+        <div className="v2-navgroup"><button type="button">Serviços <span>⌄</span></button><div className="v2-dropdown v2-service-dropdown"><Link to="/servicos" className="v2-dropdown-overview">Visão geral de serviços</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
         <Link to="/conteudo">Conteúdo</Link>
         <Link to="/contato">Contato</Link>
       </nav>
       <Link to="/contato" className="v2-navcta">Solicitar orçamento</Link>
-      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/">Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnósticos</Link><Link to="/empresa">Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link><ServicePeek/><Link to="/conteudo">Conteúdo</Link><Link to="/contato">Contato</Link><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
+      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/">Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnósticos</Link><Link to="/autoatendimento">Autoatendimento</Link><Link to="/empresa">Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<Link to="/conteudo">Conteúdo</Link><Link to="/contato">Contato</Link><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
     </div>
   </header>
 }
