@@ -31,7 +31,14 @@ const number=(value:number,digits=1)=>value.toLocaleString("pt-BR",{maximumFract
 const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
 
 function Input({label,suffix,value,min,max,step=1,onChange}:{label:string;suffix?:string;value:number;min?:number;max?:number;step?:number;onChange:(value:number)=>void}){
-  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} onChange={e=>onChange(Number(e.target.value)||0)}/>{suffix&&<b>{suffix}</b>}</div></label>
+  const handleChange=(raw:string)=>{
+    if(raw.length>6 || /[eE+]/.test(raw)) return;
+    if(raw===""){ onChange(0); return; }
+    const next=Number(raw);
+    if(!Number.isFinite(next)) return;
+    onChange(next);
+  };
+  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} maxLength={6} onChange={e=>handleChange(e.target.value)}/>{suffix&&<b>{suffix}</b>}</div></label>
 }
 
 function Meter({label,value,max,display,tone="default"}:{label:string;value:number;max:number;display:string;tone?:"default"|"risk"|"good"}){

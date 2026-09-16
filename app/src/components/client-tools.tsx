@@ -3,6 +3,12 @@ import { CAGI_UP6S, COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data
 
 const money=(value:number)=>value.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const number=(value:number,digits=0)=>value.toLocaleString("pt-BR",{maximumFractionDigits:digits,minimumFractionDigits:digits});
+const limitedNumber=(raw:string)=>{
+  if(raw.length>6 || /[eE+]/.test(raw)) return null;
+  if(raw==="") return 0;
+  const next=Number(raw);
+  return Number.isFinite(next)?next:null;
+};
 
 export function EnergyLossTool(){
   const [modelId,setModelId]=useState("up6s-30-125");
@@ -17,7 +23,7 @@ export function EnergyLossTool(){
     <div className="v2-evidence-badge">Cálculo reproduzível: potência total do pacote CAGI × horas informadas × tarifa regulatória</div>
     <div className="v2-inputgrid v2-inputgrid-stack">
       <label>Compressor verificado<select value={modelId} onChange={e=>setModelId(e.target.value)}>{CAGI_UP6S.map(x=><option key={x.id} value={x.id}>{x.model} · {x.hp} hp · {x.flowCfm} cfm</option>)}</select></label>
-      <label>Horas reais de operação no ano<input type="number" min="1" max="8760" value={hours} onChange={e=>setHours(Math.min(8760,Math.max(0,Number(e.target.value)||0)))}/></label>
+      <label>Horas reais de operação no ano<input type="number" min="1" max="8760" maxLength={6} value={hours} onChange={e=>{const next=limitedNumber(e.target.value);if(next!==null)setHours(Math.min(8760,Math.max(0,next)))}}/></label>
       <label>Referência tarifária<select value={tariffId} onChange={e=>setTariffId(e.target.value)}>{COPEL_A4_TARIFFS.map(x=><option key={x.id} value={x.id}>{x.label} · R$ {x.value.toFixed(5)}/kWh</option>)}</select></label>
     </div>
     <div className="v2-tool-facts"><span><b>{number(model.packageKw ?? 0,2)} kW</b>entrada total em plena carga</span><span><b>{number(annualKwh)} kWh</b>energia anual calculada</span><span><b>{number(model.specificKw100Cfm ?? 0,2)}</b>kW/100 cfm CAGI</span></div>
@@ -32,7 +38,7 @@ export function DowntimeTool(){
   const total=value*hours;
   return <div className="v2-tool v2-tool-compact">
     <div className="v2-tool-head"><span>Impacto informado pela própria operação</span><strong>{money(total)}</strong></div>
-    <div className="v2-inputgrid"><label>Valor atribuído pela sua empresa a 1 h parada<input type="number" min="0" value={value} onChange={e=>setValue(Number(e.target.value)||0)}/></label><label>Horas paradas<input type="number" min="0" value={hours} onChange={e=>setHours(Number(e.target.value)||0)}/></label></div>
+    <div className="v2-inputgrid"><label>Valor atribuído pela sua empresa a 1 h parada<input type="number" min="0" max="999999" maxLength={6} value={value} onChange={e=>{const next=limitedNumber(e.target.value);if(next!==null)setValue(Math.max(0,next))}}/></label><label>Horas paradas<input type="number" min="0" max="999999" maxLength={6} value={hours} onChange={e=>{const next=limitedNumber(e.target.value);if(next!==null)setHours(Math.max(0,next))}}/></label></div>
     <p className="v2-tool-note">Aqui não existe taxa de mercado: o valor por hora é fornecido pelo cliente. A ferramenta apenas multiplica os dois dados e não representa cálculo contábil de lucro cessante.</p>
   </div>
 }
