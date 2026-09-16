@@ -28,7 +28,7 @@ export function EnergyLossTool(){
     </div>
     <div className="v2-tool-facts"><span><b>{number(model.packageKw ?? 0,2)} kW</b>entrada total em plena carga</span><span><b>{number(annualKwh)} kWh</b>energia anual calculada</span><span><b>{number(model.specificKw100Cfm ?? 0,2)}</b>kW/100 cfm CAGI</span></div>
     <p className="v2-tool-note">Não é uma simulação da fatura. A referência ANEEL usada aqui considera apenas TE + TUSD de energia do subgrupo A4; demanda, tributos, bandeiras e demais itens não entram no resultado.</p>
-    <details className="v2-source"><summary>Base técnica e fontes</summary><p>{model.sourceLabel}. A potência usada é a entrada total do pacote no ponto de ensaio informado na ficha, não uma conversão de HP.</p><a href={model.sourceUrl} target="_blank" rel="noreferrer">Ficha CAGI do modelo</a><a href={TECH_SOURCES.copel.url} target="_blank" rel="noreferrer">Copel: tarifas vigentes</a><a href={TECH_SOURCES.aneel.url} target="_blank" rel="noreferrer">ANEEL: base tarifária oficial</a></details>
+    <details className="v2-source"><summary>Base técnica e fontes</summary><p>{model.sourceLabel}. A potência usada é a entrada total do pacote no ponto de ensaio informado na ficha, não uma conversão de HP.</p><a href={model.sourceUrl} target="_blank" rel="noopener noreferrer">Ficha CAGI do modelo</a><a href={TECH_SOURCES.copel.url} target="_blank" rel="noopener noreferrer">Copel: tarifas vigentes</a><a href={TECH_SOURCES.aneel.url} target="_blank" rel="noopener noreferrer">ANEEL: base tarifária oficial</a></details>
   </div>
 }
 

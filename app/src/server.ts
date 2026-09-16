@@ -40,6 +40,13 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const method = request.method.toUpperCase();
+    if (method === "OPTIONS") {
+      return applySecurityHeaders(new Response(null, { status: 204, headers: { Allow: "GET, HEAD, OPTIONS" } }));
+    }
+    if (method !== "GET" && method !== "HEAD") {
+      return applySecurityHeaders(new Response("Method Not Allowed", { status: 405, headers: { Allow: "GET, HEAD, OPTIONS", "Content-Type": "text/plain; charset=utf-8" } }));
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

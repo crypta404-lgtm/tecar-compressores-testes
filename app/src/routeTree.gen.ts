@@ -29,7 +29,6 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CompressoresRouteImport } from './routes/compressores'
 import { Route as BlogListRouteImport } from './routes/blog-list'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AppRouteImport } from './routes/app'
 import { Route as AcessoriosRouteImport } from './routes/acessorios'
 import { Route as AEmpresaRouteImport } from './routes/a-empresa'
 import { Route as IndexRouteImport } from './routes/index'
@@ -137,11 +136,6 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AcessoriosRoute = AcessoriosRouteImport.update({
   id: '/acessorios',
   path: '/acessorios',
@@ -162,7 +156,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/app': typeof AppRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
@@ -188,7 +181,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/app': typeof AppRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
@@ -215,7 +207,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/app': typeof AppRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
@@ -243,7 +234,6 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/app'
     | '/blog'
     | '/blog-list'
     | '/compressores'
@@ -269,7 +259,6 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/app'
     | '/blog'
     | '/blog-list'
     | '/compressores'
@@ -295,7 +284,6 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/app'
     | '/blog'
     | '/blog-list'
     | '/compressores'
@@ -322,7 +310,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AEmpresaRoute: typeof AEmpresaRoute
   AcessoriosRoute: typeof AcessoriosRoute
-  AppRoute: typeof AppRoute
   BlogRoute: typeof BlogRoute
   BlogListRoute: typeof BlogListRoute
   CompressoresRoute: typeof CompressoresRoute
@@ -487,13 +474,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/acessorios': {
       id: '/acessorios'
       path: '/acessorios'
@@ -522,7 +502,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AEmpresaRoute: AEmpresaRoute,
   AcessoriosRoute: AcessoriosRoute,
-  AppRoute: AppRoute,
   BlogRoute: BlogRoute,
   BlogListRoute: BlogListRoute,
   CompressoresRoute: CompressoresRoute,

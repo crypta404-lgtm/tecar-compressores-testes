@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState, type ComponentType } from "react";
 import { CAGI_UP6S, COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
+import { WhatsAppLink } from "@/components/site-v2";
 
 type ReportId = "flow" | "energy" | "leaks" | "pressure" | "quality";
 type IndustryProfile = { label:string; focus:string; risks:string[]; measurements:string[] };
@@ -36,7 +37,7 @@ function Input({label,suffix,value,min,max,step=1,onChange}:{label:string;suffix
     if(raw===""){ onChange(0); return; }
     const next=Number(raw);
     if(!Number.isFinite(next)) return;
-    onChange(next);
+    onChange(clamp(next,min??-999999,max??999999));
   };
   return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} maxLength={6} onChange={e=>handleChange(e.target.value)}/>{suffix&&<b>{suffix}</b>}</div></label>
 }
@@ -47,7 +48,7 @@ function Meter({label,value,max,display,tone="default"}:{label:string;value:numb
 }
 
 function SourceLinks({links}:{links:Array<{label:string;url:string}>}){
-  return <div className="v2-dx-sources"><span>Fontes desta leitura</span>{links.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}</a>)}</div>
+  return <div className="v2-dx-sources"><span>Fontes desta leitura</span>{links.map(source=><a key={source.url} href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a>)}</div>
 }
 
 export function DiagnosticHero(){
@@ -150,7 +151,7 @@ export function DiagnosticReportStudio(){
         </div>}
         {active==="pressure"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Gauge/><div><span>RELATÓRIO 04</span><h3>Pressão, queda e oportunidade</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Saída do reservatório" suffix="bar" value={supplyBar} min={0} step={.1} onChange={setSupplyBar}/><Input label="Ponto crítico de uso" suffix="bar" value={pointBar} min={0} step={.1} onChange={setPointBar}/><Input label="Setpoint alvo" suffix="bar" value={targetBar} min={0} step={.1} onChange={setTargetBar}/></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Saída do reservatório" suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Ponto crítico de uso" suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Setpoint alvo" suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
           <div className="v2-dx-pressure-line"><div><Gauge/><span>Origem</span><b>{number(supplyBar,1)} bar</b></div><i><em style={{width:clamp(100-result.pressureDropPercent,5,100)+"%"}}/></i><div><ArrowDownRight/><span>Ponto de uso</span><b>{number(pointBar,1)} bar</b></div></div>
           <div className="v2-dx-kpis"><div className={result.pressureDropPercent>=10?"is-risk":""}><span>Queda na rede</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Redução avaliada</span><b>{number(result.pressureSavingPercent,1)}%</b></div><div><span>Referência anual</span><b>{money(result.pressureSaving)}</b></div></div>
           <div className="v2-dx-finding"><Gauge size={20}/><p><b>Regra de triagem próxima de 6,9 bar.</b>O Sourcebook relaciona cada redução de aproximadamente 0,14 bar a cerca de 1% de economia em plena vazão. A curva e o controle real do compressor prevalecem.</p></div>
@@ -158,7 +159,7 @@ export function DiagnosticReportStudio(){
         </div>}
         {active==="quality"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Droplets/><div><span>RELATÓRIO 05</span><h3>Qualidade do ar e ponto de orvalho</h3></div></div>
-          <div className="v2-dx-inputs"><Input label="PDP medido" suffix="°C" value={pdpMeasured} onChange={setPdpMeasured}/><Input label="PDP requerido pelo processo" suffix="°C" value={pdpRequired} onChange={setPdpRequired}/></div>
+          <div className="v2-dx-inputs"><Input label="PDP medido" suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="PDP requerido pelo processo" suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
           <div className="v2-dx-quality-grid"><article><Droplets/><span>Água</span><b>{result.pdpGap>0?"Investigar":"Dentro do informado"}</b><p>PDP, água líquida, drenagem e condição do secador.</p></article><article><ShieldCheck/><span>Óleo</span><b>Exige medição</b><p>A classe não pode ser presumida apenas pelo tipo de compressor.</p></article><article><Activity/><span>Partículas</span><b>Exige medição</b><p>Filtros, rede e ponto de coleta influenciam o resultado.</p></article></div>
           <div className={"v2-dx-finding "+(result.pdpGap>0?"risk":"ok")}><ThermometerSun size={20}/><p><b>{result.pdpGap>0?"PDP acima do requisito informado.":"PDP atende ao requisito informado."}</b>A ISO 8573-1 classifica pureza por partículas, água e óleo. Um pré-laudo não certifica classe sem medição e método aplicável.</p></div>
           <div className="v2-dx-measure-list"><span>Medições recomendadas para este setor</span>{industry.measurements.map(item=><b key={item}><ClipboardCheck size={15}/>{item}</b>)}</div>
@@ -168,7 +169,7 @@ export function DiagnosticReportStudio(){
     </div>
 
     <section className="v2-dx-prelaudo">
-      <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><a href={whatsapp} target="_blank" rel="noreferrer"><FileText size={17}/>Enviar à TecAr</a></div></div>
+      <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><WhatsAppLink href={whatsapp}><FileText size={17}/>Enviar à TecAr</WhatsAppLink></div></div>
       <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
       <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>2. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>3. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
       <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e dados CAGI devem ser confirmados por avaliação técnica.</p>
@@ -184,5 +185,5 @@ export function DiagnosticSourceLibrary(){
     {icon:Droplets,name:"ISO 8573-1",text:"Estrutura de classes de pureza para partículas, água e óleo.",source:TECH_SOURCES.iso8573},
     {icon:Bolt,name:"Copel e ANEEL",text:"Tarifa homologada usada como referência comparativa de energia.",source:TECH_SOURCES.copel},
   ];
-  return <div className="v2-dx-source-library">{sources.map(({icon:Icon,name,text,source})=><a key={name} href={source.url} target="_blank" rel="noreferrer"><Icon size={23} strokeWidth={1.7}/><div><b>{name}</b><span>{text}</span></div><ArrowDownRight size={17}/></a>)}</div>
+  return <div className="v2-dx-source-library">{sources.map(({icon:Icon,name,text,source})=><a key={name} href={source.url} target="_blank" rel="noopener noreferrer"><Icon size={23} strokeWidth={1.7}/><div><b>{name}</b><span>{text}</span></div><ArrowDownRight size={17}/></a>)}</div>
 }

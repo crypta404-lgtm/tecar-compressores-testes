@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { WhatsAppLink } from "@/components/site-v2";
 
 type Variant = "compact" | "full";
 
@@ -79,7 +80,7 @@ function buildMessage(a: Answers, variant: Variant) {
     "",
     "Gostaria de orientação da equipe TecAr sobre o próximo passo."
   );
-  return rows.join("\n");
+  return rows.join("\n").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g," ").slice(0,1800);
 }
 
 function ChoiceGrid({options,value,onChange}:{options:string[];value:string;onChange:(value:string)=>void}) {
@@ -97,7 +98,8 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
   const route = useMemo(()=>getRoute(answers),[answers]);
   const whatsapp = useMemo(()=>"https://wa.me/5541996441330?text="+encodeURIComponent(buildMessage(answers,variant)),[answers,variant]);
 
-  const set = (key:keyof Answers,value:string)=>setAnswers((prev)=>({...prev,[key]:value}));
+  const limits:Record<keyof Answers,number>={goal:80,impact:80,system:60,details:500,readings:350,maintenance:350,urgency:60,city:80,company:100,name:80};
+  const set = (key:keyof Answers,value:string)=>setAnswers((prev)=>({...prev,[key]:value.slice(0,limits[key])}));
   const next = ()=>setStep((s)=>Math.min(steps,s+1));
   const back = ()=>setStep((s)=>Math.max(0,s-1));
 
@@ -126,14 +128,14 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
       {step===1 && <div className="v2-diagnostic-step"><h3>Como isso está afetando a operação?</h3><p>A criticidade ajuda a TecAr a entender a prioridade do atendimento.</p><ChoiceGrid options={IMPACTS} value={answers.impact} onChange={(v)=>set("impact",v)}/></div>}
       {step===2 && <div className="v2-diagnostic-step"><h3>Onde está o problema ou a necessidade?</h3><ChoiceGrid options={SYSTEMS} value={answers.system} onChange={(v)=>set("system",v)}/></div>}
 
-      {compact && step===3 && <div className="v2-diagnostic-step"><h3>Onde está a operação?</h3><label className="v2-diagnostic-field">Cidade / UF<input value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Ex.: Curitiba / PR"/></label></div>}
-      {compact && step===4 && <div className="v2-diagnostic-step"><h3>Quem devemos atender?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Seu nome<input value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa<input value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
+      {compact && step===3 && <div className="v2-diagnostic-step"><h3>Onde está a operação?</h3><label className="v2-diagnostic-field">Cidade / UF<input maxLength={80} value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Ex.: Curitiba / PR"/></label></div>}
+      {compact && step===4 && <div className="v2-diagnostic-step"><h3>Quem devemos atender?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Seu nome<input maxLength={80} value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa<input maxLength={100} value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
 
-      {!compact && step===3 && <div className="v2-diagnostic-step"><h3>Conte o que você sabe sobre o equipamento e o sintoma.</h3><p>Marca, modelo, potência, mensagens de alarme, ruído, temperatura, comportamento ou qualquer informação observada.</p><label className="v2-diagnostic-field"><textarea rows={5} value={answers.details} onChange={(e)=>set("details",e.target.value)} placeholder="Ex.: compressor 50 hp, temperatura subindo, alarme após 20 minutos..."/></label></div>}
-      {!compact && step===4 && <div className="v2-diagnostic-step"><h3>Você possui alguma leitura ou medição?</h3><p>Opcional. Informe pressão, temperatura, ponto de orvalho, consumo, horas ou outra leitura disponível.</p><label className="v2-diagnostic-field"><textarea rows={4} value={answers.readings} onChange={(e)=>set("readings",e.target.value)} placeholder="Ex.: 6,2 bar na rede, 92 °C no compressor, ponto de orvalho +8 °C..."/></label></div>}
-      {!compact && step===5 && <div className="v2-diagnostic-step"><h3>Como está o histórico de manutenção?</h3><p>Opcional. Última preventiva, peças trocadas, falhas repetidas ou intervenções recentes ajudam na triagem.</p><label className="v2-diagnostic-field"><textarea rows={4} value={answers.maintenance} onChange={(e)=>set("maintenance",e.target.value)} placeholder="Ex.: preventiva há 4 meses; falha semelhante já ocorreu duas vezes..."/></label></div>}
+      {!compact && step===3 && <div className="v2-diagnostic-step"><h3>Conte o que você sabe sobre o equipamento e o sintoma.</h3><p>Marca, modelo, potência, mensagens de alarme, ruído, temperatura, comportamento ou qualquer informação observada.</p><label className="v2-diagnostic-field"><textarea rows={5} maxLength={500} value={answers.details} onChange={(e)=>set("details",e.target.value)} placeholder="Ex.: compressor 50 hp, temperatura subindo, alarme após 20 minutos..."/></label></div>}
+      {!compact && step===4 && <div className="v2-diagnostic-step"><h3>Você possui alguma leitura ou medição?</h3><p>Opcional. Informe pressão, temperatura, ponto de orvalho, consumo, horas ou outra leitura disponível.</p><label className="v2-diagnostic-field"><textarea rows={4} maxLength={350} value={answers.readings} onChange={(e)=>set("readings",e.target.value)} placeholder="Ex.: 6,2 bar na rede, 92 °C no compressor, ponto de orvalho +8 °C..."/></label></div>}
+      {!compact && step===5 && <div className="v2-diagnostic-step"><h3>Como está o histórico de manutenção?</h3><p>Opcional. Última preventiva, peças trocadas, falhas repetidas ou intervenções recentes ajudam na triagem.</p><label className="v2-diagnostic-field"><textarea rows={4} maxLength={350} value={answers.maintenance} onChange={(e)=>set("maintenance",e.target.value)} placeholder="Ex.: preventiva há 4 meses; falha semelhante já ocorreu duas vezes..."/></label></div>}
       {!compact && step===6 && <div className="v2-diagnostic-step"><h3>Qual é a urgência?</h3><ChoiceGrid options={URGENCIES} value={answers.urgency} onChange={(v)=>set("urgency",v)}/></div>}
-      {!compact && step===7 && <div className="v2-diagnostic-step"><h3>Para onde a equipe deve direcionar a conversa?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Cidade / UF<input value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Cidade / UF"/></label><label className="v2-diagnostic-field">Seu nome<input value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa<input value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
+      {!compact && step===7 && <div className="v2-diagnostic-step"><h3>Para onde a equipe deve direcionar a conversa?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Cidade / UF<input maxLength={80} value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Cidade / UF"/></label><label className="v2-diagnostic-field">Seu nome<input maxLength={80} value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa<input maxLength={100} value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
     </div>}
 
     {done && <div className="v2-diagnostic-result">
@@ -146,21 +148,14 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
         <div><b>Sistema</b><span>{answers.system}</span></div>
         <div><b>Local</b><span>{answers.city}</span></div>
       </div>
-      <a href={whatsapp} target="_blank" rel="noreferrer" className="v2-diagnostic-whatsapp">Enviar diagnóstico no WhatsApp</a>
+      <WhatsAppLink href={whatsapp} className="v2-diagnostic-whatsapp">Enviar diagnóstico no WhatsApp</WhatsAppLink>
       <button type="button" className="v2-diagnostic-restart" onClick={()=>{setAnswers(EMPTY);setStep(0)}}>Refazer questionário</button>
     </div>}
 
     {!done && <div className="v2-diagnostic-nav">
       {step>0 ? <button type="button" onClick={back}>Voltar</button> : <span/>}
       {step===steps-1
-        ? <a
-            className="v2-diagnostic-next"
-            aria-disabled={!canContinue}
-            href={canContinue ? whatsapp : undefined}
-            target="_blank"
-            rel="noreferrer"
-            onClick={(event)=>{ if(!canContinue){ event.preventDefault(); return; } setStep(steps); }}
-          >Concluir e abrir WhatsApp</a>
+        ? (canContinue ? <span onClick={()=>setStep(steps)}><WhatsAppLink href={whatsapp} className="v2-diagnostic-next">Concluir e abrir WhatsApp</WhatsAppLink></span> : <button type="button" className="v2-diagnostic-next" disabled>Concluir e abrir WhatsApp</button>)
         : <button type="button" className="v2-diagnostic-next" disabled={!canContinue} onClick={next}>Continuar</button>}
     </div>}
   </div>;

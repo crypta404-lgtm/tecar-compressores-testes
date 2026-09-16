@@ -4,5 +4,6 @@
  * The `json` prop must be a pre-stringified JSON string (module-level const).
  */
 export function StructuredData({ json }: { json: string }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
+  const safeJson = json.replace(/</g, "\\u003c");
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJson }} />;
 }
