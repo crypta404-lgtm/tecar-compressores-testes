@@ -57,13 +57,6 @@ function Home(){
       </div>
     </section>
 
-    <section className="v2-home-presence">
-      <img src="/assets/v2/tecar-service.png" alt="Equipe técnica TecAr em atendimento industrial"/>
-      <div className="v2-container v2-home-presence-content">
-        <div><span className="v2-kicker">PRESENÇA TÉCNICA</span><h2>Proximidade para responder. Método para resolver.</h2><p>Atendimento industrial com unidades em Curitiba e Paranaguá, suporte autorizado Ingersoll Rand e experiência construída desde 1999.</p><Link to="/empresa">Conhecer a TecAr</Link></div>
-      </div>
-    </section>
-
     <ContactBand title="Sua operação precisa de uma resposta objetiva?" text="Envie o cenário pelo diagnóstico ou fale diretamente com a equipe TecAr."/>
   </PageFrame>
 }

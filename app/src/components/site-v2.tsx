@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type MouseEvent, type ReactNode } from "react";
 
 const productLinks = [
@@ -28,22 +28,27 @@ export function WhatsAppLink({href,children,className}:{href:string;children:Rea
 }
 
 export function SiteHeader(){
+  const pathname=useRouterState({select:(state)=>state.location.pathname});
+  const productsActive=productLinks.some(([to])=>to===pathname);
+  const servicesActive=pathname==="/servicos" || serviceLinks.some(([to])=>to===pathname);
   return <header className="v2-header">
-    <div className="v2-topline"><div className="v2-container v2-topline-inner"><span>Curitiba: (41) 3376-9966</span><span>Paranaguá: (41) 3422-7855</span><WhatsAppLink href="https://wa.me/5541996441330">WhatsApp</WhatsAppLink></div></div>
     <div className="v2-container v2-navrow">
-      <Link to="/" className="v2-logo"><img src="/assets/tecar/logo.gif" alt="TecAr Compressores"/></Link>
+      <Link to="/" className="v2-logo"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/></Link>
       <nav className="v2-mainnav" aria-label="Navegação principal">
-        <Link to="/">Home</Link>
-        <Link to="/diagnostico" className="v2-diagnostic-navlink">Diagnósticos</Link>
+        <Link to="/" activeOptions={{exact:true}} activeProps={{"data-active":"true"}}>Home</Link>
+        <Link to="/diagnostico" activeProps={{"data-active":"true"}} className="v2-diagnostic-navlink">Diagnósticos</Link>
         
-        <Link to="/empresa">Empresa</Link>
-        <div className="v2-navgroup"><button type="button">Produtos <span>⌄</span></button><div className="v2-dropdown">{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
-        <div className="v2-navgroup"><button type="button">Serviços <span>⌄</span></button><div className="v2-dropdown v2-service-dropdown"><Link to="/servicos" className="v2-dropdown-overview">Visão geral de serviços</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
+        <Link to="/empresa" activeProps={{"data-active":"true"}}>Empresa</Link>
+        <div className="v2-navgroup" data-active={productsActive?"true":undefined}><button type="button">Produtos <span>⌄</span></button><div className="v2-dropdown">{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
+        <div className="v2-navgroup" data-active={servicesActive?"true":undefined}><button type="button">Serviços <span>⌄</span></button><div className="v2-dropdown v2-service-dropdown"><Link to="/servicos" className="v2-dropdown-overview">Visão geral de serviços</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}</div></div>
         
         
       </nav>
-      <WhatsAppLink href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." className="v2-navcta">Solicitar orçamento</WhatsAppLink>
-      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/">Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnósticos</Link><Link to="/empresa">Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<WhatsAppLink href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr.">Falar pelo WhatsApp</WhatsAppLink><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
+      <div className="v2-header-actions">
+        <WhatsAppLink href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." className="v2-navcta">Solicitar orçamento</WhatsAppLink>
+        <div className="v2-header-contacts"><a href="tel:+554133769966">Curitiba (41) 3376-9966</a><a href="tel:+554134227855">Paranaguá (41) 3422-7855</a><WhatsAppLink href="https://wa.me/5541996441330">WhatsApp</WhatsAppLink></div>
+      </div>
+      <details className="v2-mobilemenu"><summary>Menu</summary><div className="v2-mobilepanel"><Link to="/" activeOptions={{exact:true}} activeProps={{"data-active":"true"}}>Home</Link><Link to="/diagnostico" className="v2-mobile-diagnostic">Diagnósticos</Link><Link to="/empresa" activeProps={{"data-active":"true"}}>Empresa</Link><strong>Produtos</strong>{productLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<strong>Serviços</strong><Link to="/servicos">Visão geral</Link>{serviceLinks.map(([to,label])=><Link key={to} to={to}>{label}</Link>)}<WhatsAppLink href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr.">Falar pelo WhatsApp</WhatsAppLink><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></div></details>
     </div>
   </header>
 }
@@ -51,7 +56,7 @@ export function SiteHeader(){
 export function SiteFooter(){
   return <footer className="v2-footer">
     <div className="v2-container v2-footer-grid">
-      <div className="v2-footer-brand"><img src="/assets/tecar/logo.gif" alt="TecAr Compressores"/><p>Ar comprimido industrial: equipamentos, assistência, engenharia e locação.</p></div>
+      <div className="v2-footer-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><p>Ar comprimido industrial: equipamentos, assistência, engenharia e locação.</p></div>
       <div><h4>Curitiba</h4><p>R. das Carmelitas, 1935<br/>Boqueirão, Curitiba PR</p><a href="tel:+554133769966">(41) 3376-9966</a><a href="mailto:tecarindustrial@tecarcompressores.com.br">tecarindustrial@tecarcompressores.com.br</a></div>
       <div><h4>Paranaguá</h4><p>R. Prof. Décio, 197<br/>Rocio, Paranaguá PR</p><a href="tel:+554134227855">(41) 3422-7855</a><a href="mailto:tecarportuaria@tecarcompressores.com.br">tecarportuaria@tecarcompressores.com.br</a></div>
       <div><h4>Acesso rápido</h4><Link to="/diagnostico">Diagnóstico</Link><Link to="/manutencao">Manutenção</Link><Link to="/locacao">Locação</Link><Link to="/engenharia">Engenharia</Link><Link to="/tecar-connect">Monitoramento</Link></div>
