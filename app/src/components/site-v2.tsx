@@ -59,7 +59,7 @@ export function SiteFooter(){
       <div className="v2-footer-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><p>Ar comprimido industrial: equipamentos, assistência, engenharia e locação.</p></div>
       <div><h4>Curitiba</h4><p>R. das Carmelitas, 1935<br/>Boqueirão, Curitiba PR</p><a href="tel:+554133769966">(41) 3376-9966</a><a href="mailto:tecarindustrial@tecarcompressores.com.br">tecarindustrial@tecarcompressores.com.br</a></div>
       <div><h4>Paranaguá</h4><p>R. Prof. Décio, 197<br/>Rocio, Paranaguá PR</p><a href="tel:+554134227855">(41) 3422-7855</a><a href="mailto:tecarportuaria@tecarcompressores.com.br">tecarportuaria@tecarcompressores.com.br</a></div>
-      <div><h4>Acesso rápido</h4><Link to="/diagnostico">Diagnóstico</Link><Link to="/manutencao">Manutenção</Link><Link to="/locacao">Locação</Link><Link to="/engenharia">Engenharia</Link><Link to="/tecar-connect">Monitoramento</Link></div>
+      <div className="v2-footer-quick"><h4>Acesso rápido</h4><Link to="/diagnostico">Diagnóstico</Link><Link to="/manutencao">Manutenção</Link><Link to="/locacao">Locação</Link><Link to="/engenharia">Engenharia</Link><Link to="/tecar-connect">Monitoramento</Link></div>
     </div>
     <div className="v2-container v2-footer-bottom"><span>© {new Date().getFullYear()} TecAr Compressores</span><span>Assistência e revenda autorizada Ingersoll Rand desde 1999.</span></div>
   </footer>
