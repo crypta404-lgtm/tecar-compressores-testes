@@ -6,7 +6,7 @@ import { useMemo, useState, type ComponentType } from "react";
 import { CAGI_UP6S, COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
 import { WhatsAppLink } from "@/components/site-v2";
 
-type ReportId = "flow" | "energy" | "leaks" | "pressure" | "quality";
+type ReportId = "flow" | "energy" | "pressure" | "quality";
 type IndustryProfile = { label:string; focus:string; risks:string[]; measurements:string[] };
 
 const INDUSTRIES:Record<string,IndustryProfile>={
@@ -20,9 +20,8 @@ const INDUSTRIES:Record<string,IndustryProfile>={
 };
 
 const REPORTS:Array<{id:ReportId;label:string;short:string;icon:ComponentType<{size?:number;strokeWidth?:number}>}>=[
-  {id:"flow",label:"Vazão e demanda",short:"Capacidade, consumo e reserva",icon:Wind},
+  {id:"flow",label:"Vazão e vazamentos",short:"Demanda, perdas e custo",icon:Wind},
   {id:"energy",label:"Energia",short:"kWh, potência e custo anual",icon:Bolt},
-  {id:"leaks",label:"Vazamentos",short:"Perda de ar e impacto financeiro",icon:AirVent},
   {id:"pressure",label:"Pressão",short:"Queda de rede e oportunidade",icon:Gauge},
   {id:"quality",label:"Qualidade do ar",short:"PDP, contaminantes e evidências",icon:Droplets},
 ];
@@ -57,8 +56,7 @@ export function DiagnosticHero(){
       <span className="v2-kicker">DIAGNÓSTICO TECAR 360</span>
       <h1>Transforme sinais da operação em uma decisão técnica.</h1>
       <p>Simule vazão, energia, vazamentos, pressão e qualidade do ar. Ao final, gere um pré-laudo com memória de cálculo e fontes técnicas visíveis.</p>
-      <div className="v2-dx-hero-actions"><a href="#estudio-diagnostico">Gerar pré-laudo</a><a href="#ensaios-tecnicos">Abrir calculadoras</a></div>
-      <div className="v2-dx-proof"><span><b>5 eixos</b> no pré-laudo 360</span><span><b>CAGI</b> desempenho verificado</span><span><b>DOE</b> métodos de referência</span></div>
+      <div className="v2-dx-proof"><span><b>4 relatórios</b> no pré-laudo 360</span><span><b>CAGI</b> desempenho verificado</span><span><b>DOE</b> métodos de referência</span></div>
     </div>
     <div className="v2-dx-hero-media">
       <video autoPlay muted loop playsInline poster="/assets/world/scene-01-poster.png" aria-label="Sistema industrial de ar comprimido"><source src="/assets/world/scene-01.mp4" type="video/mp4"/></video>
@@ -77,7 +75,7 @@ export function DiagnosticReportStudio(){
   const [hours,setHours]=useState(4000);
   const [loadPercent,setLoadPercent]=useState(72);
   const [demandCfm,setDemandCfm]=useState(92);
-  const [leakCfm,setLeakCfm]=useState(14);
+  const [leakInputPercent,setLeakInputPercent]=useState(10);
   const [supplyBar,setSupplyBar]=useState(7.5);
   const [pointBar,setPointBar]=useState(6.9);
   const [targetBar,setTargetBar]=useState(7);
@@ -92,23 +90,24 @@ export function DiagnosticReportStudio(){
     const loadRatio=clamp(loadPercent/100,0,1),packageKw=model.packageKw??0,noLoadKw=model.noLoadKw??0;
     const averageKw=packageKw*loadRatio+noLoadKw*(1-loadRatio),annualKwh=averageKw*hours,annualCost=annualKwh*tariff.value;
     const reserveCfm=model.flowCfm-demandCfm,reservePercent=model.flowCfm>0?reserveCfm/model.flowCfm*100:0;
+    const leakCfm=demandCfm*clamp(leakInputPercent,0,100)/100;
     const specificPower=model.specificKw100Cfm??packageKw/Math.max(model.flowCfm,1)*100;
-    const leakPower=Math.max(0,leakCfm)*specificPower/100,leakCost=leakPower*hours*tariff.value,leakPercent=demandCfm>0?Math.max(0,leakCfm)/demandCfm*100:0;
+    const leakPower=Math.max(0,leakCfm)*specificPower/100,leakCost=leakPower*hours*tariff.value,leakPercent=clamp(leakInputPercent,0,100);
     const pressureDrop=Math.max(0,supplyBar-pointBar),pressureDropPercent=supplyBar>0?pressureDrop/supplyBar*100:0;
     const pressureSavingPercent=Math.max(0,supplyBar-targetBar)/0.1378952,pressureSaving=packageKw*pressureSavingPercent/100*hours*tariff.value;
     const pdpGap=pdpMeasured-pdpRequired;
-    return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap};
-  },[demandCfm,hours,leakCfm,loadPercent,model,pdpMeasured,pdpRequired,pointBar,supplyBar,targetBar,tariff.value]);
+    return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakCfm,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap};
+  },[demandCfm,hours,leakInputPercent,loadPercent,model,pdpMeasured,pdpRequired,pointBar,supplyBar,targetBar,tariff.value]);
   const reportText=useMemo(()=>[
     "PRÉ-LAUDO TECAR 360","Indústria: "+industry.label,"Modelo: "+model.model,
     "Vazão publicada / demanda: "+number(model.flowCfm,0)+" / "+number(demandCfm,0)+" cfm",
     "Reserva calculada: "+number(result.reserveCfm,0)+" cfm","Potência média: "+number(result.averageKw,2)+" kW",
     "Energia anual: "+number(result.annualKwh,0)+" kWh","Custo anual: "+money(result.annualCost),
-    "Vazamento: "+number(leakCfm,1)+" cfm | "+money(result.leakCost)+"/ano",
+    "Vazamento: "+number(leakInputPercent,0)+"% da demanda ("+number(result.leakCfm,1)+" cfm) | "+money(result.leakCost)+"/ano",
     "Queda de pressão: "+number(result.pressureDrop,2)+" bar","Oportunidade por setpoint: "+money(result.pressureSaving)+"/ano",
     "PDP medido / requerido: "+number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C",
     "Resultado preliminar baseado em dados informados e referências públicas. Requer validação em campo."
-  ].join("\n"),[demandCfm,industry.label,leakCfm,model,result,pdpMeasured,pdpRequired]);
+  ].join("\n"),[demandCfm,industry.label,leakInputPercent,model,result,pdpMeasured,pdpRequired]);
 
   const whatsapp="https://wa.me/5541996441330?text="+encodeURIComponent("Olá, gerei um pré-laudo no Diagnóstico TecAr 360.\n\n"+reportText);
   const copyReport=async()=>{if(typeof navigator==="undefined"||!navigator.clipboard)return;await navigator.clipboard.writeText(reportText);setCopied(true);window.setTimeout(()=>setCopied(false),1800)};
@@ -127,12 +126,16 @@ export function DiagnosticReportStudio(){
       <nav className="v2-dx-tabs" aria-label="Relatórios do diagnóstico">{REPORTS.map(report=>{const Icon=report.icon;return <button key={report.id} type="button" className={active===report.id?"is-active":""} onClick={()=>setActive(report.id)}><Icon size={20} strokeWidth={1.8}/><span><b>{report.label}</b><small>{report.short}</small></span><ArrowDownRight size={16}/></button>})}</nav>
       <div className="v2-dx-report" aria-live="polite">
         {active==="flow"&&<div className="v2-dx-report-panel">
-          <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Balanço de vazão e demanda</h3></div></div>
-          <div className="v2-dx-inputs"><Input label="Demanda medida ou estimada" suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Vazamento já identificado" suffix="cfm" value={leakCfm} min={0} onChange={setLeakCfm}/></div>
-          <div className="v2-dx-kpis v2-dx-kpis-four"><div><span>Capacidade publicada</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda informada</span><b>{number(demandCfm,0)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva calculada</span><b>{number(result.reserveCfm,0)} cfm</b></div><div className={result.reservePercent<10?"is-risk":""}><span>Reserva percentual</span><b>{number(result.reservePercent,1)}%</b></div></div>
-          <div className="v2-dx-chart"><Meter label="Capacidade CAGI" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda da planta" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Vazamento informado" value={leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(leakCfm,1)+" cfm"} tone={result.leakPercent>=10?"risk":"default"}/></div>
-          <div className={"v2-dx-finding "+(result.reserveCfm<0?"risk":"ok")}><ClipboardCheck size={20}/><p><b>{result.reserveCfm<0?"Demanda acima da capacidade publicada.":"Existe reserva nominal no cenário informado."}</b>A confirmação exige medição de vazão e perfil de demanda ao longo do turno.</p></div>
-          <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.cagiVerify]}/>
+          <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Vazão, demanda e vazamentos</h3></div></div>
+          <p className="v2-dx-explain">Informe a demanda total estimada da planta e qual parte dela pode estar escapando. A porcentagem é uma hipótese inicial: confirme em campo antes de usar estes valores para decisão ou orçamento.</p>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Demanda total da planta" suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Vazamento estimado" suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas pressurizadas no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
+          <div className="v2-dx-kpis v2-dx-kpis-four"><div><span>Capacidade CAGI</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda útil estimada</span><b>{number(Math.max(0,demandCfm-result.leakCfm),1)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva nominal</span><b>{number(result.reserveCfm,0)} cfm</b></div><div className={result.leakPercent>=10?"is-risk":""}><span>Perda informada</span><b>{number(result.leakPercent,0)}%</b></div></div>
+          <div className="v2-dx-chart"><Meter label="Capacidade publicada" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda total informada" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Parte atribuída a vazamentos" value={result.leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(result.leakCfm,1)+" cfm"} tone="risk"/></div>
+          <div className="v2-dx-leak-summary"><div className="v2-dx-leak-ring"><span>{number(result.leakPercent,0)}%</span><small>da demanda informada</small></div><div><span>Vazão desperdiçada (estimativa)</span><strong>{number(result.leakCfm,1)} cfm</strong><span>Potência proporcional</span><strong>{number(result.leakPower,2)} kW</strong></div><div><span>Energia em {number(hours,0)} horas</span><strong>{number(result.leakPower*hours,0)} kWh</strong><span>Custo anual indicativo</span><strong>{money(result.leakCost)}</strong></div></div>
+          <div className="v2-dx-breakdown"><b>Como este cenário é calculado</b><span>Vazamento em cfm = demanda total × porcentagem informada / 100.</span><span>Reserva nominal = capacidade CAGI − demanda total, já incluindo a parte estimada como vazamento.</span><span>Potência proporcional = vazamento em cfm × potência específica CAGI / 100; custo = potência × horas pressurizadas × tarifa de referência.</span></div>
+          <p className="v2-dx-disclaimer">A estimativa de custo supõe consumo proporcional à vazão perdida. Controle de carga, alívio, inversor e demanda real podem mudar bastante o resultado; a reserva é nominal, não uma garantia operacional. A referência de &lt;10% para sistemas bem mantidos considera a capacidade produzida, enquanto o percentual informado acima se refere à demanda da planta: compare somente após medir ambos na mesma base.</p>
+          <div className={"v2-dx-finding "+(result.reserveCfm<0?"risk":"ok")}><ClipboardCheck size={20}/><p><b>{result.reserveCfm<0?"Demanda acima da capacidade publicada.":"Existe reserva nominal no cenário informado."}</b> Confirme vazão, perfil de carga e vazamentos com medição durante um turno representativo.</p></div>
+          <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.cagiVerify,TECH_SOURCES.doe,TECH_SOURCES.copel]}/>
         </div>}
         {active==="energy"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Bolt/><div><span>RELATÓRIO 02</span><h3>Uso e custo de energia</h3></div></div>
@@ -142,15 +145,8 @@ export function DiagnosticReportStudio(){
           <p className="v2-dx-disclaimer">A tarifa considera TE + TUSD de energia do subgrupo A4. Demanda, tributos, bandeiras e outros itens da fatura não estão incluídos.</p>
           <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.copel,TECH_SOURCES.aneel]}/>
         </div>}
-        {active==="leaks"&&<div className="v2-dx-report-panel">
-          <div className="v2-dx-report-title"><AirVent/><div><span>RELATÓRIO 03</span><h3>Perdas por vazamentos</h3></div></div>
-          <div className="v2-dx-inputs"><Input label="Vazamento medido ou estimado" suffix="cfm" value={leakCfm} min={0} onChange={setLeakCfm}/><Input label="Horas pressurizadas no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
-          <div className="v2-dx-leak-visual"><div className="v2-dx-leak-ring"><span>{number(result.leakPercent,0)}%</span><small>da demanda informada</small></div><div><span>Potência associada</span><strong>{number(result.leakPower,2)} kW</strong><span>Custo anual estimado</span><strong>{money(result.leakCost)}</strong></div></div>
-          <div className={"v2-dx-finding "+(result.leakPercent>=10?"risk":"ok")}><AirVent size={20}/><p><b>{result.leakPercent>=10?"Acima do benchmark de sistema bem mantido.":"Abaixo de 10% no cenário informado."}</b>O Sourcebook indica menos de 10% da capacidade para sistemas bem mantidos e cita 20% a 30% em sistemas mal mantidos.</p></div>
-          <SourceLinks links={[TECH_SOURCES.doe,{label:model.sourceLabel,url:model.sourceUrl}]}/>
-        </div>}
         {active==="pressure"&&<div className="v2-dx-report-panel">
-          <div className="v2-dx-report-title"><Gauge/><div><span>RELATÓRIO 04</span><h3>Pressão, queda e oportunidade</h3></div></div>
+          <div className="v2-dx-report-title"><Gauge/><div><span>RELATÓRIO 03</span><h3>Pressão, queda e oportunidade</h3></div></div>
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Saída do reservatório" suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Ponto crítico de uso" suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Setpoint alvo" suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
           <div className="v2-dx-pressure-line"><div><Gauge/><span>Origem</span><b>{number(supplyBar,1)} bar</b></div><i><em style={{width:clamp(100-result.pressureDropPercent,5,100)+"%"}}/></i><div><ArrowDownRight/><span>Ponto de uso</span><b>{number(pointBar,1)} bar</b></div></div>
           <div className="v2-dx-kpis"><div className={result.pressureDropPercent>=10?"is-risk":""}><span>Queda na rede</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Redução avaliada</span><b>{number(result.pressureSavingPercent,1)}%</b></div><div><span>Referência anual</span><b>{money(result.pressureSaving)}</b></div></div>
@@ -158,7 +154,7 @@ export function DiagnosticReportStudio(){
           <SourceLinks links={[TECH_SOURCES.doe,TECH_SOURCES.irOptimization]}/>
         </div>}
         {active==="quality"&&<div className="v2-dx-report-panel">
-          <div className="v2-dx-report-title"><Droplets/><div><span>RELATÓRIO 05</span><h3>Qualidade do ar e ponto de orvalho</h3></div></div>
+          <div className="v2-dx-report-title"><Droplets/><div><span>RELATÓRIO 04</span><h3>Qualidade do ar e ponto de orvalho</h3></div></div>
           <div className="v2-dx-inputs"><Input label="PDP medido" suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="PDP requerido pelo processo" suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
           <div className="v2-dx-quality-grid"><article><Droplets/><span>Água</span><b>{result.pdpGap>0?"Investigar":"Dentro do informado"}</b><p>PDP, água líquida, drenagem e condição do secador.</p></article><article><ShieldCheck/><span>Óleo</span><b>Exige medição</b><p>A classe não pode ser presumida apenas pelo tipo de compressor.</p></article><article><Activity/><span>Partículas</span><b>Exige medição</b><p>Filtros, rede e ponto de coleta influenciam o resultado.</p></article></div>
           <div className={"v2-dx-finding "+(result.pdpGap>0?"risk":"ok")}><ThermometerSun size={20}/><p><b>{result.pdpGap>0?"PDP acima do requisito informado.":"PDP atende ao requisito informado."}</b>A ISO 8573-1 classifica pureza por partículas, água e óleo. Um pré-laudo não certifica classe sem medição e método aplicável.</p></div>
@@ -170,8 +166,10 @@ export function DiagnosticReportStudio(){
 
     <section className="v2-dx-prelaudo">
       <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><WhatsAppLink href={whatsapp}><FileText size={17}/>Enviar à TecAr</WhatsAppLink></div></div>
-      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento</span><b>{money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
-      <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>2. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>3. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
+      <img className="v2-dx-print-watermark" src="/assets/tecar/logo-cropped.png" alt="" aria-hidden="true"/>
+      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento estimado</span><b>{number(result.leakPercent,0)}% · {money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
+      <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Contatar a equipe TecAr e revisar os dados com um técnico antes de tomar decisões.</span><span>2. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>3. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>4. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
+      <div className="v2-dx-report-evidence"><b>Base e limites deste pré-laudo</b><span>Modelo e potência específica: <a href={model.sourceUrl} target="_blank" rel="noopener noreferrer">{model.sourceLabel}</a> (CAGI). Tarifa: <a href={TECH_SOURCES.copel.url} target="_blank" rel="noopener noreferrer">Copel</a>. Métodos e referências de vazamento/pressão: <a href={TECH_SOURCES.doe.url} target="_blank" rel="noopener noreferrer">DOE Sourcebook</a>.</span><span>Demanda, percentual de vazamento, horas, pressão e ponto de orvalho foram informados pelo usuário; o custo de vazamentos é indicativo e requer validação em campo.</span></div>
       <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e dados CAGI devem ser confirmados por avaliação técnica.</p>
     </section>
   </div>

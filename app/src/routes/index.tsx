@@ -65,7 +65,7 @@ function Home(){
 
     <section className="v2-home-services">
       <div className="v2-container">
-        <div className="v2-home-services-heading"><span className="v2-kicker">SERVIÇOS</span><h2>Da instalação ao próximo turno.</h2><p>Encontre o apoio que a sua operação precisa.</p></div>
+        <div className="v2-home-services-heading"><span className="v2-kicker">SERVIÇOS</span><h2>Da instalação ao próximo turno.</h2></div>
         <div className="v2-home-services-grid">{services.map((service)=><article key={service.to}><span>{service.number} / TECAR</span><h3>{service.title}</h3><p>{service.text}</p><Link to={service.to}>Ver serviço <span aria-hidden="true">↗</span></Link></article>)}</div>
       </div>
     </section>
