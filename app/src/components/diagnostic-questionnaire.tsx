@@ -8,6 +8,9 @@ type Answers = {
   impact: string;
   system: string;
   details: string;
+  symptom: string;
+  pressure: string;
+  onset: string;
   readings: string;
   maintenance: string;
   urgency: string;
@@ -21,6 +24,9 @@ const EMPTY: Answers = {
   impact: "",
   system: "",
   details: "",
+  symptom: "",
+  pressure: "",
+  onset: "",
   readings: "",
   maintenance: "",
   urgency: "",
@@ -42,6 +48,10 @@ const GOALS = [
 
 const IMPACTS = ["Produção parada", "Produção parcialmente afetada", "Operando, mas com anormalidade", "Sem falha atual, quero prevenir"];
 const SYSTEMS = ["Compressor", "Secador", "Rede de ar", "Reservatório", "Sistema completo", "Não sei identificar"];
+const SYMPTOMS = ["Não liga", "Desliga sozinho", "Alarme no painel", "Pressão insuficiente", "Ruído ou vibração", "Vazamento de ar", "Água na linha", "Temperatura alta", "Queda de rendimento", "Sem falha; quero planejar", "Não sei identificar"];
+const PRESSURES = ["Normal", "Oscilando", "Abaixo do necessário", "Sem pressão", "Não sei medir", "Não se aplica"];
+const ONSETS = ["Começou hoje", "Nos últimos dias", "Ocorre de vez em quando", "Piorando há semanas", "É uma necessidade nova", "Não sei"];
+const MAINTENANCE_CHOICES = ["Em dia", "Atrasada", "Falha voltou após manutenção", "Equipamento novo", "Não sei informar"];
 const URGENCIES = ["Agora / operação crítica", "Hoje", "Nos próximos dias", "Planejamento / estudo"];
 
 function getRoute(a: Answers) {
@@ -65,6 +75,15 @@ function buildMessage(a: Answers, variant: Variant) {
     "Impacto na operação: " + (a.impact || "Não informado"),
     "Sistema / equipamento: " + (a.system || "Não informado"),
   ];
+  if (variant === "compact") {
+    rows.push(
+      "Sintoma observado: " + (a.symptom || "Não informado"),
+      "Condição da pressão: " + (a.pressure || "Não informada"),
+      "Quando começou: " + (a.onset || "Não informado"),
+      "Manutenção: " + (a.maintenance || "Não informada"),
+      "Urgência: " + (a.urgency || "Não informada"),
+    );
+  }
   if (variant === "full") {
     rows.push(
       "Equipamento, sintomas e contexto: " + (a.details || "Não informado"),
@@ -93,12 +112,12 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
   const [step,setStep]=useState(0);
   const [answers,setAnswers]=useState<Answers>(EMPTY);
   const compact = variant === "compact";
-  const steps = compact ? 5 : 8;
+  const steps = compact ? 10 : 8;
   const done = step >= steps;
   const route = useMemo(()=>getRoute(answers),[answers]);
   const whatsapp = useMemo(()=>"https://wa.me/5541996441330?text="+encodeURIComponent(buildMessage(answers,variant)),[answers,variant]);
 
-  const limits:Record<keyof Answers,number>={goal:80,impact:80,system:60,details:500,readings:350,maintenance:350,urgency:60,city:80,company:100,name:80};
+  const limits:Record<keyof Answers,number>={goal:80,impact:80,system:60,details:500,symptom:80,pressure:80,onset:80,readings:350,maintenance:350,urgency:60,city:80,company:100,name:80};
   const set = (key:keyof Answers,value:string)=>setAnswers((prev)=>({...prev,[key]:value.slice(0,limits[key])}));
   const next = ()=>setStep((s)=>Math.min(steps,s+1));
   const back = ()=>setStep((s)=>Math.max(0,s-1));
@@ -107,8 +126,13 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
     if (step===0) return Boolean(answers.goal);
     if (step===1) return Boolean(answers.impact);
     if (step===2) return Boolean(answers.system);
-    if (compact && step===3) return Boolean(answers.city.trim());
-    if (compact && step===4) return Boolean(answers.name.trim());
+    if (compact && step===3) return Boolean(answers.symptom);
+    if (compact && step===4) return Boolean(answers.pressure);
+    if (compact && step===5) return Boolean(answers.onset);
+    if (compact && step===6) return Boolean(answers.maintenance);
+    if (compact && step===7) return Boolean(answers.urgency);
+    if (compact && step===8) return Boolean(answers.city.trim());
+    if (compact && step===9) return Boolean(answers.name.trim());
     if (!compact && step===3) return Boolean(answers.details.trim());
     if (!compact && step===4) return true;
     if (!compact && step===5) return true;
@@ -128,8 +152,13 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
       {step===1 && <div className="v2-diagnostic-step"><h3>Como isso está afetando a operação?</h3><p>A criticidade ajuda a TecAr a entender a prioridade do atendimento.</p><ChoiceGrid options={IMPACTS} value={answers.impact} onChange={(v)=>set("impact",v)}/></div>}
       {step===2 && <div className="v2-diagnostic-step"><h3>Onde está o problema ou a necessidade?</h3><ChoiceGrid options={SYSTEMS} value={answers.system} onChange={(v)=>set("system",v)}/></div>}
 
-      {compact && step===3 && <div className="v2-diagnostic-step"><h3>Onde está a operação?</h3><label className="v2-diagnostic-field">Cidade / UF<input maxLength={80} value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Ex.: Curitiba / PR"/></label></div>}
-      {compact && step===4 && <div className="v2-diagnostic-step"><h3>Quem devemos atender?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Seu nome<input maxLength={80} value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa<input maxLength={100} value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
+      {compact && step===3 && <div className="v2-diagnostic-step"><h3>O que você percebeu?</h3><p>Selecione o sinal mais evidente.</p><ChoiceGrid options={SYMPTOMS} value={answers.symptom} onChange={(v)=>set("symptom",v)}/></div>}
+      {compact && step===4 && <div className="v2-diagnostic-step"><h3>Como está a pressão do ar?</h3><ChoiceGrid options={PRESSURES} value={answers.pressure} onChange={(v)=>set("pressure",v)}/></div>}
+      {compact && step===5 && <div className="v2-diagnostic-step"><h3>Quando começou?</h3><ChoiceGrid options={ONSETS} value={answers.onset} onChange={(v)=>set("onset",v)}/></div>}
+      {compact && step===6 && <div className="v2-diagnostic-step"><h3>E a manutenção do equipamento?</h3><ChoiceGrid options={MAINTENANCE_CHOICES} value={answers.maintenance} onChange={(v)=>set("maintenance",v)}/></div>}
+      {compact && step===7 && <div className="v2-diagnostic-step"><h3>Qual é a urgência?</h3><ChoiceGrid options={URGENCIES} value={answers.urgency} onChange={(v)=>set("urgency",v)}/></div>}
+      {compact && step===8 && <div className="v2-diagnostic-step"><h3>Onde está a operação?</h3><label className="v2-diagnostic-field">Cidade / UF<input maxLength={80} value={answers.city} onChange={(e)=>set("city",e.target.value)} placeholder="Ex.: Curitiba / PR"/></label></div>}
+      {compact && step===9 && <div className="v2-diagnostic-step"><h3>Quem devemos atender?</h3><div className="v2-diagnostic-fields"><label className="v2-diagnostic-field">Seu nome<input maxLength={80} value={answers.name} onChange={(e)=>set("name",e.target.value)} placeholder="Nome"/></label><label className="v2-diagnostic-field">Empresa (opcional)<input maxLength={100} value={answers.company} onChange={(e)=>set("company",e.target.value)} placeholder="Empresa"/></label></div></div>}
 
       {!compact && step===3 && <div className="v2-diagnostic-step"><h3>Conte o que você sabe sobre o equipamento e o sintoma.</h3><p>Marca, modelo, potência, mensagens de alarme, ruído, temperatura, comportamento ou qualquer informação observada.</p><label className="v2-diagnostic-field"><textarea rows={5} maxLength={500} value={answers.details} onChange={(e)=>set("details",e.target.value)} placeholder="Ex.: compressor 50 hp, temperatura subindo, alarme após 20 minutos..."/></label></div>}
       {!compact && step===4 && <div className="v2-diagnostic-step"><h3>Você possui alguma leitura ou medição?</h3><p>Opcional. Informe pressão, temperatura, ponto de orvalho, consumo, horas ou outra leitura disponível.</p><label className="v2-diagnostic-field"><textarea rows={4} maxLength={350} value={answers.readings} onChange={(e)=>set("readings",e.target.value)} placeholder="Ex.: 6,2 bar na rede, 92 °C no compressor, ponto de orvalho +8 °C..."/></label></div>}
@@ -146,6 +175,8 @@ export function DiagnosticQuestionnaire({variant="full"}:{variant?:Variant}) {
         <div><b>Necessidade</b><span>{answers.goal}</span></div>
         <div><b>Operação</b><span>{answers.impact}</span></div>
         <div><b>Sistema</b><span>{answers.system}</span></div>
+        {compact && <div><b>Sintoma</b><span>{answers.symptom}</span></div>}
+        {compact && <div><b>Urgência</b><span>{answers.urgency}</span></div>}
         <div><b>Local</b><span>{answers.city}</span></div>
       </div>
       <WhatsAppLink href={whatsapp} className="v2-diagnostic-whatsapp">Enviar diagnóstico no WhatsApp</WhatsAppLink>

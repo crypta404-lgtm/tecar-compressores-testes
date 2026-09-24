@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageFrame, SectionHead, ContactBand } from "@/components/site-v2";
+import { PageFrame, ContactBand } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
 import { pageMeta } from "@/lib/page-meta";
 
@@ -8,11 +8,11 @@ export const Route=createFileRoute("/")({
   component:Home
 });
 
-const capabilities=[
-  ["Equipamentos","Compressores, secadores, linhas e acessórios dimensionados para a necessidade real da planta."],
-  ["Assistência técnica","Manutenção preventiva e corretiva, atendimento multimarcas e gestão do histórico técnico."],
-  ["Engenharia","Auditorias, eficiência energética, projetos de rede e organização da casa de máquinas."],
-  ["Continuidade","Locação emergencial, contratos de longo prazo e monitoramento remoto da operação."]
+const services = [
+  {number:"01",title:"Manutenção",text:"Preventiva, corretiva e suporte técnico para manter o ar comprimido disponível.",to:"/manutencao"},
+  {number:"02",title:"Engenharia",text:"Projetos de rede, medições e estudos para operar com mais eficiência.",to:"/engenharia"},
+  {number:"03",title:"Locação",text:"Compressores e equipamentos para demandas temporárias ou contínuas.",to:"/locacao"},
+  {number:"04",title:"TecAr Connect",text:"Monitoramento remoto para acompanhar parâmetros e alarmes.",to:"/tecar-connect"},
 ] as const;
 
 function Home(){
@@ -42,18 +42,31 @@ function Home(){
         <div>
           <span className="v2-kicker">RELATÓRIO DIRETO</span>
           <h2>Descreva o cenário. A TecAr recebe a triagem pronta.</h2>
-          <p>O formulário organiza condição do equipamento, pressão, urgência e impacto na produção. Ao final, o relatório segue pelo WhatsApp para a equipe técnica.</p>
+          <p>Dez perguntas rápidas sobre equipamento, sintoma, pressão, manutenção e urgência. Quase tudo se responde com um toque. Ao final, a mensagem fica pronta para enviar à equipe pelo WhatsApp.</p>
           <div className="v2-home-report-facts"><span><b>01</b> Respostas objetivas</span><span><b>02</b> Resumo automático</span><span><b>03</b> Envio pelo WhatsApp</span></div>
         </div>
         <DiagnosticQuestionnaire variant="compact"/>
       </div>
     </section>
 
-    <section className="v2-section v2-home-capabilities">
+    <section className="v2-home-story">
+      <div className="v2-container v2-home-story-grid">
+        <div className="v2-home-story-copy"><span className="v2-kicker">A TECAR</span><h2>Desde 1999, perto de quem precisa de ar comprimido.</h2><p>Com unidades em Curitiba e Paranaguá, a TecAr reúne equipamentos, assistência e engenharia para apoiar a operação industrial.</p><Link to="/empresa" className="v2-home-arrow">Conhecer a empresa <span aria-hidden="true">↗</span></Link></div>
+        <div className="v2-home-film"><div className="v2-home-film-frame"><iframe src="https://www.youtube-nocookie.com/embed/3sWKrRIMI7M" title="TecAr Compressores — vídeo institucional" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div><span>01 / CONHEÇA A TECAR</span></div>
+      </div>
+    </section>
+
+    <section className="v2-home-products">
+      <div className="v2-container v2-home-story-grid">
+        <div className="v2-home-film"><div className="v2-home-film-frame"><iframe src="https://www.youtube-nocookie.com/embed/vqm1xLn1p-k" title="Ingersoll Rand Série R — Motor HPM, controle variável" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div><span>02 / EQUIPAMENTOS EM AÇÃO</span></div>
+        <div className="v2-home-story-copy"><span className="v2-kicker">PRODUTOS</span><h2>O equipamento certo para cada operação.</h2><p>Compressores, secadores, redes de ar e acessórios com orientação técnica para escolher e manter o sistema.</p><Link to="/produtos" className="v2-home-arrow">Explorar produtos <span aria-hidden="true">↗</span></Link></div>
+      </div>
+    </section>
+
+    <section className="v2-home-services">
       <div className="v2-container">
-        <SectionHead kicker="SISTEMA COMPLETO" title="Uma equipe para cuidar do ar comprimido de ponta a ponta." text="A TecAr combina fornecimento, serviço e engenharia em uma visão única da operação."/>
-        <div className="v2-home-capability-grid">{capabilities.map(([title,text],index)=><article key={title}><span>0{index+1}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-        <Link to="/servicos" className="v2-home-inline-link">Conhecer todas as soluções</Link>
+        <div className="v2-home-services-heading"><span className="v2-kicker">SERVIÇOS</span><h2>Da instalação ao próximo turno.</h2><p>Encontre o apoio que a sua operação precisa.</p></div>
+        <div className="v2-home-services-grid">{services.map((service)=><article key={service.to}><span>{service.number} / TECAR</span><h3>{service.title}</h3><p>{service.text}</p><Link to={service.to}>Ver serviço <span aria-hidden="true">↗</span></Link></article>)}</div>
       </div>
     </section>
 
