@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageFrame, SectionHead, ContactBand } from "@/components/site-v2";
-import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
-import { DiagnosticToolsGrid, TariffReferencePanel } from "@/components/engineering-diagnostics";
+import { DiagnosticToolsGrid } from "@/components/engineering-diagnostics";
 import { DiagnosticHero, DiagnosticReportStudio, DiagnosticSourceLibrary } from "@/components/diagnostic-report-studio";
 import { pageMeta } from "@/lib/page-meta";
 
@@ -30,12 +29,18 @@ function Page(){
       <div className="v2-container">
         <a href="#estudio-diagnostico">Pré-laudo 360</a>
         <a href="#ensaios-tecnicos">Calculadoras técnicas</a>
-        <a href="#questionario">Triagem guiada</a>
+        <a href="#observamos">O que observamos</a>
         <a href="#fontes-tecnicas">Fontes</a>
       </div>
     </nav>
 
-    <section className="v2-section">
+    <section id="estudio-diagnostico" className="v2-section v2-soft">
+      <div className="v2-container">
+        <DiagnosticReportStudio/>
+      </div>
+    </section>
+
+    <section id="observamos" className="v2-section">
       <div className="v2-container">
         <SectionHead
           kicker="O QUE OBSERVAMOS"
@@ -48,31 +53,14 @@ function Page(){
       </div>
     </section>
 
-    <section id="estudio-diagnostico" className="v2-section v2-soft">
-      <div className="v2-container">
-        <DiagnosticReportStudio/>
-      </div>
-    </section>
-
     <section id="ensaios-tecnicos" className="v2-section">
       <div className="v2-container">
         <SectionHead
           kicker="MEMÓRIA DE CÁLCULO"
           title="Ensaios rápidos para aprofundar cada hipótese."
-          text="Use os módulos abaixo quando houver dados mais específicos de pressão, tempo de ciclo, volume da rede ou modelo do compressor."
+          text="Compare modelos verificados e entenda a conversão de HP para kW sem confundir potência nominal com consumo medido."
         />
         <DiagnosticToolsGrid/>
-      </div>
-    </section>
-
-    <section className="v2-section v2-soft v2-evidence-section">
-      <div className="v2-container">
-        <SectionHead
-          kicker="BASE TÉCNICA"
-          title="Se o número não tem fonte, ele não entra."
-          text="Os diagnósticos separam dado publicado, dado informado pelo cliente e regra técnica de triagem. Cada ferramenta mostra sua memória de cálculo e permite abrir a fonte original."
-        />
-        <TariffReferencePanel/>
       </div>
     </section>
 
@@ -80,59 +68,10 @@ function Page(){
       <div className="v2-container">
         <SectionHead
           kicker="RASTREABILIDADE"
-          title="As referências ficam abertas para conferência."
+          title="A resposta indica a rota. A avaliação técnica confirma a causa."
           text="O pré-laudo diferencia dado publicado, entrada do usuário, regra de triagem e medição que ainda precisa ser feita em campo."
         />
         <DiagnosticSourceLibrary/>
-      </div>
-    </section>
-
-    <section id="questionario" className="v2-section v2-soft">
-      <div className="v2-container v2-diagnostic-page-grid">
-        <div className="v2-diagnostic-page-copy">
-          <SectionHead
-            kicker="TRIAGEM GUIADA"
-            title="Responda o que você já sabe."
-            text="Não é necessário conhecer todos os dados técnicos. Se alguma leitura não estiver disponível, avance normalmente. O objetivo é entregar à equipe TecAr um primeiro retrato organizado da situação."
-          />
-          <div className="v2-diagnostic-help">
-            <div><b>Leva poucos minutos</b><span>Perguntas objetivas, uma etapa por vez.</span></div>
-            <div><b>Sem obrigação técnica</b><span>Você pode deixar medições e histórico em branco quando não souber.</span></div>
-            <div><b>Vai direto ao WhatsApp</b><span>No fim, o site monta a mensagem com todas as respostas.</span></div>
-          </div>
-        </div>
-        <DiagnosticQuestionnaire variant="full"/>
-      </div>
-    </section>
-
-    <section className="v2-section">
-      <div className="v2-container">
-        <SectionHead
-          kicker="ANTES DO ATENDIMENTO"
-          title="Se tiver estas informações, melhor ainda."
-          text="Quanto mais contexto houver, mais objetiva tende a ser a primeira conversa com a equipe."
-        />
-        <div className="v2-diagnostic-checklist">
-          <div><span>01</span><b>Marca e modelo</b><p>Identificação do compressor, secador ou componente envolvido.</p></div>
-          <div><span>02</span><b>Foto do painel</b><p>Alarmes, códigos, temperatura ou mensagens exibidas no controlador.</p></div>
-          <div><span>03</span><b>Pressão e horário</b><p>Quando a falha ocorre e qual pressão a operação precisa manter.</p></div>
-          <div><span>04</span><b>Última manutenção</b><p>Data aproximada, peças trocadas e se o sintoma já ocorreu antes.</p></div>
-          <div><span>05</span><b>Impacto na produção</b><p>Se a planta está parada, limitada ou operando normalmente.</p></div>
-          <div><span>06</span><b>Local da instalação</b><p>Cidade e condições relevantes do ambiente industrial.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section className="v2-diagnostic-path">
-      <div className="v2-container v2-diagnostic-path-inner">
-        <div>
-          <span className="v2-kicker">DEPOIS DA TRIAGEM</span>
-          <h2>A resposta indica a rota. A avaliação técnica confirma a causa.</h2>
-          <p>Dependendo das respostas, o atendimento pode seguir para assistência, engenharia, qualidade do ar, monitoramento ou locação. O questionário organiza o começo, mas não substitui diagnóstico técnico presencial quando ele for necessário.</p>
-        </div>
-        <div className="v2-diagnostic-path-flow">
-          <span>Questionário</span><i>→</i><span>WhatsApp TecAr</span><i>→</i><span>Triagem técnica</span><i>→</i><span>Próximo passo</span>
-        </div>
       </div>
     </section>
 

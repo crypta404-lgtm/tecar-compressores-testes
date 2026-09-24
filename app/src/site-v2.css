@@ -348,3 +348,36 @@
   .v2-dx-print-watermark{display:block!important;position:fixed;z-index:0;top:29%;left:9%;width:82%;height:auto;max-height:42%;object-fit:contain;opacity:.14;pointer-events:none}
   .v2-dx-report-evidence,.v2-dx-priority-list{break-inside:avoid}
 }
+
+/* Diagnostic charts: readable at narrow widths */
+.v2-dx-leak-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:26px 0;padding:22px}
+.v2-dx-leak-summary>div{min-width:0}
+.v2-dx-leak-summary>.v2-dx-leak-ring{grid-column:1/-1;justify-self:center;width:170px;min-width:170px;aspect-ratio:1;transform:none;border-width:15px}
+.v2-dx-leak-summary>.v2-dx-leak-ring>*{transform:none}
+.v2-dx-leak-summary>.v2-dx-leak-ring span{line-height:1}
+.v2-dx-leak-summary>.v2-dx-leak-ring small{max-width:12ch;line-height:1.25}
+.v2-dx-leak-summary>div:not(:first-child){padding:17px 19px;background:#fff;border:1px solid var(--v2-line)}
+.v2-dx-leak-summary>div:not(:first-child) strong{font-size:clamp(1.2rem,2vw,1.65rem);line-height:1.12;overflow-wrap:anywhere;margin-bottom:12px}
+.v2-dx-energy-visual-four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.v2-dx-energy-visual>div{min-width:0}
+.v2-dx-energy-visual strong{overflow-wrap:anywhere;line-height:1.18}
+.v2-dx-visual-block{display:grid;gap:14px;margin:25px 0;padding:23px;background:#f2f5f6;border:1px solid var(--v2-line)}
+.v2-dx-visual-block>b{font-size:.86rem}
+.v2-dx-visual-block p{font-size:.76rem;margin:0;max-width:70ch}
+.v2-dx-load-track{height:21px;display:flex;overflow:hidden;background:#e2e7ea}
+.v2-dx-load-track i{display:block;background:#d71920}
+.v2-dx-load-track em{display:block;background:#70818b}
+.v2-dx-legend{display:flex;gap:22px;flex-wrap:wrap;font-size:.72rem;color:#42515a;font-weight:700}
+.v2-dx-legend span{display:inline-flex;align-items:center;gap:7px}
+.v2-dx-legend i{width:10px;height:10px;background:#d71920;display:inline-block}
+.v2-dx-legend span:nth-child(2) i{background:#70818b}
+.v2-dx-pdp-track{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:13px;font-size:.7rem;color:#52616a}
+.v2-dx-pdp-axis{position:relative;height:16px;background:linear-gradient(90deg,#a3c4d1,#e0e6e8 50%,#f3c6c6)}
+.v2-dx-pdp-axis i,.v2-dx-pdp-axis em{position:absolute;top:-6px;width:4px;height:28px;transform:translateX(-50%);background:#d71920}
+.v2-dx-pdp-axis em{background:#53616a}
+@media(max-width:620px){.v2-dx-leak-summary{grid-template-columns:1fr}.v2-dx-leak-summary>.v2-dx-leak-ring{grid-column:1}.v2-dx-energy-visual-four{grid-template-columns:1fr}}
+@media print{
+ .v2-dx-prelaudo{overflow:visible!important}
+ .v2-dx-print-watermark{display:block!important;position:fixed;z-index:6!important;top:16%;left:6%;width:88%;height:60%;max-height:none;object-fit:contain;opacity:.15!important;pointer-events:none}
+ .v2-dx-prelaudo>*:not(.v2-dx-print-watermark){position:relative;z-index:1}
+}
