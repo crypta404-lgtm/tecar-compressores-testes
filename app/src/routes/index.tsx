@@ -24,7 +24,7 @@ function Home(){
         <span className="v2-kicker">TECAR COMPRESSORES · DESDE 1999</span>
         <h1>Ar comprimido com engenharia, resposta e continuidade.</h1>
         <p>Equipamentos, assistência, locação e diagnóstico para decisões industriais mais seguras em Curitiba, Paranaguá e região.</p>
-        <div className="v2-clean-hero-actions"><Link to="/diagnostico">Iniciar diagnóstico</Link><Link to="/contato">Falar com a TecAr</Link></div>
+        <div className="v2-clean-hero-actions"><Link to="/diagnostico">Iniciar diagnóstico</Link><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer">Falar com a TecAr</a></div>
       </div>
     </section>
 
@@ -32,7 +32,7 @@ function Home(){
       <div className="v2-container v2-proof-grid">
         <div><strong>1999</strong><span>presença no mercado</span></div>
         <div><strong>500+</strong><span>clientes atendidos</span></div>
-        <div><strong>IR</strong><span>assistência e revenda autorizada</span></div>
+        <div><strong>Ingersoll Rand</strong><span>assistência e revenda autorizada</span></div>
         <div><strong>2</strong><span>unidades no Paraná</span></div>
       </div>
     </section>

@@ -55,7 +55,7 @@ export function ProductExplorer({groups,ctaLabel="Falar com a TecAr"}:{groups:Pr
         <h2>{selected.name}</h2>
         <p>{selected.summary}</p>
         {!!selected.facts?.length&&<div className="v2-product-facts">{selected.facts.map(f=><b key={f}>{f}</b>)}</div>}
-        <div className="v2-product-detail-actions"><Link to="/contato" className="v2-primary">{ctaLabel}</Link>{selected.source&&<a href={selected.source} target="_blank" rel="noopener noreferrer" className="v2-secondary">Ver fabricante</a>}</div>
+        <div className="v2-product-detail-actions"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">{ctaLabel}</a>{selected.source&&<a href={selected.source} target="_blank" rel="noopener noreferrer" className="v2-secondary">Ver fabricante</a>}</div>
       </div>
     </section>}
   </div>;

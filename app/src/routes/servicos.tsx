@@ -17,5 +17,5 @@ const items=[
 function Page(){return <PageFrame>
   <section className="v2-services-hero"><div className="v2-container"><span>SERVIÇOS</span><h1>Serviços</h1><p>Escolha a frente que mais se aproxima da sua necessidade. Clique para abrir um resumo; a página completa continua disponível quando você quiser aprofundar.</p></div></section>
   <section className="v2-section"><div className="v2-container"><div className="v2-service-visual-grid">{items.map(item=><details key={item.to} className="v2-service-visual-card"><summary><div className="v2-service-visual-photo"><img src={item.image} alt={item.title} loading="lazy"/></div><div className="v2-service-visual-title"><span>SERVIÇO</span><h2>{item.title}</h2><p>{item.short}</p><b>Ver resumo +</b></div></summary><div className="v2-service-visual-detail"><p>{item.detail}</p><Link to={item.to}>Abrir página de {item.title} →</Link></div></details>)}</div></div></section>
-  <ContactBand title="Ainda não sabe qual serviço precisa?" text="Use o Diagnóstico ou o Autoatendimento para organizar o cenário antes de falar com a equipe."/>
+  <ContactBand title="Ainda não sabe qual serviço precisa?" text="Use o Diagnóstico para organizar o cenário antes de falar com a equipe."/>
 </PageFrame>}
