@@ -24,12 +24,9 @@ import { Route as LinhasDeArRouteImport } from './routes/linhas-de-ar'
 import { Route as EngenhariaRouteImport } from './routes/engenharia'
 import { Route as EmpresaRouteImport } from './routes/empresa'
 import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
-import { Route as ConteudoRouteImport } from './routes/conteudo'
-import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CompressoresRouteImport } from './routes/compressores'
 import { Route as BlogListRouteImport } from './routes/blog-list'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AutoatendimentoRouteImport } from './routes/autoatendimento'
 import { Route as AcessoriosRouteImport } from './routes/acessorios'
 import { Route as AEmpresaRouteImport } from './routes/a-empresa'
 import { Route as IndexRouteImport } from './routes/index'
@@ -112,16 +109,6 @@ const DiagnosticoRoute = DiagnosticoRouteImport.update({
   path: '/diagnostico',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ConteudoRoute = ConteudoRouteImport.update({
-  id: '/conteudo',
-  path: '/conteudo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContatoRoute = ContatoRouteImport.update({
-  id: '/contato',
-  path: '/contato',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompressoresRoute = CompressoresRouteImport.update({
   id: '/compressores',
   path: '/compressores',
@@ -135,11 +122,6 @@ const BlogListRoute = BlogListRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AutoatendimentoRoute = AutoatendimentoRouteImport.update({
-  id: '/autoatendimento',
-  path: '/autoatendimento',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AcessoriosRoute = AcessoriosRouteImport.update({
@@ -162,12 +144,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/autoatendimento': typeof AutoatendimentoRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
-  '/contato': typeof ContatoRoute
-  '/conteudo': typeof ConteudoRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
@@ -188,12 +167,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/autoatendimento': typeof AutoatendimentoRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
-  '/contato': typeof ContatoRoute
-  '/conteudo': typeof ConteudoRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
@@ -215,12 +191,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-empresa': typeof AEmpresaRoute
   '/acessorios': typeof AcessoriosRoute
-  '/autoatendimento': typeof AutoatendimentoRoute
   '/blog': typeof BlogRoute
   '/blog-list': typeof BlogListRoute
   '/compressores': typeof CompressoresRoute
-  '/contato': typeof ContatoRoute
-  '/conteudo': typeof ConteudoRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/empresa': typeof EmpresaRoute
   '/engenharia': typeof EngenhariaRoute
@@ -243,12 +216,9 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/autoatendimento'
     | '/blog'
     | '/blog-list'
     | '/compressores'
-    | '/contato'
-    | '/conteudo'
     | '/diagnostico'
     | '/empresa'
     | '/engenharia'
@@ -269,12 +239,9 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/autoatendimento'
     | '/blog'
     | '/blog-list'
     | '/compressores'
-    | '/contato'
-    | '/conteudo'
     | '/diagnostico'
     | '/empresa'
     | '/engenharia'
@@ -295,12 +262,9 @@ export interface FileRouteTypes {
     | '/'
     | '/a-empresa'
     | '/acessorios'
-    | '/autoatendimento'
     | '/blog'
     | '/blog-list'
     | '/compressores'
-    | '/contato'
-    | '/conteudo'
     | '/diagnostico'
     | '/empresa'
     | '/engenharia'
@@ -322,12 +286,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AEmpresaRoute: typeof AEmpresaRoute
   AcessoriosRoute: typeof AcessoriosRoute
-  AutoatendimentoRoute: typeof AutoatendimentoRoute
   BlogRoute: typeof BlogRoute
   BlogListRoute: typeof BlogListRoute
   CompressoresRoute: typeof CompressoresRoute
-  ContatoRoute: typeof ContatoRoute
-  ConteudoRoute: typeof ConteudoRoute
   DiagnosticoRoute: typeof DiagnosticoRoute
   EmpresaRoute: typeof EmpresaRoute
   EngenhariaRoute: typeof EngenhariaRoute
@@ -452,20 +413,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnosticoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/conteudo': {
-      id: '/conteudo'
-      path: '/conteudo'
-      fullPath: '/conteudo'
-      preLoaderRoute: typeof ConteudoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contato': {
-      id: '/contato'
-      path: '/contato'
-      fullPath: '/contato'
-      preLoaderRoute: typeof ContatoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/compressores': {
       id: '/compressores'
       path: '/compressores'
@@ -485,13 +432,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/autoatendimento': {
-      id: '/autoatendimento'
-      path: '/autoatendimento'
-      fullPath: '/autoatendimento'
-      preLoaderRoute: typeof AutoatendimentoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/acessorios': {
@@ -522,12 +462,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AEmpresaRoute: AEmpresaRoute,
   AcessoriosRoute: AcessoriosRoute,
-  AutoatendimentoRoute: AutoatendimentoRoute,
   BlogRoute: BlogRoute,
   BlogListRoute: BlogListRoute,
   CompressoresRoute: CompressoresRoute,
-  ContatoRoute: ContatoRoute,
-  ConteudoRoute: ConteudoRoute,
   DiagnosticoRoute: DiagnosticoRoute,
   EmpresaRoute: EmpresaRoute,
   EngenhariaRoute: EngenhariaRoute,

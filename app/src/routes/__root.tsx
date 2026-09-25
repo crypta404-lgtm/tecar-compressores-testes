@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  return <html lang="pt-BR" style={{ colorScheme: "dark" }}><head><HeadContent /></head><body className="tecarBody">{children}<Scripts /></body></html>;
+  return <html lang="pt-BR" style={{ colorScheme: "light" }}><head><HeadContent /></head><body className="tecarBody">{children}<Scripts /></body></html>;
 }
 
 function RootComponent() {

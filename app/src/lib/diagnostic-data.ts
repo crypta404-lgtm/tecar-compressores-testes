@@ -10,18 +10,27 @@ export const TECH_SOURCES={
   cagiVerify:{label:'CAGI • Performance Verification Program',url:'https://www.cagi.org/performance-verification'},
   iso8573:{label:'ISO • ISO 8573-1:2010',url:'https://www.iso.org/standard/46418.html'},
   irOptimization:{label:'Ingersoll Rand • Compressed Air System Optimization',url:'https://www.ingersollrand.com/en/products/air-compressors/controls-and-automation/system-optimization/'},
-  irUp6s:{label:'Ingersoll Rand • UP6S 20–30 HP',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/up6s-20-30-hp/'},
-  irRs37:{label:'Ingersoll Rand • R-Series 30–37 kW',url:'https://www.ingersollrand.com/pt-br/air-compressor/oil-flooded-ac/ng-r-series-30-37-vsd-hrm'},
+  irUp6s:{label:'Ingersoll Rand • UP6S 20-30 HP',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/up6s-20-30-hp/'},
+  irRs37:{label:'Ingersoll Rand • R-Series 30-37 kW',url:'https://www.ingersollrand.com/pt-br/air-compressor/oil-flooded-ac/ng-r-series-30-37-vsd-hrm'},
   irR90:{label:'Ingersoll Rand • R90ix 90 kW',url:'https://www.ingersollrand.com/pt-br/products/air-compressors/oil-flooded-rotary-air-compressors/r-series-90-kw-125-hp/'},
-  irRs90:{label:'Ingersoll Rand • Next Gen RS 90–160 kW',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-90-160-kw/'},
-  irRs15:{label:'Ingersoll Rand • Next Gen RS 15–22 kW',url:'https://www.ingersollrand.com/es-lac/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-15-22-kw/'},
-  irRs45:{label:'Ingersoll Rand • Next Gen RS 45–75 kW',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-45-75-kw/'},
+  irRs90:{label:'Ingersoll Rand • Next Gen RS 90-160 kW',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-90-160-kw/'},
+  irRs15:{label:'Ingersoll Rand • Next Gen RS 15-22 kW',url:'https://www.ingersollrand.com/es-lac/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-15-22-kw/'},
+  irRs45:{label:'Ingersoll Rand • Next Gen RS 45-75 kW',url:'https://www.ingersollrand.com/en-us/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rs-45-75-kw/'},
   irOilFlooded:{label:'Ingersoll Rand • Catálogo de compressores lubrificados',url:'https://www.ingersollrand.com/pt-br/products/air-compressors/oil-flooded-rotary-air-compressors/'},
   irOilFree:{label:'Ingersoll Rand • Catálogo de compressores isentos de óleo',url:'https://www.ingersollrand.com/pt-br/products/air-compressors/oil-free-air-compressors/'},
-  irRsb15:{label:'Ingersoll Rand • RSb 15–22 kW variável',url:'https://www.ingersollrand.com/en-mea/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rsb-series-15-22-kw-vsd/'},
+  irRsb15:{label:'Ingersoll Rand • RSb 15-22 kW variável',url:'https://www.ingersollrand.com/en-mea/products/air-compressors/oil-flooded-rotary-air-compressors/ng-rsb-series-15-22-kw-vsd/'},
 };
 
-// ANEEL Tarifa de Aplicação, COPEL-DIS, A4, vigência 24/06/2026–23/06/2027.
+export const TARIFF_META={
+  distributor:"COPEL-DIS",
+  subgroup:"A4",
+  resolution:"Resolução Homologatória ANEEL nº 3.592, de 23 de junho de 2026",
+  effectiveFrom:"24/06/2026",
+  effectiveTo:"23/06/2027",
+  checkedAt:"25/09/2026",
+} as const;
+
+// ANEEL Tarifa de Aplicação, COPEL-DIS, A4, vigência 24/06/2026-23/06/2027.
 // Valores abaixo são somente parcela de energia TE+TUSD em R$/kWh, convertidos de R$/MWh.
 // Não incluem demanda, tributos, bandeiras nem outros itens da fatura.
 export const COPEL_A4_TARIFFS:TariffReference[]=[
@@ -42,40 +51,40 @@ export const CAGI_UP6S:CompressorReference[]=[
 export const VERIFIED_MODELS:CompressorReference[]=[
  {id:'up6-5-125',family:'UP6',model:'UP6-5-125',hp:5,pressureBar:8.6,flowCfm:14.9,energyVerified:false,sourceLabel:'Ingersoll Rand • catálogo oficial UP6',sourceUrl:TECH_SOURCES.irOilFlooded.url},
  ...CAGI_UP6S,
- {id:'rs30ne',family:'Next Gen R-Series',model:'RS30ne',hp:40,nominalKw:30,pressureBar:10.0,flowCfm:200,flowM3Min:5.7,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial 30–37 kW',sourceUrl:TECH_SOURCES.irRs37.url},
- {id:'rs37ne',family:'Next Gen R-Series',model:'RS37ne',hp:50,nominalKw:37,pressureBar:10.0,flowCfm:253,flowM3Min:7.2,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial 30–37 kW',sourceUrl:TECH_SOURCES.irRs37.url},
+ {id:'rs30ne',family:'Next Gen R-Series',model:'RS30ne',hp:40,nominalKw:30,pressureBar:10.0,flowCfm:200,flowM3Min:5.7,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial 30-37 kW',sourceUrl:TECH_SOURCES.irRs37.url},
+ {id:'rs37ne',family:'Next Gen R-Series',model:'RS37ne',hp:50,nominalKw:37,pressureBar:10.0,flowCfm:253,flowM3Min:7.2,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial 30-37 kW',sourceUrl:TECH_SOURCES.irRs37.url},
  {id:'r90ix-a125',family:'R90ix Brasil',model:'R90ix-A125',hp:125,nominalKw:90,pressureBar:8.6,flowCfm:514,flowM3Min:14.6,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial R90ix Brasil',sourceUrl:TECH_SOURCES.irR90.url},
- {id:'rs90i-a125',family:'Next Gen RS',model:'RS90I-A125',hp:125,nominalKw:93,pressureBar:8.6,flowCfm:634,flowM3Min:18.0,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial RS 90–160 kW',sourceUrl:TECH_SOURCES.irRs90.url},
- {id:'rs110i-a125',family:'Next Gen RS',model:'RS110I-A125',hp:150,nominalKw:112,pressureBar:8.6,flowCfm:735,flowM3Min:20.8,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial RS 90–160 kW',sourceUrl:TECH_SOURCES.irRs90.url},
+ {id:'rs90i-a125',family:'Next Gen RS',model:'RS90I-A125',hp:125,nominalKw:90,pressureBar:8.6,flowCfm:634,flowM3Min:18.0,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial RS 90-160 kW',sourceUrl:TECH_SOURCES.irRs90.url},
+ {id:'rs110i-a125',family:'Next Gen RS',model:'RS110I-A125',hp:150,nominalKw:110,pressureBar:8.6,flowCfm:735,flowM3Min:20.8,energyVerified:false,sourceLabel:'Ingersoll Rand • página oficial RS 90-160 kW',sourceUrl:TECH_SOURCES.irRs90.url},
 ];
 
 
 export const INGERSOLL_FAMILIES=[
- {name:'UP6',range:'5–15 hp'},
- {name:'UP6S',range:'20–30 hp'},
- {name:'UP6S',range:'75–100 hp'},
- {name:'Next Gen RS',range:'4–11 kW'},
- {name:'RSb variável',range:'15–29 kW'},
- {name:'Next Gen RS',range:'15–22 kW'},
- {name:'Next Gen RS',range:'30–37 kW'},
- {name:'Next Gen RS',range:'45–75 kW'},
- {name:'Next Gen RS',range:'90–160 kW'},
- {name:'Next Gen RS',range:'185–260 kW'},
- {name:'Next Gen RS',range:'300–375 kW'},
- {name:'Nirvana isento de óleo',range:'37–45 kW'},
+ {name:'UP6',range:'5-15 hp'},
+ {name:'UP6S',range:'20-30 hp'},
+ {name:'UP6S',range:'75-100 hp'},
+ {name:'Next Gen RS',range:'4-11 kW'},
+ {name:'RSb variável',range:'15-29 kW'},
+ {name:'Next Gen RS',range:'15-22 kW'},
+ {name:'Next Gen RS',range:'30-37 kW'},
+ {name:'Next Gen RS',range:'45-75 kW'},
+ {name:'Next Gen RS',range:'90-160 kW'},
+ {name:'Next Gen RS',range:'185-260 kW'},
+ {name:'Next Gen RS',range:'300-375 kW'},
+ {name:'Nirvana isento de óleo',range:'37-45 kW'},
  {name:'SSR',range:'dois estágios'}
 ];
 
 export const VARIABLE_SPEED_MODELS=[
- {family:'RSb',range:'15–22 kW',models:['RSb15n','RSb18n','RSb22n'],pressureRange:'7,5–13,0 bar',sourceUrl:TECH_SOURCES.irRsb15.url},
- {family:'RSb',range:'23–29 kW',models:['RSb23n','RSb26n','RSb29n'],pressureRange:'7,5–13,0 bar',sourceUrl:TECH_SOURCES.irOilFlooded.url},
- {family:'Next Gen RS',range:'4–11 kW',models:['RS4n','RS5n','RS7n','RS11n'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irOilFlooded.url},
- {family:'Next Gen RS',range:'30–37 kW',models:['RS30ne','RS37ne'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs37.url},
- {family:'Next Gen RS',range:'45–75 kW',models:['RS45N','RS55N','RS75N'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs45.url},
- {family:'Next Gen RS',range:'90–160 kW',models:['RS90N','RS110N','RS132N','RS160N'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs90.url},
- {family:'Next Gen RS',range:'185–260 kW',models:['RS185N','RS200N','RS250N','RS260N'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFlooded.url},
- {family:'Next Gen RS',range:'300–375 kW',models:['RS300N','RS315N','RS355N','RS375N'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFlooded.url},
- {family:'Nirvana isento de óleo',range:'37–45 kW',models:['Nirvana 37 kW','Nirvana 45 kW'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFree.url},
+ {family:'RSb',range:'15-22 kW',models:['RSb15n','RSb18n','RSb22n'],pressureRange:'7,5-13,0 bar',sourceUrl:TECH_SOURCES.irRsb15.url},
+ {family:'RSb',range:'23-29 kW',models:['RSb23n','RSb26n','RSb29n'],pressureRange:'7,5-13,0 bar',sourceUrl:TECH_SOURCES.irOilFlooded.url},
+ {family:'Next Gen RS',range:'4-11 kW',models:['RS4n','RS5n','RS7n','RS11n'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irOilFlooded.url},
+ {family:'Next Gen RS',range:'30-37 kW',models:['RS30ne','RS37ne'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs37.url},
+ {family:'Next Gen RS',range:'45-75 kW',models:['RS45N','RS55N','RS75N'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs45.url},
+ {family:'Next Gen RS',range:'90-160 kW',models:['RS90N','RS110N','RS132N','RS160N'],pressureRange:'até 10,0 bar',sourceUrl:TECH_SOURCES.irRs90.url},
+ {family:'Next Gen RS',range:'185-260 kW',models:['RS185N','RS200N','RS250N','RS260N'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFlooded.url},
+ {family:'Next Gen RS',range:'300-375 kW',models:['RS300N','RS315N','RS355N','RS375N'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFlooded.url},
+ {family:'Nirvana isento de óleo',range:'37-45 kW',models:['Nirvana 37 kW','Nirvana 45 kW'],pressureRange:'conforme configuração',sourceUrl:TECH_SOURCES.irOilFree.url},
 ];
 
 export const HP_ROWS=[5,7.5,10,15,20,25,30,40,50,60,75,100,125,150,200].map(hp=>({hp,kw:hp*0.7456999}));
