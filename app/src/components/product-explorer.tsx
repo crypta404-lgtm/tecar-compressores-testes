@@ -1,9 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export type ProductItem = {
   name:string;
-  image:string;
+  image?:string;
+  referenceFamily?:string;
   summary:string;
   tag?:string;
   facts?:string[];
@@ -42,13 +43,13 @@ export function ProductExplorer({groups,ctaLabel="Falar com a TecAr"}:{groups:Pr
 
     <div className="v2-product-cards" role="list">
       {group.items.map(item=><button key={item.name} type="button" role="listitem" aria-pressed={item.name===selectedName} className={item.name===selectedName?"is-selected":""} onClick={()=>setSelectedName(item.name===selectedName?"":item.name)}>
-        <div className="v2-product-card-photo"><img src={item.image} alt={item.name} loading="lazy"/></div>
+        {item.image?<div className="v2-product-card-photo"><img src={item.image} alt={item.name} loading="lazy"/></div>:<div className="tc-product-reference"><ArrowUpRight aria-hidden="true"/><span>{item.referenceFamily}</span></div>}
         <div className="v2-product-card-copy">{item.tag&&<span>{item.tag}</span>}<h3>{item.name}</h3><b>{item.name===selectedName?"Fechar −":"Abrir +"}</b></div>
       </button>)}
     </div>
 
     {selected&&<section className="v2-product-detail" aria-live="polite">
-      <div className="v2-product-detail-photo"><img src={selected.image} alt={selected.name}/></div>
+      
       <div className="v2-product-detail-copy">
         <button type="button" className="v2-product-detail-close" onClick={()=>setSelectedName("")} aria-label="Fechar resumo">×</button>
         {selected.tag&&<span>{selected.tag}</span>}

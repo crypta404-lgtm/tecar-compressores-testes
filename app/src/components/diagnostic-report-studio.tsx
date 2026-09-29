@@ -59,7 +59,7 @@ export function DiagnosticHero(){
       <div className="v2-dx-proof"><span><b>4 relatórios</b> no pré-laudo 360</span><span><b>CAGI</b> desempenho verificado</span><span><b>DOE</b> métodos de referência</span></div>
     </div>
     <div className="v2-dx-hero-media">
-      <video autoPlay muted loop playsInline poster="/assets/world/scene-01-poster.png" aria-label="Sistema industrial de ar comprimido"><source src="/assets/world/scene-01.mp4" type="video/mp4"/></video>
+      <img src="/assets/unique/generated/diagnostic-hero.webp" alt="Imagem ilustrativa de instrumentos de diagnóstico industrial, criada por IA"/><span className="tc-image-credit">Imagem ilustrativa · IA</span>
       <div className="v2-dx-sensor v2-dx-sensor-a"><Activity size={17}/><span>Pressão</span><b>7,0 bar</b></div>
       <div className="v2-dx-sensor v2-dx-sensor-b"><Wind size={17}/><span>Vazão</span><b>116 cfm</b></div>
       <div className="v2-dx-sensor v2-dx-sensor-c"><Bolt size={17}/><span>Potência</span><b>26,16 kW</b></div>

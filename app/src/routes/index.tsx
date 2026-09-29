@@ -12,9 +12,9 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { to: "/compressores", name: "Compressores", caption: "Geração de ar", image: "/assets/products/rs45-75-official.jpg", alt: "Compressor de parafuso Ingersoll Rand série RS" },
-  { to: "/secadores", name: "Secadores", caption: "Tratamento do ar", image: "/assets/products/dryer-refrigerated.png", alt: "Secador de ar por refrigeração Ingersoll Rand" },
-  { to: "/linhas-de-ar", name: "Linhas de ar", caption: "Distribuição eficiente", image: "/assets/v2/lines.jpg", alt: "Rede de ar comprimido em alumínio instalada em ambiente industrial", photo: true },
+  { to: "/compressores", name: "Compressores", caption: "Geração de ar", image: "/assets/unique/official/rental-rseries.webp", alt: "Compressor de parafuso Ingersoll Rand série R" },
+  { to: "/secadores", name: "Secadores", caption: "Tratamento do ar", image: "/assets/unique/generated/home-treatment.webp", photo: true, alt: "Imagem ilustrativa de secagem do ar comprimido, criada por IA" },
+  { to: "/linhas-de-ar", name: "Linhas de ar", caption: "Distribuição eficiente", image: "/assets/unique/generated/home-distribution.webp", alt: "Imagem ilustrativa de um ponto de distribuição de ar, criada por IA", photo: true },
 ] as const;
 
 const services = [
@@ -101,7 +101,7 @@ function Home() {
 
     <section className="tc-section tc-diagnostic" aria-labelledby="diagnostic-title">
       <div className="v2-container tc-diagnostic-grid">
-        <div className="tc-diagnostic-copy"><span className="tc-eyebrow">04 / Atendimento técnico</span><h2 id="diagnostic-title">Toda resposta<br />começa com<br />uma boa análise.</h2><p>Compartilhe o cenário da sua operação. Nossa equipe recebe as informações essenciais para orientar o próximo passo.</p><Link to="/diagnostico" className="tc-text-link">Diagnósticos e calculadoras <ArrowUpRight aria-hidden="true" /></Link><img src="/assets/editorial/engineering.webp" alt="Análise e planejamento técnico" loading="lazy" width="1200" height="1200" /></div>
+        <div className="tc-diagnostic-copy"><span className="tc-eyebrow">04 / Atendimento técnico</span><h2 id="diagnostic-title">Toda resposta<br />começa com<br />uma boa análise.</h2><p>Compartilhe o cenário da sua operação. Nossa equipe recebe as informações essenciais para orientar o próximo passo.</p><Link to="/diagnostico" className="tc-text-link">Diagnósticos e calculadoras <ArrowUpRight aria-hidden="true" /></Link><img src="/assets/unique/generated/home-analysis.webp" alt="Imagem ilustrativa de instrumentos de análise técnica, criada por IA" loading="lazy" width="1200" height="1200" /></div>
         <DiagnosticQuestionnaire variant="compact" />
       </div>
     </section>

@@ -21,7 +21,7 @@ const groups:ProductGroup[]=[
 ];
 
 function Page(){return <PageFrame>
- <PageHero kicker="ACESSÓRIOS" title="Escolha pela função no sistema." text="Filtragem, condensado e controle organizados em grupos clicáveis." image="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=696,fit=crop/YZ9EgGEK8zh4Pjl4/irp-en-product-photo-exterior-right-fs-filter-JdFwicofy98WNmpN.webp"/>
+ <PageHero kicker="ACESSÓRIOS" title="Escolha pela função no sistema." text="Filtragem, condensado e controle organizados em grupos clicáveis." image="/assets/unique/generated/accessories-hero.webp"/>
  <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este componente"/></div></section>
  <ContactBand/>
 </PageFrame>}

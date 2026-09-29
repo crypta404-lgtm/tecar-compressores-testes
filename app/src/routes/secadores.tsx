@@ -13,7 +13,7 @@ const groups:ProductGroup[]=[{
 }];
 
 function Page(){return <PageFrame>
-  <PageHero kicker="SECADORES" title="Dois caminhos. Uma escolha rápida." text="Refrigerado para uso industrial geral. Adsorção quando o processo exige ar mais seco." image="/assets/products/dryer-refrigerated.png"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
+  <PageHero kicker="SECADORES" title="Dois caminhos. Uma escolha rápida." text="Refrigerado para uso industrial geral. Adsorção quando o processo exige ar mais seco." image="/assets/unique/generated/dryer-hero.webp"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
   <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este secador"/></div></section>
   <ContactBand/>
 </PageFrame>}

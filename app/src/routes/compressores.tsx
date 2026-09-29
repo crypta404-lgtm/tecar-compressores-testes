@@ -47,8 +47,8 @@ const groups:ProductGroup[]=[
     id:"pet",label:"PET / alta pressão",intro:"Famílias para sopro de embalagens, boosters e processos que exigem pressão elevada.",
     items:[
       {name:"Compressor de alta pressão",tag:"Processo especial",image:"/assets/products/compressor-high-pressure.png",summary:"Pacote dedicado a aplicações de pressão elevada, selecionado conforme vazão e pressão final do processo.",facts:["Alta pressão","Processos especiais","Dimensionamento dedicado"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/high-pressure-compressors/"},
-      {name:"MSG Turbo-Air 2040",tag:"PET · centrífugo",image:"https://azure-na-images.contentstack.com/v3/assets/blta3c1d56420975795/blt73ff6f49d3b0cbeb/67b716f3dd97b1710cdbdedb/IRP-Product-Photo-turbo-air-2040.webp?auto=webp&format=pjpeg&quality=80&width=1600",summary:"Centrífugo de alta pressão desenvolvido para grandes fluxos e aplicações como sopro PET.",facts:["Até alta pressão","PET","Grande fluxo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
-      {name:"T30 alta pressão",tag:"Pistão multiestágio",image:"/assets/products/t30-high-official.jpg",summary:"Alternativo de alta pressão para processos que exigem solução robusta e vazões menores.",facts:["Pistão","Alta pressão","Multiestágio"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/reciprocating-air-compressors/high-pressure/"},
+      {name:"MSG Turbo-Air 2040",tag:"PET · centrífugo",referenceFamily:"Centrífugos",summary:"Centrífugo de alta pressão desenvolvido para grandes fluxos e aplicações como sopro PET.",facts:["Até alta pressão","PET","Grande fluxo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
+      {name:"T30 alta pressão",tag:"Pistão multiestágio",referenceFamily:"Pistão",summary:"Alternativo de alta pressão para processos que exigem solução robusta e vazões menores.",facts:["Pistão","Alta pressão","Multiestágio"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/reciprocating-air-compressors/high-pressure/"},
     ]
   },
   {
@@ -60,7 +60,7 @@ const groups:ProductGroup[]=[
 ];
 
 function Page(){return <PageFrame>
-  <PageHero kicker="COMPRESSORES" title="Escolha primeiro a família. Depois o equipamento." text="Clique no tipo de compressor e veja somente as opções daquela tecnologia." image="/assets/products/compressor-nirvana.jpg"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
+  <PageHero kicker="COMPRESSORES" title="Escolha primeiro a família. Depois o equipamento." text="Clique no tipo de compressor e veja somente as opções daquela tecnologia." image="/assets/unique/generated/compressor-hero.webp"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
   <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este compressor"/></div></section>
   <ContactBand/>
 </PageFrame>}
