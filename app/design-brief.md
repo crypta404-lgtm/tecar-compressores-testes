@@ -1,37 +1,37 @@
-# TecAr Compressores redesign v2
+# TecAr Editorial Design
 
-Design read: site B2B industrial limpo para clientes que precisam pesquisar, comparar e entender soluções antes de entrar em contato.
-Concept spine: catálogo técnico orientado à decisão. A Home resume a empresa e distribui o cliente para páginas especializadas.
-Delivery tier: cinema contido, com microanimações, vídeo oficial, hover técnico e uma única seção scroll-scrub.
-Locked palette: branco #FFFFFF dominante, cinza técnico #F5F7F8, texto #22292F, linhas #DFE4E7 e vermelho institucional #D71920 como único acento.
-Locked type: Oswald para títulos e DM Sans para leitura, preservando a identidade atual.
-Animation mode: animated-website
-Journey shape: single-shot.
-Journey:
-- A Home começa estática, clara e objetiva com resumo da empresa.
-- O scrub aparece somente como seção visual secundária sobre operação industrial.
-- As páginas internas usam movimento discreto e interações funcionais.
-World grammar: fotografia industrial real, interface branca, linhas finas, vermelho restrito a chamadas e estado.
-Mobile framing: navegação compacta, conteúdo em coluna, cards sem dependência de hover.
-Journey intent: movimento explica operação e estado, sem competir com a leitura.
+## Audience and intent
+Industrial decision makers, engineering leaders and corporate purchasing teams.
+An exclusive, restrained and professional presentation of TecAr's existing offer.
+User references: FARFROM architectural editorial design and GAZU fashion storefront.
 
-Section plan Home:
-1. Header com abas e dropdowns.
-2. Hero branco com resumo TecAr.
-3. Credenciais.
-4. Diagnóstico TecAr com questionário compacto e envio ao WhatsApp.
-5. Serviços.
-6. Simulador de desperdício.
-7. Monitoramento interativo.
-8. Produtos.
-9. Simulador de parada.
-10. Scrub industrial secundário.
-11. Vídeos oficiais.
-12. TecAr Portuária.
-13. Contato.
+## Visual direction
+Large authentic equipment and service photographs, a prominent TecAr wordmark,
+asymmetric image pairings, generous whitespace and fine horizontal rules.
+White and neutral black foundations; original TecAr red used sparingly.
+DM Sans throughout the public experience. Fixed type sizes with responsive breakpoints.
+No ornamental gradients, floating decorative cards or invented client logos.
+Image overlays are limited to the areas where white copy needs contrast.
 
-Added route:
-- /diagnostico: página de diagnóstico industrial com triagem aprofundada, resumo automático e envio ao WhatsApp.
+## Home structure
+Photographic hero; company facts; editorial company introduction; visual catalog;
+service photograph and service index; port-operation photo; preserved compact
+technical questionnaire; preserved scroll-driven film; two existing institutional
+videos; contact band; contact details and oversized wordmark in footer.
 
-Asset plan: imagens já publicadas pela TecAr, vídeos públicos do canal Tecar Compressores incorporados por YouTube, fotos complementares Pexels marcadas como free to use, e infográficos/interações desenhados em código.
-CTA inventory: Solicitar orçamento; Conhecer serviços; Falar com especialista; Dimensionar; Consultar disponibilidade; Abrir WhatsApp.
+## Preserved
+Every product family and service route, contact destination, calculator, technical
+table, report, source citation and questionnaire behavior. No technical data edits.
+Original manufacturer photographs remain the authority for product appearance.
+Existing scroll-scrub engine and media are not modified.
+
+## Responsive and accessible
+Desktop dropdowns and a mobile navigation panel with explicit expanded state.
+Escape and outside-click dismissal, visible keyboard focus, skip link,
+semantic headings and image descriptions. All image grids have stable aspect ratios.
+Reduced motion retains the underlying content. Technical tools use compact headings.
+Print styles continue to hide shared navigation on diagnostic reports.
+
+## Assets
+Original images retained. Optimized WebP copies of service, engineering and rental
+photographs reduce transfer size on the home page without altering their subject.

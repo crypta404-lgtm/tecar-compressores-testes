@@ -3,6 +3,7 @@ import { Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts } f
 import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import siteV2Css from "../site-v2.css?url";
+import editorialCss from "../tecar-editorial.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import appMetaJson from "../app-meta.json";
 import { scrollScrubTheme } from "../scroll-scrub-scenes";
@@ -40,6 +41,7 @@ function buildHead(meta: AppMeta) {
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" },
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: siteV2Css },
+      { rel: "stylesheet", href: editorialCss },
       { rel: "icon", href: "/favicon-32.png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },

@@ -1,97 +1,119 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Activity, ArrowUpRight, Gauge, RadioTower, Truck, Wind, Wrench } from "lucide-react";
-import { PageFrame, ContactBand } from "@/components/site-v2";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { PageFrame, ContactBand, VideoEmbed } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
 import { pageMeta } from "@/lib/page-meta";
 import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
 
-export const Route=createFileRoute("/")({
-  head:()=>pageMeta("/","TecAr Compressores | Soluções em Ar Comprimido","Compressores, manutenção, locação, engenharia e monitoramento para indústrias em Curitiba e Paranaguá."),
-  component:Home
+export const Route = createFileRoute("/")({
+  head: () => pageMeta("/", "TecAr Compressores | Engenharia para a sua operação", "Compressores, manutenção, locação, engenharia e monitoramento para indústrias em Curitiba e Paranaguá."),
+  component: Home,
 });
 
+const products = [
+  { to: "/compressores", name: "Compressores", caption: "Geração de ar", image: "/assets/products/rs45-75-official.jpg", alt: "Compressor de parafuso Ingersoll Rand série RS" },
+  { to: "/secadores", name: "Secadores", caption: "Tratamento do ar", image: "/assets/products/dryer-refrigerated.png", alt: "Secador de ar por refrigeração Ingersoll Rand" },
+  { to: "/linhas-de-ar", name: "Linhas de ar", caption: "Distribuição eficiente", image: "/assets/v2/lines.jpg", alt: "Rede de ar comprimido em alumínio instalada em ambiente industrial", photo: true },
+] as const;
+
 const services = [
-  {icon:Wrench,title:"Manutenção",text:"Preventiva, corretiva e suporte técnico para manter o ar comprimido disponível.",to:"/manutencao"},
-  {icon:Gauge,title:"Engenharia",text:"Projetos de rede, medições e estudos para operar com mais eficiência.",to:"/engenharia"},
-  {icon:Truck,title:"Locação",text:"Compressores e equipamentos para demandas temporárias ou contínuas.",to:"/locacao"},
-  {icon:RadioTower,title:"TecAr Connect",text:"Monitoramento remoto para acompanhar parâmetros e alarmes.",to:"/tecar-connect"},
+  { to: "/manutencao", number: "01", title: "Manutenção", text: "Assistência preventiva e corretiva. Cuidado contínuo com a disponibilidade do seu sistema." },
+  { to: "/engenharia", number: "02", title: "Engenharia", text: "Projetos, medições e estudos orientados à eficiência da sua operação." },
+  { to: "/locacao", number: "03", title: "Locação", text: "Equipamentos para contingência, expansão e demandas temporárias." },
+  { to: "/tecar-connect", number: "04", title: "TecAr Connect", text: "Monitoramento remoto de parâmetros e alarmes. Informação para agir." },
 ] as const;
 
-const solutionPaths = [
-  {icon:Activity,title:"Equipamento parado",text:"Organize sintomas e urgência para acelerar o atendimento.",to:"/diagnostico",action:"Iniciar diagnóstico"},
-  {icon:Gauge,title:"Reduzir custos",text:"Compare pressão, consumo, vazamentos e regime de operação.",to:"/diagnostico",action:"Abrir calculadoras"},
-  {icon:Wind,title:"Escolher equipamento",text:"Explore compressores, secadores, redes e acessórios.",to:"/produtos",action:"Ver produtos"},
-  {icon:Truck,title:"Garantir contingência",text:"Avalie locação para paradas, picos de demanda ou obras.",to:"/locacao",action:"Conhecer locação"},
-] as const;
-
-function Home(){
+function Home() {
   return <PageFrame>
-    <section className="v2-clean-hero">
-      <img src="/assets/v2/compressors.jpg" alt="Compressores industriais instalados em ambiente técnico"/>
-      <div className="v2-clean-hero-shade"/>
-      <div className="v2-container v2-clean-hero-content">
-        <span className="v2-kicker">TECAR COMPRESSORES · DESDE 1999</span>
-        <h1>Ar comprimido com engenharia, resposta e continuidade.</h1>
-        <p>Equipamentos, assistência, locação e diagnóstico para decisões industriais mais seguras em Curitiba, Paranaguá e região.</p>
-        <div className="v2-clean-hero-actions"><Link to="/diagnostico">Iniciar diagnóstico</Link><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer">Falar com a TecAr</a></div>
-      </div>
-    </section>
-
-    <section className="v2-proof v2-proof-clean">
-      <div className="v2-container v2-proof-grid">
-        <div><strong>1999</strong><span>presença no mercado</span></div>
-        <div><strong>500+</strong><span>clientes atendidos</span></div>
-        <div><strong>Ingersoll Rand</strong><span>assistência e revenda autorizada</span></div>
-        <div><strong>2</strong><span>unidades no Paraná</span></div>
-      </div>
-    </section>
-
-    <section className="v3-routefinder" aria-labelledby="routefinder-title">
-      <div className="v2-container">
-        <div className="v3-routefinder-head"><h2 id="routefinder-title">Comece pela necessidade da operação.</h2><p>Quatro caminhos diretos para chegar à informação certa sem navegar pelo catálogo inteiro.</p></div>
-        <div className="v3-routefinder-grid">{solutionPaths.map((item)=><Link key={item.title} to={item.to} className="v3-routefinder-item"><item.icon aria-hidden="true"/><div><h3>{item.title}</h3><p>{item.text}</p><span>{item.action}<ArrowUpRight aria-hidden="true"/></span></div></Link>)}</div>
-      </div>
-    </section>
-
-    <section className="v2-home-report">
-      <div className="v2-container v2-home-report-grid">
-        <div>
-          <span className="v2-kicker">RELATÓRIO DIRETO</span>
-          <h2>Descreva o cenário. A TecAr recebe a triagem pronta.</h2>
-          <p>Dez perguntas rápidas sobre equipamento, sintoma, pressão, manutenção e urgência. Quase tudo se responde com um toque. Ao final, a mensagem fica pronta para enviar à equipe pelo WhatsApp.</p>
-          <div className="v2-home-report-facts"><span><b>01</b> Respostas objetivas</span><span><b>02</b> Resumo automático</span><span><b>03</b> Envio pelo WhatsApp</span></div>
+    <section className="tc-hero" aria-labelledby="home-title">
+      <img className="tc-hero-image" src="/assets/v2/compressors.jpg" alt="Compressores Ingersoll Rand e rede de ar em instalação industrial" fetchPriority="high" width="1179" height="885" />
+      <div className="tc-hero-overlay" />
+      <div className="tc-hero-content">
+        <div className="tc-hero-top">
+          <p>Precisão para<br />mover a indústria.</p>
+          <Link to="/produtos" className="tc-hero-explore">Explore nossas soluções <ArrowUpRight aria-hidden="true" /></Link>
         </div>
-        <DiagnosticQuestionnaire variant="compact"/>
+        <div className="tc-hero-bottom">
+          <h1 id="home-title">TecAr<span>.</span><span className="tc-sr-only"> Compressores</span></h1>
+          <div><span>Ar comprimido industrial</span><span>Engenharia. Presença. Continuidade.</span></div>
+          <a href="#a-tecar" className="tc-round-link" aria-label="Conhecer a TecAr"><ArrowDown aria-hidden="true" /></a>
+        </div>
       </div>
     </section>
 
-    <section className="v2-home-story">
-      <div className="v2-container v2-home-story-grid">
-        <div className="v2-home-story-copy"><span className="v2-kicker">A TECAR</span><h2>Desde 1999, perto de quem precisa de ar comprimido.</h2><p>Com unidades em Curitiba e Paranaguá, a TecAr reúne equipamentos, assistência e engenharia para apoiar a operação industrial.</p><Link to="/empresa" className="v2-home-arrow">Conhecer a empresa <span aria-hidden="true">↗</span></Link></div>
-        <div className="v2-home-film"><div className="v2-home-film-frame"><iframe src="https://www.youtube-nocookie.com/embed/3sWKrRIMI7M" title="TecAr Compressores - vídeo institucional" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div><span>01 / CONHEÇA A TECAR</span></div>
+    <section className="tc-proof" aria-label="A TecAr em números">
+      <div className="v2-container tc-proof-grid">
+        <div><strong>Desde 1999</strong><span>Ao lado da indústria</span></div>
+        <div><strong>500+</strong><span>Clientes atendidos</span></div>
+        <div><strong>02 unidades</strong><span>Curitiba e Paranaguá</span></div>
+        <div className="tc-proof-partner"><strong>Ingersoll Rand</strong><span>Assistência e revenda autorizada</span></div>
       </div>
     </section>
 
-    <section className="v2-home-products">
-      <div className="v2-container v2-home-story-grid">
-        <div className="v2-home-film"><div className="v2-home-film-frame"><iframe src="https://www.youtube-nocookie.com/embed/vqm1xLn1p-k" title="Ingersoll Rand Série R - Motor HPM, controle variável" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div><span>02 / EQUIPAMENTOS EM AÇÃO</span></div>
-        <div className="v2-home-story-copy"><span className="v2-kicker">PRODUTOS</span><h2>O equipamento certo para cada operação.</h2><p>Compressores, secadores, redes de ar e acessórios com orientação técnica para escolher e manter o sistema.</p><Link to="/produtos" className="v2-home-arrow">Explorar produtos <span aria-hidden="true">↗</span></Link></div>
+    <section className="tc-section tc-intro" id="a-tecar">
+      <div className="v2-container tc-intro-grid">
+        <div className="tc-intro-aside">
+          <span className="tc-eyebrow">01 / A TecAr</span>
+          <div className="tc-intro-images">
+            <img src="/assets/editorial/engineering.webp" alt="Planejamento de engenharia para sistemas de ar comprimido" loading="lazy" width="1200" height="1200" />
+            <img src="/assets/editorial/rental.webp" alt="Atendimento técnico em equipamento industrial" loading="lazy" width="1200" height="1200" />
+          </div>
+          <span className="tc-caption">Conhecimento técnico.<br />Proximidade em cada etapa.</span>
+        </div>
+        <div className="tc-intro-copy">
+          <h2>Engenharia que<br />acompanha a sua<br /><span>operação.</span></h2>
+          <p>O ar comprimido faz parte do que move a sua empresa. A TecAr reúne equipamentos, assistência e engenharia para cuidar desse sistema por inteiro.</p>
+          <p>Desde 1999, com presença em Curitiba e Paranaguá e uma relação próxima com quem está à frente da operação.</p>
+          <Link to="/empresa" className="tc-text-link">Conheça a TecAr <ArrowUpRight aria-hidden="true" /></Link>
+        </div>
       </div>
     </section>
 
-    <section className="v2-home-services">
+    <section className="tc-section tc-catalog" aria-labelledby="catalog-title">
       <div className="v2-container">
-        <div className="v2-home-services-heading"><span className="v2-kicker">SERVIÇOS</span><h2>Da instalação ao próximo turno.</h2></div>
-        <div className="v2-home-services-grid">{services.map((service)=><article key={service.to}><service.icon aria-hidden="true"/><h3>{service.title}</h3><p>{service.text}</p><Link to={service.to}>Ver serviço <ArrowUpRight aria-hidden="true"/></Link></article>)}</div>
+        <div className="tc-section-top"><span className="tc-eyebrow">02 / Equipamentos</span><span className="tc-caption">Da geração à distribuição.</span></div>
+        <div className="tc-section-heading"><h2 id="catalog-title">Precisão em cada escolha.</h2><Link to="/produtos" className="tc-text-link">Catálogo completo <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="tc-product-grid">{products.map((product) => <Link key={product.to} to={product.to} className="tc-product">
+          <div className={"tc-product-image" + ("photo" in product ? " tc-product-image-photo" : "")}><img src={product.image} alt={product.alt} loading="lazy" width="800" height="800" /></div>
+          <div className="tc-product-meta"><div><span>{product.caption}</span><h3>{product.name}</h3></div><ArrowUpRight aria-hidden="true" /></div>
+        </Link>)}</div>
+        <div className="tc-catalog-more"><span>Um sistema completo, em cada detalhe.</span><Link to="/acessorios">Acessórios <ArrowUpRight aria-hidden="true" /></Link><Link to="/safety-air">Safety Air <ArrowUpRight aria-hidden="true" /></Link></div>
       </div>
     </section>
 
-    <section className="v3-scrub-section" aria-labelledby="scrub-title">
-      <div className="v2-container v3-scrub-heading"><h2 id="scrub-title">Uma operação conectada do equipamento ao dado.</h2><p>Role para percorrer a jornada visual da TecAr. Com movimento reduzido, a mesma história permanece disponível em formato estático.</p></div>
-      <div className="v2-scrub-frame"><ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme}/></div>
+    <section className="tc-section tc-services" aria-labelledby="services-title">
+      <div className="v2-container">
+        <div className="tc-section-top"><span className="tc-eyebrow">03 / Serviços</span><Link to="/servicos" className="tc-text-link">Todas as soluções <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="tc-services-layout">
+          <figure className="tc-service-photo"><img src="/assets/editorial/service.webp" alt="Profissional de manutenção de compressores industriais" loading="lazy" width="1200" height="1200" /><figcaption>Presença técnica. Do projeto à manutenção.</figcaption></figure>
+          <div className="tc-services-copy"><h2 id="services-title">A sua operação.<br />Nossa atenção<br />a cada detalhe.</h2>
+            <div className="tc-service-list">{services.map((service) => <Link key={service.to} to={service.to}><span className="tc-service-number">{service.number}</span><div><h3>{service.title}</h3><p>{service.text}</p></div><ArrowUpRight aria-hidden="true" /></Link>)}</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <ContactBand title="Sua operação precisa de uma resposta objetiva?" text="Envie o cenário pelo diagnóstico ou fale diretamente com a equipe TecAr."/>
-  </PageFrame>
+    <section className="tc-field" aria-label="Soluções para indústria e operações portuárias">
+      <img src="/assets/v2/free-port.jpg" alt="Infraestrutura e atividade portuária" loading="lazy" width="1800" height="1200" />
+      <div className="tc-field-copy"><span className="tc-eyebrow">Indústria & operações portuárias</span><h2>Onde a operação<br />não pode parar.</h2><Link to="/locacao" className="tc-text-link">Conheça nossas soluções em locação <ArrowUpRight aria-hidden="true" /></Link></div>
+    </section>
+
+    <section className="tc-section tc-diagnostic" aria-labelledby="diagnostic-title">
+      <div className="v2-container tc-diagnostic-grid">
+        <div className="tc-diagnostic-copy"><span className="tc-eyebrow">04 / Atendimento técnico</span><h2 id="diagnostic-title">Toda resposta<br />começa com<br />uma boa análise.</h2><p>Compartilhe o cenário da sua operação. Nossa equipe recebe as informações essenciais para orientar o próximo passo.</p><Link to="/diagnostico" className="tc-text-link">Diagnósticos e calculadoras <ArrowUpRight aria-hidden="true" /></Link><img src="/assets/editorial/engineering.webp" alt="Análise e planejamento técnico" loading="lazy" width="1200" height="1200" /></div>
+        <DiagnosticQuestionnaire variant="compact" />
+      </div>
+    </section>
+
+    <section className="tc-motion" aria-labelledby="motion-title">
+      <div className="v2-container tc-motion-heading"><span className="tc-eyebrow">05 / Visão integrada</span><h2 id="motion-title">Do equipamento ao dado.</h2><p>Tecnologia, assistência e monitoramento conectados à sua indústria.</p><Link to="/tecar-connect" className="tc-text-link">TecAr Connect <ArrowUpRight aria-hidden="true" /></Link></div>
+      <div className="v2-scrub-frame"><ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} /></div>
+    </section>
+
+    <section className="tc-section tc-films" aria-labelledby="films-title">
+      <div className="v2-container"><div className="tc-section-heading"><h2 id="films-title">Mais perto da TecAr.</h2><span className="tc-caption">Pessoas, tecnologia e indústria.</span></div><div className="tc-films-grid"><VideoEmbed id="3sWKrRIMI7M" title="Conheça a TecAr" /><VideoEmbed id="vqm1xLn1p-k" title="Ingersoll Rand: tecnologia em operação" /></div></div>
+    </section>
+    <ContactBand title="Vamos cuidar da sua operação." text="Uma conversa com quem entende de ar comprimido." />
+  </PageFrame>;
 }
