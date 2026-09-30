@@ -75,5 +75,8 @@
   },
   "overrides": {
     "@types/react": "19.2.15"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

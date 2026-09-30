@@ -40,18 +40,20 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 export default {
-  async fetch(request: Request, env: unknown, ctx: unknown) {
+  async fetch(request: Request, env?: unknown, ctx?: unknown) {
+    // Vercel supplies secrets through the Node environment; retain explicit env for portability.
+    const runtimeEnv = { OPENAI_API_KEY: process.env.OPENAI_API_KEY, ...(env && typeof env === "object" ? env : {}) };
     const method = request.method.toUpperCase();
     const url = new URL(request.url);
     if (method === "OPTIONS") {
       return applySecurityHeaders(new Response(null, { status: 204, headers: { Allow: "GET, HEAD, POST, OPTIONS" } }));
     }
     if (method === "GET" && url.pathname === "/api/autoatendimento/status") {
-      const active = Boolean((env as { OPENAI_API_KEY?: string })?.OPENAI_API_KEY);
+      const active = Boolean(runtimeEnv.OPENAI_API_KEY);
       return applySecurityHeaders(new Response(JSON.stringify({ active }), { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } }));
     }
     if (method === "POST" && url.pathname === "/api/autoatendimento") {
-      return applySecurityHeaders(await handleAutoatendimento(request, env));
+      return applySecurityHeaders(await handleAutoatendimento(request, runtimeEnv));
     }
     if (method !== "GET" && method !== "HEAD") {
       return applySecurityHeaders(new Response("Method Not Allowed", { status: 405, headers: { Allow: "GET, HEAD, OPTIONS", "Content-Type": "text/plain; charset=utf-8" } }));
