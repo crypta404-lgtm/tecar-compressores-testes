@@ -1,24 +1,18 @@
 import { useState } from "react";
-
-const steps=[
-  {id:"principal",label:"Rede principal",title:"Linha principal",text:"Leva a maior vazão da planta. O diâmetro correto reduz velocidade e perda de carga.",fact:"Base da distribuição"},
-  {id:"anel",label:"Anel",title:"Rede em anel",text:"Alimenta setores por mais de um caminho e ajuda a estabilizar a pressão em plantas extensas.",fact:"Mais estabilidade"},
-  {id:"descidas",label:"Descidas",title:"Descidas e ramais",text:"Distribuem o ar por área sem transformar a linha principal em gargalo.",fact:"Distribuição por setor"},
-  {id:"pontos",label:"Pontos de uso",title:"Pontos de uso",text:"Válvulas, conexões e tratamento final entregam o ar onde o processo realmente precisa.",fact:"Pressão no processo"},
+const steps = [
+ {id:"principal",label:"Rede principal",title:"O caminho da geração à fábrica",text:"Transporta o ar da central até os setores. Um dimensionamento adequado evita que a tubulação limite a capacidade dos equipamentos.",benefit:"Menos perda de pressão, mais ar útil na produção.",checks:["Dimensionar diâmetro pela vazão e distância.","Prever expansão e acesso para manutenção.","Avaliar pressão e vazão nos horários de pico."],x:16,y:28},
+ {id:"anel",label:"Anel",title:"Distribuição por mais de um caminho",text:"O circuito em anel permite alimentar os setores por caminhos alternativos, conforme o projeto da planta.",benefit:"Pressão mais estável para processos simultâneos.",checks:["Distribuir os pontos de consumo ao longo do anel.","Prever válvulas de isolamento por trecho.","Verificar gargalos antes de ampliar a produção."],x:37,y:56},
+ {id:"descidas",label:"Descidas",title:"Ar disponível em cada setor",text:"Os ramais conectam a rede às áreas produtivas. A instalação deve considerar o consumo de cada setor e o manejo do condensado.",benefit:"Manutenção setorizada e expansão organizada.",checks:["Dimensionar ramais pelo consumo local.","Planejar drenagem e pontos de isolamento.","Manter conexões acessíveis para inspeção."],x:58,y:28},
+ {id:"pontos",label:"Pontos de uso",title:"Qualidade onde o ar é utilizado",text:"O conjunto final entrega o ar nas condições necessárias para ferramentas, máquinas e processos.",benefit:"Proteção do equipamento e repetibilidade do processo.",checks:["Definir filtragem conforme a aplicação.","Ajustar pressão de trabalho no ponto de uso.","Inspecionar mangueiras, conexões e vazamentos."],x:79,y:56}
 ] as const;
-
 export function AirLineExplorer(){
- const [id,setId]=useState<(typeof steps)[number]["id"]>("principal");
- const current=steps.find(s=>s.id===id)??steps[0];
- return <div className="v2-line-explorer">
-   <div className="v2-line-stage">
-     <div className="v2-line-photo">
-       <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YZ9EgGEK8zh4Pjl4/piping-application-6-1200x800-1-mePg6NWzlRFonDzk.jpg" alt="Rede industrial em alumínio"/>
-       <div className="v2-line-hotspots" aria-label="Partes da rede">
-         {steps.map((s,index)=><button key={s.id} type="button" className={s.id===id?"is-active":""} style={{left:`${16+index*21}%`,top:`${28+(index%2)*28}%`}} onClick={()=>setId(s.id)}><i>{index+1}</i><span>{s.label}</span></button>)}
-       </div>
-     </div>
-     <div className="v2-line-copy"><small>SELECIONADO</small><h2>{current.title}</h2><p>{current.text}</p><strong>{current.fact}</strong><div className="v2-line-tabs">{steps.map(s=><button key={s.id} type="button" className={s.id===id?"is-active":""} onClick={()=>setId(s.id)}>{s.label}</button>)}</div></div>
-   </div>
- </div>
+ const [selected,setSelected]=useState<number|null>(null);
+ const current=selected===null?null:steps[selected];
+ return <div className="v2-line-explorer"><div className="v2-line-stage">
+ <div className="v2-line-photo"><div className="v2-line-zoom" style={{transform:current?"scale(1.22)":"scale(1)",transformOrigin:current?`${current.x}% ${current.y}%`:"50% 50%"}}>
+ <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YZ9EgGEK8zh4Pjl4/piping-application-6-1200x800-1-mePg6NWzlRFonDzk.jpg" alt="Rede industrial em alumínio com quatro pontos de exploração" loading="lazy"/>
+ <div className="v2-line-hotspots" aria-label="Etapas da distribuição">{steps.map((s,i)=><button key={s.id} type="button" aria-label={`${i+1}. ${s.label}`} aria-pressed={selected===i} aria-controls="air-line-manual" className={selected===i?"is-active":""} style={{left:`${s.x}%`,top:`${s.y}%`}} onClick={()=>setSelected(i)}><i>{i+1}</i><span>{s.label}</span></button>)}</div></div>
+ {current&&<button type="button" className="v2-line-reset" onClick={()=>setSelected(null)}>− Visão completa</button>}</div>
+ <div className="v2-line-copy" id="air-line-manual" aria-live="polite"><small>GUIA DA REDE DE AR</small><h2>{current?.title??"Explore sua rede."}</h2><p>{current?.text??"Selecione um dos quatro pontos para ampliar a imagem e abrir o guia de cada etapa da distribuição."}</p>{current&&<><strong>{current.benefit}</strong><h3>O que avaliar no projeto</h3><ul>{current.checks.map(check=><li key={check}>{check}</li>)}</ul><a className="tc-text-link" href={`https://wa.me/5541996441330?text=${encodeURIComponent('Olá, gostaria de avaliar '+current.label.toLowerCase()+' da minha rede de ar.')}`} target="_blank" rel="noopener noreferrer">Avaliar esta etapa com a TecAr ↗</a></>}
+ <div className="v2-line-tabs">{steps.map((s,i)=><button key={s.id} type="button" aria-pressed={selected===i} aria-controls="air-line-manual" className={selected===i?"is-active":""} onClick={()=>setSelected(i)}>{i+1}. {s.label}</button>)}</div></div></div></div>
 }

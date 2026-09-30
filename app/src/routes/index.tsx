@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
 
 const products = [
   { to: "/compressores", name: "Compressores", caption: "Geração de ar", image: "/assets/unique/official/rental-rseries.webp", alt: "Compressor de parafuso Ingersoll Rand série R" },
-  { to: "/secadores", name: "Secadores", caption: "Tratamento do ar", image: "/assets/unique/generated/home-treatment.webp", photo: true, alt: "Imagem ilustrativa de secagem do ar comprimido, criada por IA" },
+  { to: "/secadores", name: "Secadores", caption: "Tratamento do ar", image: "/assets/products/dryer-refrigerated.png", alt: "Secador refrigerado Ingersoll Rand" },
   { to: "/linhas-de-ar", name: "Linhas de ar", caption: "Distribuição eficiente", image: "/assets/unique/generated/home-distribution.webp", alt: "Imagem ilustrativa de um ponto de distribuição de ar, criada por IA", photo: true },
 ] as const;
 
@@ -37,8 +37,15 @@ function Home() {
         <div className="tc-hero-bottom">
           <h1 id="home-title">TecAr<span>.</span><span className="tc-sr-only"> Compressores</span></h1>
           <div><span>Ar comprimido industrial</span><span>Engenharia. Presença. Continuidade.</span></div>
-          <a href="#a-tecar" className="tc-round-link" aria-label="Conhecer a TecAr"><ArrowDown aria-hidden="true" /></a>
+          <a href="#atendimento" className="tc-round-link" aria-label="Ir para atendimento técnico"><ArrowDown aria-hidden="true" /></a>
         </div>
+      </div>
+    </section>
+
+    <section className="tc-section tc-diagnostic" id="atendimento" aria-labelledby="diagnostic-title">
+      <div className="v2-container tc-diagnostic-grid">
+        <div className="tc-diagnostic-copy"><span className="tc-eyebrow">Atendimento técnico</span><h2 id="diagnostic-title">Toda resposta<br />começa com<br />uma boa análise.</h2><p>Compartilhe o cenário da sua operação. Nossa equipe recebe as informações essenciais para orientar o próximo passo.</p><Link to="/diagnostico" className="tc-text-link">Diagnósticos e calculadoras <ArrowUpRight aria-hidden="true" /></Link><img src="/assets/unique/generated/home-analysis.webp" alt="Imagem ilustrativa de instrumentos de análise técnica, criada por IA" loading="lazy" width="1200" height="1200" /></div>
+        <DiagnosticQuestionnaire variant="compact" />
       </div>
     </section>
 
@@ -54,12 +61,12 @@ function Home() {
     <section className="tc-section tc-intro" id="a-tecar">
       <div className="v2-container tc-intro-grid">
         <div className="tc-intro-aside">
-          <span className="tc-eyebrow">01 / A TecAr</span>
+
           <div className="tc-intro-images">
             <img src="/assets/editorial/engineering.webp" alt="Planejamento de engenharia para sistemas de ar comprimido" loading="lazy" width="1200" height="1200" />
             <img src="/assets/editorial/rental.webp" alt="Atendimento técnico em equipamento industrial" loading="lazy" width="1200" height="1200" />
           </div>
-          <span className="tc-caption">Conhecimento técnico.<br />Proximidade em cada etapa.</span>
+
         </div>
         <div className="tc-intro-copy">
           <h2>Engenharia que<br />acompanha a sua<br /><span>operação.</span></h2>
@@ -72,19 +79,19 @@ function Home() {
 
     <section className="tc-section tc-catalog" aria-labelledby="catalog-title">
       <div className="v2-container">
-        <div className="tc-section-top"><span className="tc-eyebrow">02 / Equipamentos</span><span className="tc-caption">Da geração à distribuição.</span></div>
+
         <div className="tc-section-heading"><h2 id="catalog-title">Precisão em cada escolha.</h2><Link to="/produtos" className="tc-text-link">Catálogo completo <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="tc-product-grid">{products.map((product) => <Link key={product.to} to={product.to} className="tc-product">
           <div className={"tc-product-image" + ("photo" in product ? " tc-product-image-photo" : "")}><img src={product.image} alt={product.alt} loading="lazy" width="800" height="800" /></div>
           <div className="tc-product-meta"><div><span>{product.caption}</span><h3>{product.name}</h3></div><ArrowUpRight aria-hidden="true" /></div>
         </Link>)}</div>
-        <div className="tc-catalog-more"><span>Um sistema completo, em cada detalhe.</span><Link to="/acessorios">Acessórios <ArrowUpRight aria-hidden="true" /></Link><Link to="/safety-air">Safety Air <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="tc-catalog-more"><Link to="/acessorios">Acessórios <ArrowUpRight aria-hidden="true" /></Link><Link to="/safety-air">Safety Air <ArrowUpRight aria-hidden="true" /></Link></div>
       </div>
     </section>
 
     <section className="tc-section tc-services" aria-labelledby="services-title">
       <div className="v2-container">
-        <div className="tc-section-top"><span className="tc-eyebrow">03 / Serviços</span><Link to="/servicos" className="tc-text-link">Todas as soluções <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="tc-section-top"><span className="tc-eyebrow">Serviços para sua operação</span><Link to="/servicos" className="tc-text-link">Todas as soluções <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="tc-services-layout">
           <figure className="tc-service-photo"><img src="/assets/editorial/service.webp" alt="Profissional de manutenção de compressores industriais" loading="lazy" width="1200" height="1200" /><figcaption>Presença técnica. Do projeto à manutenção.</figcaption></figure>
           <div className="tc-services-copy"><h2 id="services-title">A sua operação.<br />Nossa atenção<br />a cada detalhe.</h2>
@@ -99,15 +106,8 @@ function Home() {
       <div className="tc-field-copy"><span className="tc-eyebrow">Indústria & operações portuárias</span><h2>Onde a operação<br />não pode parar.</h2><Link to="/locacao" className="tc-text-link">Conheça nossas soluções em locação <ArrowUpRight aria-hidden="true" /></Link></div>
     </section>
 
-    <section className="tc-section tc-diagnostic" aria-labelledby="diagnostic-title">
-      <div className="v2-container tc-diagnostic-grid">
-        <div className="tc-diagnostic-copy"><span className="tc-eyebrow">04 / Atendimento técnico</span><h2 id="diagnostic-title">Toda resposta<br />começa com<br />uma boa análise.</h2><p>Compartilhe o cenário da sua operação. Nossa equipe recebe as informações essenciais para orientar o próximo passo.</p><Link to="/diagnostico" className="tc-text-link">Diagnósticos e calculadoras <ArrowUpRight aria-hidden="true" /></Link><img src="/assets/unique/generated/home-analysis.webp" alt="Imagem ilustrativa de instrumentos de análise técnica, criada por IA" loading="lazy" width="1200" height="1200" /></div>
-        <DiagnosticQuestionnaire variant="compact" />
-      </div>
-    </section>
-
     <section className="tc-motion" aria-labelledby="motion-title">
-      <div className="v2-container tc-motion-heading"><span className="tc-eyebrow">05 / Visão integrada</span><h2 id="motion-title">Do equipamento ao dado.</h2><p>Tecnologia, assistência e monitoramento conectados à sua indústria.</p><Link to="/tecar-connect" className="tc-text-link">TecAr Connect <ArrowUpRight aria-hidden="true" /></Link></div>
+      <div className="v2-container tc-motion-heading"><span className="tc-eyebrow">Tecnologia integrada</span><h2 id="motion-title">Do equipamento ao dado.</h2><p>Tecnologia, assistência e monitoramento conectados à sua indústria.</p><Link to="/tecar-connect" className="tc-text-link">TecAr Connect <ArrowUpRight aria-hidden="true" /></Link></div>
       <div className="v2-scrub-frame"><ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} /></div>
     </section>
 

@@ -37,30 +37,25 @@ const groups:ProductGroup[]=[
     ]
   },
   {
-    id:"centrifugal",label:"Centrífugos",intro:"Soluções para grandes vazões e operações contínuas de maior porte.",
-    items:[
-      {name:"Centac C700",tag:"Centrífugo · isento de óleo",image:"/assets/products/centac-c700-official.jpg",summary:"Compressor centrífugo integrado para grande vazão e ar isento de óleo.",facts:["Grande vazão","Classe 0","Pacote integrado"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/60-115-m3min-2000-4100-cfm/"},
-      {name:"MSG Turbo-Air 2040",tag:"Centrífugo de alta pressão",image:"https://azure-na-images.contentstack.com/v3/assets/blta3c1d56420975795/blt73ff6f49d3b0cbeb/67b716f3dd97b1710cdbdedb/IRP-Product-Photo-turbo-air-2040.webp?auto=webp&format=pjpeg&quality=80&width=1600",summary:"Centrífugo de alta pressão para aplicações de processo e sopro de embalagens PET.",facts:["Alta pressão","PET","Isento de óleo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
-    ]
-  },
-  {
     id:"pet",label:"PET / alta pressão",intro:"Famílias para sopro de embalagens, boosters e processos que exigem pressão elevada.",
     items:[
       {name:"Compressor de alta pressão",tag:"Processo especial",image:"/assets/products/compressor-high-pressure.png",summary:"Pacote dedicado a aplicações de pressão elevada, selecionado conforme vazão e pressão final do processo.",facts:["Alta pressão","Processos especiais","Dimensionamento dedicado"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/high-pressure-compressors/"},
-      {name:"MSG Turbo-Air 2040",tag:"PET · centrífugo",referenceFamily:"Centrífugos",summary:"Centrífugo de alta pressão desenvolvido para grandes fluxos e aplicações como sopro PET.",facts:["Até alta pressão","PET","Grande fluxo"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/centrifugal-compressors/turbo-air-2040/"},
       {name:"T30 alta pressão",tag:"Pistão multiestágio",referenceFamily:"Pistão",summary:"Alternativo de alta pressão para processos que exigem solução robusta e vazões menores.",facts:["Pistão","Alta pressão","Multiestágio"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/reciprocating-air-compressors/high-pressure/"},
     ]
   },
   {
-    id:"gas",label:"Geração de gases",intro:"Produção on-site para reduzir dependência logística e integrar gás de processo à planta.",
+    id:"gas",label:"Geração de gases",intro:"Produção on-site para reduzir dependência logística e integrar gás de processo à planta. Disponibilidade e configuração no Brasil sob consulta à TecAr.",
     items:[
-      {name:"Gerador de nitrogênio on-site",tag:"Nitrogênio",image:"/assets/products/nitrogen-generator.webp",summary:"Geração local de nitrogênio integrada ao sistema de ar comprimido para aplicações de processo.",facts:["On-site","Nitrogênio","Integração com ar comprimido"],source:"https://www.ingersollrand.com/pt-br/products/air-compressors/nitrogen-generators/"},
+      {"name":"Série HS — nitrogênio PSA","tag":"Nitrogênio · PSA","summary":"Separação por adsorção para produzir nitrogênio na própria planta e reduzir a dependência de entregas.","facts":["Geração local","Pureza conforme processo","Sob consulta"],"source":"https://www.ingersollrand.com/en-us/products/air-compressors/on-site-nitrogen-oxygen-generators/","referenceFamily":"Nitrogênio · PSA"},
+      {"name":"Série OG — oxigênio","tag":"Oxigênio · PSA","summary":"Geração de oxigênio a partir do ar comprimido para aplicações industriais, como tratamento de água e aquicultura.","facts":["Oxigênio 90–95%","Monitoramento de pureza","Sob consulta"],"source":"https://www.ingersollrand.com/en-us/products/air-compressors/on-site-nitrogen-oxygen-generators/","referenceFamily":"Oxigênio · PSA"},
+      {"name":"Nitrogênio por membrana","tag":"Nitrogênio · membrana","summary":"Alternativa para menores demandas de vazão e aplicações que não exigem as maiores purezas.","facts":["Até 99,5%","Geração sob demanda","Sob consulta"],"source":"https://www.ingersollrand.com/en-us/products/air-compressors/on-site-nitrogen-oxygen-generators/","referenceFamily":"Nitrogênio · membrana"},
+      {"name":"Nitrogênio modular","tag":"Nitrogênio · modular","summary":"Configuração modular para adequar a geração às necessidades do processo e planejar a expansão da capacidade.","facts":["Expansão modular","Dimensionamento dedicado","Sob consulta"],"source":"https://www.ingersollrand.com/en-us/products/air-compressors/on-site-nitrogen-oxygen-generators/","referenceFamily":"Nitrogênio · modular"},
     ]
   }
 ];
 
 function Page(){return <PageFrame>
   <PageHero kicker="COMPRESSORES" title="Escolha primeiro a família. Depois o equipamento." text="Clique no tipo de compressor e veja somente as opções daquela tecnologia." image="/assets/unique/generated/compressor-hero.webp"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
-  <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este compressor"/></div></section>
+  <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este equipamento"/></div></section>
   <ContactBand/>
 </PageFrame>}
