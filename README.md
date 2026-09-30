@@ -14,3 +14,8 @@ Importar pela conta crypta404-lgtm. Root Directory: app. Framework: TanStack Sta
 O autoatendimento precisa de OPENAI_API_KEY no servidor. Configure a variável pelo painel da Vercel, nunca no Git. Sem a chave, o status retorna active: false. Nenhuma credencial do Higgsfield foi exportada. O limite de solicitações herdado é local à instância, não distribuído; validar modelo e acesso à API na conta de produção.
 
 Backup ZIP e Git bundle originais: pasta backups ao lado desta pasta, fora do repositório. A hospedagem original permanece intacta.
+
+## Publicação
+Site: https://tecar-compressores-lab.vercel.app
+GitHub: https://github.com/crypta404-lgtm/tecar-compressores-lab
+Vercel: conta crypta404-lgtm, escopo cry-pta. Integração Git conectada, pasta app e branch de produção feat/vercel-migration.
