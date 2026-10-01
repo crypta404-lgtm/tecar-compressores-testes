@@ -1,5 +1,6 @@
+import { EquipmentHero } from "@/components/equipment-hero";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { PageFrame, ContactBand, VideoEmbed } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
 import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
@@ -26,26 +27,7 @@ const services = [
 
 function Home() {
   return <PageFrame>
-    <section className="tc-hero tc-hero-x" aria-labelledby="home-title">
-      <div className="tc-hx-copy">
-        <span className="tc-hx-kicker">Ar comprimido industrial · Ingersoll Rand</span>
-        <h1 id="home-title"><span className="tc-sr-only">TecAr Compressores. </span>Precisão para mover a indústria.</h1>
-        <p className="tc-hx-lead">Engenharia. Presença. Continuidade.</p>
-        <div className="tc-hx-actions">
-          <Link to="/produtos" className="tc-hx-primary">Explore nossas soluções <ArrowUpRight aria-hidden="true" /></Link>
-          <a href="#atendimento" className="tc-hx-secondary">Atendimento técnico <ArrowDown aria-hidden="true" /></a>
-        </div>
-        <dl className="tc-hx-meta">
-          <div><dt>Desde</dt><dd>1999</dd></div>
-          <div><dt>Unidades</dt><dd>Curitiba · Paranaguá</dd></div>
-          <div><dt>Parceria</dt><dd>Ingersoll Rand</dd></div>
-        </dl>
-      </div>
-      <figure className="tc-hx-media">
-        <img src="/assets/v2/compressors.jpg" alt="Compressores Ingersoll Rand e rede de ar em instalação industrial" fetchPriority="high" width="1179" height="885" />
-        <figcaption>Instalação industrial · Compressores Ingersoll Rand</figcaption>
-      </figure>
-    </section>
+    <EquipmentHero />
 
     <section className="tc-section tc-diagnostic" id="atendimento" aria-labelledby="diagnostic-title">
       <div className="v2-container tc-diagnostic-grid">

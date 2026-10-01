@@ -1,3 +1,4 @@
+import luxuryCss from "../tecar-luxury.css?url";
 import refineCss from "../tecar-refine.css?url";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
@@ -44,6 +45,7 @@ function buildHead(meta: AppMeta) {
       { rel: "stylesheet", href: siteV2Css },
       { rel: "stylesheet", href: editorialCss },
       { rel: "stylesheet", href: refineCss },
+      { rel: "stylesheet", href: luxuryCss },
       { rel: "icon", href: "/favicon-32.png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },

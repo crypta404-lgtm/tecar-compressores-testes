@@ -9,28 +9,128 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport } from './routes/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
-import { Route as TrabalheConoscoRouteImport } from './routes/trabalhe-conosco'
-import { Route as TecarConnectRouteImport } from './routes/tecar-connect'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ServicosRouteImport } from './routes/servicos'
-import { Route as SecadoresRouteImport } from './routes/secadores'
-import { Route as SafetyAirRouteImport } from './routes/safety-air'
-import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
-import { Route as ProdutosRouteImport } from './routes/produtos'
-import { Route as ManutencaoRouteImport } from './routes/manutencao'
-import { Route as LocacaoRouteImport } from './routes/locacao'
-import { Route as LinhasDeArRouteImport } from './routes/linhas-de-ar'
-import { Route as EngenhariaRouteImport } from './routes/engenharia'
-import { Route as EmpresaRouteImport } from './routes/empresa'
-import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
-import { Route as CompressoresRouteImport } from './routes/compressores'
-import { Route as BlogListRouteImport } from './routes/blog-list'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AcessoriosRouteImport } from './routes/acessorios'
-import { Route as AEmpresaRouteImport } from './routes/a-empresa'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AEmpresaRouteImport } from './routes/a-empresa'
+import { Route as AcessoriosRouteImport } from './routes/acessorios'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as BlogListRouteImport } from './routes/blog-list'
+import { Route as CompressoresRouteImport } from './routes/compressores'
+import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
+import { Route as EmpresaRouteImport } from './routes/empresa'
+import { Route as EngenhariaRouteImport } from './routes/engenharia'
+import { Route as LinhasDeArRouteImport } from './routes/linhas-de-ar'
+import { Route as LocacaoRouteImport } from './routes/locacao'
+import { Route as ManutencaoRouteImport } from './routes/manutencao'
+import { Route as ProdutosRouteImport } from './routes/produtos'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SafetyAirRouteImport } from './routes/safety-air'
+import { Route as SecadoresRouteImport } from './routes/secadores'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TecarConnectRouteImport } from './routes/tecar-connect'
+import { Route as TrabalheConoscoRouteImport } from './routes/trabalhe-conosco'
+import { Route as VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport } from './routes/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AEmpresaRoute = AEmpresaRouteImport.update({
+  id: '/a-empresa',
+  path: '/a-empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcessoriosRoute = AcessoriosRouteImport.update({
+  id: '/acessorios',
+  path: '/acessorios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogListRoute = BlogListRouteImport.update({
+  id: '/blog-list',
+  path: '/blog-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressoresRoute = CompressoresRouteImport.update({
+  id: '/compressores',
+  path: '/compressores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosticoRoute = DiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmpresaRoute = EmpresaRouteImport.update({
+  id: '/empresa',
+  path: '/empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EngenhariaRoute = EngenhariaRouteImport.update({
+  id: '/engenharia',
+  path: '/engenharia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinhasDeArRoute = LinhasDeArRouteImport.update({
+  id: '/linhas-de-ar',
+  path: '/linhas-de-ar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocacaoRoute = LocacaoRouteImport.update({
+  id: '/locacao',
+  path: '/locacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManutencaoRoute = ManutencaoRouteImport.update({
+  id: '/manutencao',
+  path: '/manutencao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutosRoute = ProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyAirRoute = SafetyAirRouteImport.update({
+  id: '/safety-air',
+  path: '/safety-air',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecadoresRoute = SecadoresRouteImport.update({
+  id: '/secadores',
+  path: '/secadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TecarConnectRoute = TecarConnectRouteImport.update({
+  id: '/tecar-connect',
+  path: '/tecar-connect',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrabalheConoscoRoute = TrabalheConoscoRouteImport.update({
+  id: '/trabalhe-conosco',
+  path: '/trabalhe-conosco',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRoute =
   VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport.update(
     {
@@ -39,106 +139,6 @@ const VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustr
       getParentRoute: () => rootRouteImport,
     } as any,
   )
-const TrabalheConoscoRoute = TrabalheConoscoRouteImport.update({
-  id: '/trabalhe-conosco',
-  path: '/trabalhe-conosco',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TecarConnectRoute = TecarConnectRouteImport.update({
-  id: '/tecar-connect',
-  path: '/tecar-connect',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicosRoute = ServicosRouteImport.update({
-  id: '/servicos',
-  path: '/servicos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SecadoresRoute = SecadoresRouteImport.update({
-  id: '/secadores',
-  path: '/secadores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SafetyAirRoute = SafetyAirRouteImport.update({
-  id: '/safety-air',
-  path: '/safety-air',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
-  id: '/robots.txt',
-  path: '/robots.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProdutosRoute = ProdutosRouteImport.update({
-  id: '/produtos',
-  path: '/produtos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ManutencaoRoute = ManutencaoRouteImport.update({
-  id: '/manutencao',
-  path: '/manutencao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LocacaoRoute = LocacaoRouteImport.update({
-  id: '/locacao',
-  path: '/locacao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LinhasDeArRoute = LinhasDeArRouteImport.update({
-  id: '/linhas-de-ar',
-  path: '/linhas-de-ar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EngenhariaRoute = EngenhariaRouteImport.update({
-  id: '/engenharia',
-  path: '/engenharia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmpresaRoute = EmpresaRouteImport.update({
-  id: '/empresa',
-  path: '/empresa',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DiagnosticoRoute = DiagnosticoRouteImport.update({
-  id: '/diagnostico',
-  path: '/diagnostico',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompressoresRoute = CompressoresRouteImport.update({
-  id: '/compressores',
-  path: '/compressores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogListRoute = BlogListRouteImport.update({
-  id: '/blog-list',
-  path: '/blog-list',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AcessoriosRoute = AcessoriosRouteImport.update({
-  id: '/acessorios',
-  path: '/acessorios',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AEmpresaRoute = AEmpresaRouteImport.update({
-  id: '/a-empresa',
-  path: '/a-empresa',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -308,137 +308,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': {
-      id: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
-      path: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
-      fullPath: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
-      preLoaderRoute: typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/trabalhe-conosco': {
-      id: '/trabalhe-conosco'
-      path: '/trabalhe-conosco'
-      fullPath: '/trabalhe-conosco'
-      preLoaderRoute: typeof TrabalheConoscoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tecar-connect': {
-      id: '/tecar-connect'
-      path: '/tecar-connect'
-      fullPath: '/tecar-connect'
-      preLoaderRoute: typeof TecarConnectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/servicos': {
-      id: '/servicos'
-      path: '/servicos'
-      fullPath: '/servicos'
-      preLoaderRoute: typeof ServicosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/secadores': {
-      id: '/secadores'
-      path: '/secadores'
-      fullPath: '/secadores'
-      preLoaderRoute: typeof SecadoresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/safety-air': {
-      id: '/safety-air'
-      path: '/safety-air'
-      fullPath: '/safety-air'
-      preLoaderRoute: typeof SafetyAirRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/robots.txt': {
-      id: '/robots.txt'
-      path: '/robots.txt'
-      fullPath: '/robots.txt'
-      preLoaderRoute: typeof RobotsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/produtos': {
-      id: '/produtos'
-      path: '/produtos'
-      fullPath: '/produtos'
-      preLoaderRoute: typeof ProdutosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/manutencao': {
-      id: '/manutencao'
-      path: '/manutencao'
-      fullPath: '/manutencao'
-      preLoaderRoute: typeof ManutencaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/locacao': {
-      id: '/locacao'
-      path: '/locacao'
-      fullPath: '/locacao'
-      preLoaderRoute: typeof LocacaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/linhas-de-ar': {
-      id: '/linhas-de-ar'
-      path: '/linhas-de-ar'
-      fullPath: '/linhas-de-ar'
-      preLoaderRoute: typeof LinhasDeArRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engenharia': {
-      id: '/engenharia'
-      path: '/engenharia'
-      fullPath: '/engenharia'
-      preLoaderRoute: typeof EngenhariaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/empresa': {
-      id: '/empresa'
-      path: '/empresa'
-      fullPath: '/empresa'
-      preLoaderRoute: typeof EmpresaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diagnostico': {
-      id: '/diagnostico'
-      path: '/diagnostico'
-      fullPath: '/diagnostico'
-      preLoaderRoute: typeof DiagnosticoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compressores': {
-      id: '/compressores'
-      path: '/compressores'
-      fullPath: '/compressores'
-      preLoaderRoute: typeof CompressoresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog-list': {
-      id: '/blog-list'
-      path: '/blog-list'
-      fullPath: '/blog-list'
-      preLoaderRoute: typeof BlogListRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/acessorios': {
-      id: '/acessorios'
-      path: '/acessorios'
-      fullPath: '/acessorios'
-      preLoaderRoute: typeof AcessoriosRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a-empresa': {
@@ -448,11 +322,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AEmpresaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/acessorios': {
+      id: '/acessorios'
+      path: '/acessorios'
+      fullPath: '/acessorios'
+      preLoaderRoute: typeof AcessoriosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog-list': {
+      id: '/blog-list'
+      path: '/blog-list'
+      fullPath: '/blog-list'
+      preLoaderRoute: typeof BlogListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compressores': {
+      id: '/compressores'
+      path: '/compressores'
+      fullPath: '/compressores'
+      preLoaderRoute: typeof CompressoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnostico': {
+      id: '/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/diagnostico'
+      preLoaderRoute: typeof DiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empresa': {
+      id: '/empresa'
+      path: '/empresa'
+      fullPath: '/empresa'
+      preLoaderRoute: typeof EmpresaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engenharia': {
+      id: '/engenharia'
+      path: '/engenharia'
+      fullPath: '/engenharia'
+      preLoaderRoute: typeof EngenhariaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/linhas-de-ar': {
+      id: '/linhas-de-ar'
+      path: '/linhas-de-ar'
+      fullPath: '/linhas-de-ar'
+      preLoaderRoute: typeof LinhasDeArRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locacao': {
+      id: '/locacao'
+      path: '/locacao'
+      fullPath: '/locacao'
+      preLoaderRoute: typeof LocacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manutencao': {
+      id: '/manutencao'
+      path: '/manutencao'
+      fullPath: '/manutencao'
+      preLoaderRoute: typeof ManutencaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produtos': {
+      id: '/produtos'
+      path: '/produtos'
+      fullPath: '/produtos'
+      preLoaderRoute: typeof ProdutosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-air': {
+      id: '/safety-air'
+      path: '/safety-air'
+      fullPath: '/safety-air'
+      preLoaderRoute: typeof SafetyAirRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/secadores': {
+      id: '/secadores'
+      path: '/secadores'
+      fullPath: '/secadores'
+      preLoaderRoute: typeof SecadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tecar-connect': {
+      id: '/tecar-connect'
+      path: '/tecar-connect'
+      fullPath: '/tecar-connect'
+      preLoaderRoute: typeof TecarConnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trabalhe-conosco': {
+      id: '/trabalhe-conosco'
+      path: '/trabalhe-conosco'
+      fullPath: '/trabalhe-conosco'
+      preLoaderRoute: typeof TrabalheConoscoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria': {
+      id: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      path: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      fullPath: '/vazamentos-de-ar-comprimido-como-identificar-medir-e-eliminar-prejuizos-na-sua-industria'
+      preLoaderRoute: typeof VazamentosDeArComprimidoComoIdentificarMedirEEliminarPrejuizosNaSuaIndustriaRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
