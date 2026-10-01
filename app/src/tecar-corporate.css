@@ -651,3 +651,14 @@ html.cx-motion .tc-editorial .ap[data-reveal] .ap-grid > * { opacity: 1; transfo
 @media print {
   html.cx-motion .tc-editorial [data-reveal] * { opacity: 1 !important; transform: none !important; clip-path: none !important; }
 }
+
+/* Header readability: retain the existing row heights and control dimensions. */
+.tc-editorial :is(.tc-nav > a, .tc-navgroup > button) { font-size: 16px; }
+.tc-editorial .tc-header-contact { font-size: 15px; }
+.tc-editorial .tc-dropdown a { font-size: 15px; }
+.tc-editorial .tc-utility { font-size: 12px; }
+.tc-editorial .tc-mobile-nav a { font-size: 17px; }
+@media (max-width: 480px) {
+  .tc-editorial .tc-header-contact { font-size: 14px; gap: 8px; }
+  .tc-editorial .tc-utility { font-size: 11px; }
+}
