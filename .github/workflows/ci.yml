@@ -1,7 +1,7 @@
 name: Validate Tecar site
 on:
   push:
-    branches: [feat/vercel-migration]
+    branches: [feat/test-site]
   pull_request:
   workflow_dispatch:
 permissions:
