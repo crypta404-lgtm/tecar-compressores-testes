@@ -91,8 +91,8 @@ export function SiteFooter(){
       <div><h4>Paranaguá</h4><p>R. Prof. Décio, 197<br/>Rocio, Paranaguá PR</p><a href="tel:+554134227855">(41) 3422-7855</a><a href="mailto:tecarportuaria@tecarcompressores.com.br">tecarportuaria@tecarcompressores.com.br</a></div>
       <div className="v2-footer-quick"><h4>Acesso rápido</h4><Link to="/diagnostico">Diagnóstico</Link><Link to="/manutencao">Manutenção</Link><Link to="/locacao">Locação</Link><Link to="/engenharia">Engenharia</Link><Link to="/tecar-connect">Monitoramento</Link><Link to="/trabalhe-conosco">Trabalhe conosco</Link></div>
     </div>
-    <div className="v2-container tc-footer-signature" aria-hidden="true">TecAr<span>.</span></div>
-    <p className="v2-container tc-photo-note">As cenas editoriais geradas por IA são ilustrativas e não representam instalações, equipes ou modelos reais da TecAr. As fichas de produtos utilizam imagens de referência dos fabricantes.</p><div className="v2-container v2-footer-bottom"><span>© {new Date().getFullYear()} TecAr Compressores</span><span>Assistência e revenda autorizada Ingersoll Rand desde 1999.</span></div>
+
+    <div className="v2-container v2-footer-bottom"><span>© {new Date().getFullYear()} TecAr Compressores</span><span>Assistência e revenda autorizada Ingersoll Rand desde 1999.</span></div>
   </footer>
 }
 
