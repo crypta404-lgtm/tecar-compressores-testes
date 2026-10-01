@@ -82,7 +82,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), "320px overflow");
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.screenshot({ path: output + "/home-1920.png" });
-    await page.locator(".tc-catalog").screenshot({ path: output + "/catalog.png" });
+    await page.locator(".cx-range").screenshot({ path: output + "/catalog.png" });
     await page.locator(".tc-services").screenshot({ path: output + "/services.png" });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.reload({ waitUntil: "networkidle" });

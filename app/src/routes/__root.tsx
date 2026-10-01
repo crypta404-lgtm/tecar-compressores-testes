@@ -1,11 +1,10 @@
-import luxuryCss from "../tecar-luxury.css?url";
-import refineCss from "../tecar-refine.css?url";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import siteV2Css from "../site-v2.css?url";
 import editorialCss from "../tecar-editorial.css?url";
+import corporateCss from "../tecar-corporate.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import appMetaJson from "../app-meta.json";
 import { scrollScrubTheme } from "../scroll-scrub-scenes";
@@ -40,12 +39,11 @@ function buildHead(meta: AppMeta) {
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" },
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: siteV2Css },
       { rel: "stylesheet", href: editorialCss },
-      { rel: "stylesheet", href: refineCss },
-      { rel: "stylesheet", href: luxuryCss },
+      { rel: "stylesheet", href: corporateCss },
       { rel: "icon", href: "/favicon-32.png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },

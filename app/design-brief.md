@@ -1,37 +1,48 @@
-# TecAr Editorial Design
+# TecAr — Corporate Industrial Design (v2)
 
 ## Audience and intent
 Industrial decision makers, engineering leaders and corporate purchasing teams.
-An exclusive, restrained and professional presentation of TecAr's existing offer.
-User references: FARFROM architectural editorial design and GAZU fashion storefront.
+Premium, corporate, confident. Every element must explain the offer or move the
+visitor to the next step. References: STANQ storefront, layered cut-out heroes
+(Mars, Chernobyl, product landing pages), EVE long-form scroll storytelling.
 
-## Visual direction
-Large authentic equipment and service photographs, a prominent TecAr wordmark,
-asymmetric image pairings, generous whitespace and fine horizontal rules.
-White and neutral black foundations; original TecAr red used sparingly.
-DM Sans throughout the public experience. Fixed type sizes with responsive breakpoints.
-No ornamental gradients, floating decorative cards or invented client logos.
-Image overlays are limited to the areas where white copy needs contrast.
+## Visual system (src/tecar-corporate.css)
+- Brand colours: TecAr red #d71920 (field and accent), ink #0e0f10, warm white
+  #f7f6f3, stone #ecebe7. Photography keeps real colours.
+- Red is used as a stage (hero, page heroes, contact band) and as an accent.
+- Typography: Inter Tight (display/UI) and Inter (text).
+- No rounded corners; hairline rules; one soft radial light on red fields.
 
-## Home structure
-Photographic hero; company facts; editorial company introduction; visual catalog;
-service photograph and service index; port-operation photo; preserved compact
-technical questionnaire; preserved scroll-driven film; two existing institutional
-videos; contact band; contact details and oversized wordmark in footer.
+## Home, in order, and why each part exists
+1. Product stage hero — the three lines a buyer comes for (compressors,
+   dryers, rental), each linking to its page. Autoplay 7 s with progress,
+   paused on hover/focus/hidden tab/reduced motion. Constant h1 for SEO.
+2. Facts — 27 years, 500+ clients, 2 units, Ingersoll Rand (count-up).
+3. "O caminho do ar" — sticky original line drawing of a compressed air system
+   that draws itself as the visitor reads the five stages (generation,
+   treatment, storage/distribution, monitoring, continuity). Shows TecAr owns
+   the whole system and routes each stage to its page.
+4. Diagnostic questionnaire with the 3-step explanation of what happens next.
+5. Company — real Ingersoll Rand installation photo with overlapping card.
+6. Services — list that swaps the large image on hover/focus (preview).
+7. Port operations photo, scroll film (engine untouched), videos, red contact band.
+
+## Motion rules
+- Content is complete in server HTML; reveals only start after hydration
+  (html.cx-motion). prefers-reduced-motion disables everything.
+- IntersectionObserver only, no scroll listeners.
+- Page transitions: router defaultViewTransition (View Transitions API),
+  header keeps its place (view-transition-name).
+
+## Images created
+- public/assets/corporate/hero-e160.webp, cat-compressor.webp, cat-dryer.webp:
+  official Ingersoll Rand photos with the studio background removed.
+- public/assets/corporate/og-tecar.jpg: social share card (WhatsApp/LinkedIn).
+- The air system schematic is inline SVG in src/components/air-path.tsx.
 
 ## Preserved
-Every product family and service route, contact destination, calculator, technical
-table, report, source citation and questionnaire behavior. No technical data edits.
-Original manufacturer photographs remain the authority for product appearance.
-Existing scroll-scrub engine and media are not modified.
+All routes, contacts, calculators, tables, reports, citations, questionnaire
+behaviour and technical data. Scroll-scrub engine and media unchanged.
 
-## Responsive and accessible
-Desktop dropdowns and a mobile navigation panel with explicit expanded state.
-Escape and outside-click dismissal, visible keyboard focus, skip link,
-semantic headings and image descriptions. All image grids have stable aspect ratios.
-Reduced motion retains the underlying content. Technical tools use compact headings.
-Print styles continue to hide shared navigation on diagnostic reports.
-
-## Assets
-Original images retained. Optimized WebP copies of service, engineering and rental
-photographs reduce transfer size on the home page without altering their subject.
+## Stylesheet order
+styles.css → site-v2.css → tecar-editorial.css → tecar-corporate.css.

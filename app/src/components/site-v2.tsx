@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
+import { useSectionReveal } from "@/components/motion";
 
 const productLinks = [
   ["/produtos","Visão geral"],
@@ -98,26 +99,8 @@ export function SiteFooter(){
 
 export function PageFrame({children}:{children:ReactNode}){
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  useEffect(() => {
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motion.matches || typeof IntersectionObserver === 'undefined') return;
-    const animations: Animation[] = [];
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        if (!motion.matches) animations.push(entry.target.animate(
-          [{ transform: 'translateY(16px)' }, { transform: 'translateY(0)' }],
-          { duration: 350, easing: 'ease-out' }
-        ));
-        observer.unobserve(entry.target);
-      }
-    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('#main-content > section:not(:first-child):not(.tc-motion)').forEach(section => {
-      if (section.getBoundingClientRect().top >= window.innerHeight) observer.observe(section);
-    });
-    return () => { observer.disconnect(); animations.forEach(animation => animation.cancel()); };
-  }, [pathname]);
-  return  <div className="tecar-site-v2 tc-editorial"><SiteHeader/><main id="main-content">{children}</main><SiteFooter/></div>}
+  useSectionReveal(pathname);
+  return <div className="tecar-site-v2 tc-editorial"><SiteHeader/><main id="main-content">{children}</main><SiteFooter/></div>}
 export function PageHero({kicker,title,text,image,children}:{kicker?:string;title:string;text:string;image:string;children?:ReactNode}){return <section className="v2-pagehero"><div className="v2-container v2-pagehero-grid"><div className="v2-pagehero-copy">{kicker&&<span className="v2-kicker">{kicker}</span>}<h1>{title}</h1><p>{text}</p>{children}</div><div className="v2-pagehero-media"><img src={image} alt={image.includes("/unique/generated/")?"Imagem ilustrativa criada por IA":""}/></div></div></section>}
 export function SectionHead({kicker,title,text}:{kicker?:string;title:string;text?:string}){return <div className="v2-sectionhead">{kicker&&<span className="v2-kicker">{kicker}</span>}<h2>{title}</h2>{text&&<p>{text}</p>}</div>}
 export function ContactBand({title="Precisa resolver algo no sistema de ar?",text="Descreva a necessidade. A TecAr direciona o próximo passo."}:{title?:string;text?:string}){return <section className="v2-contactband"><div className="v2-container v2-contactband-inner"><div><h2>{title}</h2><p>{text}</p></div><WhatsAppLink href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." className="v2-primary">Falar com especialista <ArrowUpRight size={20} aria-hidden="true" /></WhatsAppLink></div></section>}
