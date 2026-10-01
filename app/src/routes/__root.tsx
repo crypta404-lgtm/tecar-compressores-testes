@@ -56,9 +56,9 @@ function NotFoundComponent() {
   return <main className="systemPage"><img src="/assets/tecar/logo.gif" alt="TecAr Compressores"/><h1>404</h1><p>Esta pagina nao foi encontrada.</p><a href="/">Voltar ao inicio</a></main>;
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   const router = useRouter();
-  useEffect(() => { reportHiggsfieldError(error, { boundary: "root_error" }); }, [error]);
+  useEffect(() => { reportHiggsfieldError(error instanceof Error ? error : new Error("Unexpected route error"), { boundary: "root_error" }); }, [error]);
   return <main className="systemPage"><img src="/assets/tecar/logo.gif" alt="TecAr Compressores"/><h1>Algo nao carregou</h1><p>Tente novamente ou volte para a pagina inicial.</p><div><button onClick={() => { router.invalidate(); reset(); }}>Tentar novamente</button><a href="/">Inicio</a></div></main>;
 }
 
