@@ -26,20 +26,25 @@ const services = [
 
 function Home() {
   return <PageFrame>
-    <section className="tc-hero" aria-labelledby="home-title">
-      <img className="tc-hero-image" src="/assets/v2/compressors.jpg" alt="Compressores Ingersoll Rand e rede de ar em instalação industrial" fetchPriority="high" width="1179" height="885" />
-      <div className="tc-hero-overlay" />
-      <div className="tc-hero-content">
-        <div className="tc-hero-top">
-          <p>Precisão para<br />mover a indústria.</p>
-          <Link to="/produtos" className="tc-hero-explore">Explore nossas soluções <ArrowUpRight aria-hidden="true" /></Link>
+    <section className="tc-hero tc-hero-x" aria-labelledby="home-title">
+      <div className="tc-hx-copy">
+        <span className="tc-hx-kicker">Ar comprimido industrial · Ingersoll Rand</span>
+        <h1 id="home-title"><span className="tc-sr-only">TecAr Compressores. </span>Precisão para mover a indústria.</h1>
+        <p className="tc-hx-lead">Engenharia. Presença. Continuidade.</p>
+        <div className="tc-hx-actions">
+          <Link to="/produtos" className="tc-hx-primary">Explore nossas soluções <ArrowUpRight aria-hidden="true" /></Link>
+          <a href="#atendimento" className="tc-hx-secondary">Atendimento técnico <ArrowDown aria-hidden="true" /></a>
         </div>
-        <div className="tc-hero-bottom">
-          <h1 id="home-title">TecAr<span>.</span><span className="tc-sr-only"> Compressores</span></h1>
-          <div><span>Ar comprimido industrial</span><span>Engenharia. Presença. Continuidade.</span></div>
-          <a href="#atendimento" className="tc-round-link" aria-label="Ir para atendimento técnico"><ArrowDown aria-hidden="true" /></a>
-        </div>
+        <dl className="tc-hx-meta">
+          <div><dt>Desde</dt><dd>1999</dd></div>
+          <div><dt>Unidades</dt><dd>Curitiba · Paranaguá</dd></div>
+          <div><dt>Parceria</dt><dd>Ingersoll Rand</dd></div>
+        </dl>
       </div>
+      <figure className="tc-hx-media">
+        <img src="/assets/v2/compressors.jpg" alt="Compressores Ingersoll Rand e rede de ar em instalação industrial" fetchPriority="high" width="1179" height="885" />
+        <figcaption>Instalação industrial · Compressores Ingersoll Rand</figcaption>
+      </figure>
     </section>
 
     <section className="tc-section tc-diagnostic" id="atendimento" aria-labelledby="diagnostic-title">
