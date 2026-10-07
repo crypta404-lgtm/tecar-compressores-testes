@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { useMemo, useState } from "react";
+import { ProductStage3D } from "@/components/product-stage-3d";
 
 export type ProductItem = {
   name:string;
@@ -48,8 +49,8 @@ export function ProductExplorer({groups,ctaLabel="Falar com a TecAr"}:{groups:Pr
       </button>)}
     </div>
 
-    {selected&&<section className="v2-product-detail" aria-live="polite">
-      
+    {selected&&<section className="v2-product-detail" data-stage={selected.image?"true":undefined} aria-live="polite">
+      {selected.image&&<ProductStage3D key={selected.name} image={selected.image} name={selected.name} facts={selected.facts}/>}
       <div className="v2-product-detail-copy">
         <button type="button" className="v2-product-detail-close" onClick={()=>setSelectedName("")} aria-label="Fechar resumo">×</button>
         {selected.tag&&<span>{selected.tag}</span>}
