@@ -744,3 +744,21 @@ html.tc-splash-off .tc-splash { display: none; }
 
 @media (prefers-reduced-motion: reduce) { .tc-splash { display: none; } }
 @media print { .tc-splash { display: none; } }
+
+/* ============================================================ PRÉ-LAUDO: GENERIC COMPRESSOR */
+.v2-dx-compressor { display: grid; gap: 14px; padding: 16px 17px; background: var(--cx-white, #fff); border: 1px solid var(--v2-line); border-top: 0; }
+.v2-dx-compressor-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 24px; align-items: end; }
+.v2-dx-compressor-fields label:not(.v2-dx-check) { display: grid; gap: 7px; }
+.v2-dx-compressor-fields label > span { font-size: .65rem; color: var(--v2-muted); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.v2-dx-compressor select { border: 0; border-bottom: 1px solid var(--cx-line, #cbd3d7); background: transparent; padding: 8px 0; color: var(--v2-ink); font: 700 .82rem var(--tc-font); outline: none; width: 100%; }
+.v2-dx-compressor select:focus { border-color: var(--v2-red); }
+/* unit select inside the boxed input style: no inner rule, same padding as the inputs */
+.v2-dx-compressor .v2-dx-field select { border: 0; padding: 0 12px; min-height: 42px; }
+.v2-dx-context select:disabled, .v2-dx-compressor select:disabled { color: var(--v2-muted); opacity: .6; }
+.v2-dx-check { display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer; font: 600 .82rem/1.35 var(--tc-font); color: var(--v2-ink); }
+.v2-dx-check input { width: 18px; height: 18px; accent-color: var(--v2-red); flex: none; }
+.v2-dx-compressor-summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding-top: 12px; border-top: 1px solid var(--v2-line); font-size: .8rem; }
+.v2-dx-compressor-summary > span { flex-basis: 100%; font-size: .65rem; color: var(--v2-muted); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.v2-dx-compressor-summary b { font: 700 .95rem var(--tc-font); color: var(--v2-ink); }
+@media (max-width: 820px) { .v2-dx-compressor-fields { grid-template-columns: 1fr; } }
+@media print { .v2-dx-compressor { display: none !important; } }
