@@ -14,3 +14,11 @@ Validação: bun run typecheck e bun run build.
 
 Este repositório e a publicação de testes são separados do site principal.
 As credenciais e os vínculos locais de publicação não são versionados.
+
+## Imagens e cache
+
+Tudo em `app/public/assets/` é servido pela Vercel com `Cache-Control: public, max-age=31536000, immutable`
+(regra do build para a pasta `/assets/`). O navegador e a CDN guardam esses arquivos por um ano sem revalidar.
+
+Nunca sobrescreva uma imagem já publicada com o mesmo nome: crie um arquivo novo (ex.: `-v2`, `-v3`) e
+atualize as referências. Senão quem já visitou o site continua vendo a versão antiga.

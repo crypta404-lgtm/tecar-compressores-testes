@@ -38,7 +38,7 @@ const slides = [
     model: "Secador por adsorção Ingersoll Rand",
     to: "/secadores",
     cta: "Ver secadores",
-    image: "/assets/corporate/cat-dryer.webp",
+    image: "/assets/corporate/cat-dryer-v2.webp",
     width: 442,
     height: 629,
     alt: "Secador de ar por adsorção Ingersoll Rand",
