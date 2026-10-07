@@ -99,10 +99,10 @@
 
 /* ------------------------------------------------------------------ layout */
 .tc-editorial .v2-container { width: min(1440px, calc(100% - 2 * var(--cx-gutter))); }
-.tc-editorial :is(.tc-section, .v2-section) { padding-block: clamp(80px, 9vw, 136px); }
+.tc-editorial :is(.tc-section, .v2-section) { padding-block: clamp(56px, 6vw, 96px); }
 .tc-editorial .v2-soft { background: var(--cx-stone); }
 .tc-editorial #atendimento, .tc-editorial #instituto, .tc-editorial #premios { scroll-margin-top: calc(var(--cx-header) + 16px); }
-.tc-editorial .tc-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: clamp(36px, 4vw, 56px); }
+.tc-editorial .tc-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: clamp(28px, 3vw, 44px); }
 .tc-editorial .tc-section-heading h2 { margin: 18px 0 0; max-width: 18ch; }
 
 /* ------------------------------------------------------------------ links */
@@ -342,8 +342,8 @@
 
 /* ============================================================ HOME: AIR PATH */
 /* overflow-x: clip (not hidden) lets the intake pipe run off-screen without breaking the sticky drawing */
-.ap { position: relative; overflow-x: clip; background: var(--cx-surface-dark); color: var(--cx-white); padding: clamp(88px, 9vw, 140px) 0 clamp(40px, 5vw, 80px); }
-.ap-head { margin-bottom: clamp(40px, 5vw, 72px); }
+.ap { position: relative; overflow-x: clip; background: var(--cx-surface-dark); color: var(--cx-white); padding: clamp(56px, 6vw, 96px) 0 clamp(32px, 4vw, 56px); }
+.ap-head { margin-bottom: clamp(28px, 3vw, 48px); }
 .tc-editorial .ap-head h2 { margin: 20px 0 0; max-width: 20ch; color: var(--cx-white); }
 .ap-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(40px, 6vw, 112px); }
 .ap-visual { position: sticky; top: calc(var(--cx-header) + 40px); align-self: start; }
@@ -396,8 +396,8 @@
 .ap-ring[data-on="true"] rect { stroke-dashoffset: 0; }
 
 .ap-steps { margin: 0; padding: 0; list-style: none; }
-.ap-steps li { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0; border-top: 1px solid var(--cx-line-dark); opacity: .32; transition: opacity .6s ease; }
-.ap-steps li:last-child { min-height: 52vh; }
+.ap-steps li { min-height: 34vh; padding-block: 28px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0; border-top: 1px solid var(--cx-line-dark); opacity: .32; transition: opacity .6s ease; }
+.ap-steps li:last-child { min-height: 30vh; }
 .ap-steps li[data-current="true"] { opacity: 1; }
 .ap-step-index { font: 500 12px/1 var(--tc-font); letter-spacing: .12em; color: var(--cx-red-on-dark); }
 .tc-editorial .ap-steps h3 { margin: 18px 0 14px; font-size: clamp(28px, 2.6vw, 40px); color: var(--cx-white); }
@@ -434,8 +434,8 @@
 .tc-editorial .v2-diagnostic-nav .v2-diagnostic-next:disabled { background: var(--cx-line-strong); }
 
 /* ============================================================ HOME: COMPANY */
-.cx-company { position: relative; background: var(--cx-white); padding-bottom: clamp(72px, 8vw, 120px); }
-.cx-company-photo { margin: 0; height: clamp(360px, 52vw, 720px); overflow: hidden; }
+.cx-company { position: relative; background: var(--cx-white); padding-bottom: clamp(48px, 5vw, 80px); }
+.cx-company-photo { margin: 0; height: clamp(300px, 40vw, 560px); overflow: hidden; }
 .cx-company-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
 .cx-company-inner { position: relative; margin-top: clamp(-220px, -14vw, -120px); }
 .cx-company-card { position: relative; width: min(620px, 100%); padding: clamp(32px, 4vw, 56px); background: var(--cx-white); border-top: 4px solid var(--cx-red); box-shadow: 0 40px 80px -50px rgba(14, 15, 16, .4); }
@@ -446,17 +446,17 @@
 /* ============================================================ HOME: SERVICES */
 .cx-services-section { background: var(--cx-paper); }
 .cx-services { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 88px); align-items: start; }
-.cx-services-media { position: sticky; top: calc(var(--cx-header) + 32px); aspect-ratio: 4 / 5; overflow: hidden; background: var(--cx-stone); }
+.cx-services-media { position: sticky; top: calc(var(--cx-header) + 32px); aspect-ratio: 8 / 7; overflow: hidden; background: var(--cx-stone); }
 .cx-services-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(0 0 100% 0); transform: scale(1.08); transition: clip-path .9s var(--cx-ease-in-out), transform 1.4s var(--cx-ease); }
 .cx-services-media img[data-active="true"] { clip-path: inset(0 0 0 0); transform: none; z-index: 1; }
 .cx-services-count { position: absolute; z-index: 2; left: 20px; bottom: 18px; padding: 8px 12px; background: var(--cx-ink); color: var(--cx-white); font: 500 12px/1 var(--tc-font); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
 .cx-services-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--cx-ink); }
-.cx-services-list a { display: grid; grid-template-columns: 48px 1fr 24px; gap: 16px; align-items: start; padding: clamp(24px, 2.6vw, 36px) 0; border-bottom: 1px solid var(--cx-line); color: var(--cx-ink); text-decoration: none; opacity: .42; transition: opacity .4s ease; }
-.cx-services-list a[data-active="true"], .cx-services-list a:hover, .cx-services-list a:focus-visible { opacity: 1; }
+.cx-services-list a { display: grid; grid-template-columns: 48px 1fr 24px; gap: 16px; align-items: start; padding: clamp(14px, 1.5vw, 20px) 0; border-bottom: 1px solid var(--cx-line); color: var(--cx-ink); text-decoration: none; transition: color .3s ease; }
+.cx-services-list a[data-active="true"] .cx-services-body h3, .cx-services-list a:hover .cx-services-body h3 { color: var(--cx-red); }
 .cx-services-number { font: 500 12px/2.4 var(--tc-font); letter-spacing: .1em; color: var(--cx-red); font-variant-numeric: tabular-nums; }
-.tc-editorial .cx-services-body h3 { margin: 0; font-size: clamp(28px, 2.8vw, 44px); letter-spacing: -.03em; transition: transform .5s var(--cx-ease); }
+.tc-editorial .cx-services-body h3 { margin: 0; font-size: clamp(24px, 2.2vw, 34px); letter-spacing: -.03em; transition: transform .5s var(--cx-ease); }
 .cx-services-list a[data-active="true"] .cx-services-body h3 { transform: translateX(6px); }
-.tc-editorial .cx-services-body p { margin: 10px 0 0; max-width: 46ch; font-size: 14px; color: var(--cx-steel); }
+.tc-editorial .cx-services-body p { margin: 6px 0 0; max-width: 52ch; font-size: 15px; line-height: 1.55; color: var(--cx-steel); }
 .cx-services-list svg { width: 22px; height: 22px; margin-top: 12px; transition: transform .3s var(--cx-ease), color .3s ease; }
 .cx-services-list a[data-active="true"] svg { color: var(--cx-red); transform: translate(3px, -3px); }
 .tc-editorial .cx-services-thumb { display: none; }
@@ -638,7 +638,7 @@ html.cx-motion .tc-editorial .ap[data-reveal] .ap-grid > * { opacity: 1; transfo
   .ap-visual { z-index: 2; top: var(--cx-header); padding: 12px 0; background: var(--cx-surface-dark); }
   .ap-drawing { max-height: 38vh; }
   .ap-legend { margin-top: 8px; gap: 4px 18px; font-size: 11px; }
-  .ap-steps li { min-height: 56vh; }
+  .ap-steps li { min-height: 40vh; }
 
   .tc-editorial .tc-diagnostic-grid { grid-template-columns: 1fr; }
   .cx-company-inner { margin-top: -64px; }
@@ -646,7 +646,7 @@ html.cx-motion .tc-editorial .ap[data-reveal] .ap-grid > * { opacity: 1; transfo
   .cx-services { grid-template-columns: 1fr; }
   .cx-services-media { display: none; }
   .cx-services-list a { grid-template-columns: 36px 1fr 20px; opacity: 1; }
-  .tc-editorial .cx-services-thumb { display: block; grid-column: 2 / 3; grid-row: 2; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; margin-top: 4px; }
+  .tc-editorial .cx-services-thumb { display: block; grid-column: 2 / 3; grid-row: 2; width: 100%; aspect-ratio: 21 / 9; object-fit: cover; margin-top: 4px; }
 
   .tc-editorial .v2-contactband::before { width: 60%; opacity: .6; }
 

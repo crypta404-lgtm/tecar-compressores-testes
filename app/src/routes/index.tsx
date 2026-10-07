@@ -6,9 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { PageFrame, ContactBand, VideoEmbed } from "@/components/site-v2";
 import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
-import { ScrollScrub } from "@/components/scroll-scrub/scroll-scrub";
 import { pageMeta } from "@/lib/page-meta";
-import { scrollScrubScenes, scrollScrubTheme } from "@/scroll-scrub-scenes";
 
 export const Route = createFileRoute("/")({
   head: () => pageMeta("/", "TecAr Compressores | Engenharia para a sua operação", "Compressores, manutenção, locação, engenharia e monitoramento para indústrias em Curitiba e Paranaguá.", "/assets/corporate/og-tecar.jpg"),
@@ -57,8 +55,6 @@ function Home() {
       </div>
     </section>
 
-    <AirPath />
-
     <section className="tc-section tc-diagnostic" id="atendimento" aria-labelledby="diagnostic-title">
       <div className="v2-container tc-diagnostic-grid">
         <div className="tc-diagnostic-copy">
@@ -75,6 +71,9 @@ function Home() {
         <DiagnosticQuestionnaire variant="compact" />
       </div>
     </section>
+
+    <AirPath />
+
 
     <section className="cx-company" id="a-tecar" aria-labelledby="company-title">
       <figure className="cx-company-photo">
@@ -101,11 +100,6 @@ function Home() {
     <section className="tc-field" aria-label="Soluções para indústria e operações portuárias">
       <img src="/assets/v2/free-port.jpg" alt="Infraestrutura e atividade portuária" loading="lazy" width="1800" height="1200" />
       <div className="tc-field-copy"><span className="tc-eyebrow">Indústria & operações portuárias</span><h2>Onde a operação<br />não pode parar.</h2><Link to="/locacao" className="tc-text-link">Conheça nossas soluções em locação <ArrowUpRight aria-hidden="true" /></Link></div>
-    </section>
-
-    <section className="tc-motion" aria-labelledby="motion-title">
-      <div className="v2-container tc-motion-heading"><span className="tc-eyebrow">Tecnologia integrada</span><h2 id="motion-title">Do equipamento ao dado.</h2><p>Tecnologia, assistência e monitoramento conectados à sua indústria.</p><Link to="/tecar-connect" className="tc-text-link">TecAr Connect <ArrowUpRight aria-hidden="true" /></Link></div>
-      <div className="v2-scrub-frame"><ScrollScrub scenes={scrollScrubScenes} theme={scrollScrubTheme} /></div>
     </section>
 
     <section className="tc-section tc-films" aria-labelledby="films-title">
