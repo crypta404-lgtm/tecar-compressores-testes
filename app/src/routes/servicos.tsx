@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageFrame, ContactBand } from "@/components/site-v2";
+import { EdSection } from "@/components/editorial";
 import { pageMeta } from "@/lib/page-meta";
 
 export const Route=createFileRoute("/servicos")({
@@ -15,7 +16,7 @@ const items=[
 ] as const;
 
 function Page(){return <PageFrame>
-  <section className="v2-services-hero"><div className="v2-container"><span>SERVIÇOS</span><h1>Serviços</h1><p>Escolha a frente que mais se aproxima da sua necessidade. Clique para abrir um resumo; a página completa continua disponível quando você quiser aprofundar.</p></div></section>
-  <section className="v2-section"><div className="v2-container"><div className="v2-service-visual-grid">{items.map(item=><details key={item.to} className="v2-service-visual-card"><summary><div className="v2-service-visual-photo"><img src={item.image} alt={"Imagem ilustrativa de "+item.title+", criada por IA"} loading="lazy"/></div><div className="v2-service-visual-title"><span>SERVIÇO</span><h2>{item.title}</h2><p>{item.short}</p><b>Ver resumo +</b></div></summary><div className="v2-service-visual-detail"><p>{item.detail}</p><Link to={item.to}>Abrir página de {item.title} →</Link></div></details>)}</div></div></section>
+  <section className="ed-services-hero"><div className="v2-container"><span className="v2-kicker">SERVIÇOS</span><h1>Serviços</h1><p>Escolha a frente que mais se aproxima da sua necessidade. Cada uma tem um resumo aqui e uma página completa para aprofundar.</p></div></section>
+  <EdSection tone="paper"><div className="ed-services">{items.map(item=><Link key={item.to} to={item.to}><figure><img src={item.image} alt={"Imagem ilustrativa de "+item.title+", criada por IA"} loading="lazy"/></figure><div><h2>{item.title}</h2><strong>{item.short}</strong><p>{item.detail}</p><span className="ed-link">Conhecer {item.title}</span></div></Link>)}</div></EdSection>
   <ContactBand title="Ainda não sabe qual serviço precisa?" text="Use o Diagnóstico para organizar o cenário antes de falar com a equipe."/>
 </PageFrame>}
