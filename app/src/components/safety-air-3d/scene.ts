@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { badge, compressorFront, compressorSide, concrete, contactShadow, corrugated, grass, louvre, pavers, rng, sky } from "./textures";
 
 /*
@@ -13,15 +12,14 @@ import { badge, compressorFront, compressorSide, concrete, contactShadow, corrug
  * wall and a ring of trees, softened by fog so it never competes with the
  * cabin.
  *
- * Rendering is on demand: frames are drawn only while something moves
- * (orbit damping, auto-rotate, roof/door/camera tweens), and the loop stops
- * when the viewer leaves the screen.
+ * Built to stay light: no real-time shadows (painted contact shadows instead),
+ * no environment map, no extra lights, capped resolution. Frames are drawn
+ * only while something moves (orbit damping, door and camera tweens), and the
+ * loop stops when the viewer leaves the screen or the tab is hidden.
  */
 
 export type SafetyAirScene = {
-  setRoof: (removed: boolean) => void;
   setDoors: (open: boolean) => void;
-  setInside: (inside: boolean) => void;
   reset: () => void;
   dispose: () => void;
 };
@@ -38,17 +36,14 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   // pixel ratio capped, and the default GPU (no forced switch to the discrete GPU on laptops).
   const dpr = window.devicePixelRatio || 1;
   const coarse = window.matchMedia("(pointer: coarse)").matches;
-  const maxRatio = Math.min(dpr, coarse ? 1.25 : 1.5);
+  const maxRatio = Math.min(dpr, coarse ? 1 : 1.25);
   const renderer = new THREE.WebGLRenderer({ antialias: dpr < 1.5, powerPreference: "default" });
   renderer.setPixelRatio(maxRatio);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
-  // the scene is static: shadows are drawn once and again only while the roof or doors move
-  renderer.shadowMap.autoUpdate = false;
-  renderer.shadowMap.needsUpdate = true;
+  // No real-time shadows and no environment map: the ground contact is painted (soft
+  // shadow planes under the cabin and the tank), which costs nothing per frame.
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";
@@ -57,15 +52,9 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const scene = new THREE.Scene();
   scene.background = sky(HORIZON);
   scene.fog = new THREE.Fog(HORIZON, 18, 55);
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environment = envTex;
-  scene.environmentIntensity = 0.55;
 
   const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 200);
   const HOME = { pos: new THREE.Vector3(8.2, 4.6, 9.4), target: new THREE.Vector3(0.3, 1.1, 0) };
-  const TOP = { pos: new THREE.Vector3(4.6, 8.2, 6.2), target: new THREE.Vector3(0, 0.6, -0.2) };
-  const INSIDE = { pos: new THREE.Vector3(1.75, 1.75, 1.2), target: new THREE.Vector3(-0.35, 0.85, -0.55) };
   camera.position.copy(HOME.pos);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -81,22 +70,17 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   controls.update();
 
   // ---- lights
-  scene.add(new THREE.HemisphereLight("#e4edf5", "#77715f", 1.0));
+  scene.add(new THREE.HemisphereLight("#e8f0f7", "#7a7462", 1.35));
   const sun = new THREE.DirectionalLight("#fff4e2", 2.4);
   sun.position.set(-5.5, 10, 6.5);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(coarse ? 1024 : 1536, coarse ? 1024 : 1536);
-  sun.shadow.camera.left = -7; sun.shadow.camera.right = 7; sun.shadow.camera.top = 7; sun.shadow.camera.bottom = -7;
-  sun.shadow.camera.near = 1; sun.shadow.camera.far = 30;
-  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
   scene.add(sun);
 
-  const disposables: Array<{ dispose: () => void }> = [envTex, pmrem];
+  const disposables: Array<{ dispose: () => void }> = [];
   const track = <T extends { dispose: () => void }>(x: T) => (disposables.push(x), x);
   const std = (p: THREE.MeshStandardMaterialParameters) => track(new THREE.MeshStandardMaterial(p));
   const box = (w: number, h: number, d: number) => track(new THREE.BoxGeometry(w, h, d));
   const mesh = (g: THREE.BufferGeometry, m: THREE.Material | THREE.Material[], shadow = true) => {
-    const o = new THREE.Mesh(g, m); o.castShadow = shadow; o.receiveShadow = true; return o;
+    void shadow; return new THREE.Mesh(g, m);
   };
 
   // ---- materials
@@ -105,14 +89,14 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const steelPart = corrugated("#8b9298", ((W - DOOR_W) / 2) / 0.2);
   const steelLeaf = corrugated("#8f969c", (DOOR_W / 2) / 0.2);
   [steelBack, steelSide, steelPart, steelLeaf].forEach((s) => { track(s.map); track(s.normalMap); });
-  const steel = (s: { map: THREE.Texture; normalMap: THREE.Texture }) => std({ map: s.map, normalMap: s.normalMap, normalScale: new THREE.Vector2(1.4, 1.4), metalness: 0.55, roughness: 0.42 });
-  const frameMat = std({ color: "#454b51", metalness: 0.6, roughness: 0.38 });
+  const steel = (s: { map: THREE.Texture; normalMap: THREE.Texture }) => std({ map: s.map, normalMap: s.normalMap, normalScale: new THREE.Vector2(1.4, 1.4), metalness: 0.2, roughness: 0.42 });
+  const frameMat = std({ color: "#454b51", metalness: 0.2, roughness: 0.38 });
   const lv = louvre(16); track(lv.map); track(lv.normalMap);
-  const louvreMat = std({ map: lv.map, normalMap: lv.normalMap, metalness: 0.5, roughness: 0.5 });
-  const roofMat = std({ color: "#c9cdd0", metalness: 0.5, roughness: 0.4 });
-  const hoodMat = std({ color: "#b9bec2", metalness: 0.7, roughness: 0.3 });
+  const louvreMat = std({ map: lv.map, normalMap: lv.normalMap, metalness: 0.2, roughness: 0.5 });
+  const roofMat = std({ color: "#c9cdd0", metalness: 0.2, roughness: 0.4 });
+  const hoodMat = std({ color: "#b9bec2", metalness: 0.2, roughness: 0.3 });
   const glassMat = std({ color: "#1d2a33", metalness: 0.2, roughness: 0.05, transparent: true, opacity: 0.55 });
-  const blueMat = std({ color: "#1f6fb2", metalness: 0.35, roughness: 0.3 });
+  const blueMat = std({ color: "#1f6fb2", metalness: 0.2, roughness: 0.3 });
   const floorIn = std({ map: track(concrete(2, "#a9adb0")), roughness: 0.7, metalness: 0.05 });
 
   // ---- ground: grass + paved yard
@@ -126,15 +110,15 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   // ---- factory wall behind (blue corrugated, like the plant in the photos)
   const facSteel = corrugated("#4a6589", 34 / 0.35, 1); track(facSteel.map); track(facSteel.normalMap);
   const factory = new THREE.Group();
-  const facWall = mesh(box(34, 9, 0.3), [std({ color: "#4a6589", roughness: 0.6 }), std({ color: "#4a6589" }), std({ color: "#3a3f45" }), std({ color: "#4a6589" }), std({ map: facSteel.map, normalMap: facSteel.normalMap, metalness: 0.45, roughness: 0.5 }), std({ color: "#4a6589" })], false);
+  const facWall = mesh(box(34, 9, 0.3), [std({ color: "#4a6589", roughness: 0.6 }), std({ color: "#4a6589" }), std({ color: "#3a3f45" }), std({ color: "#4a6589" }), std({ map: facSteel.map, normalMap: facSteel.normalMap, metalness: 0.2, roughness: 0.5 }), std({ color: "#4a6589" })], false);
   facWall.position.set(0, 4.5, -15.5); factory.add(facWall);
   const facBlock = mesh(box(34, 9, 18), std({ color: "#4a6589", roughness: 0.7 }), false);
   facBlock.position.set(0, 4.5, -24.7); factory.add(facBlock);
   const facRoof = mesh(box(34.6, 0.5, 19), std({ color: "#5a6168", roughness: 0.6 }), false);
   facRoof.position.set(0, 9.2, -24.5); factory.add(facRoof);
-  const windowMat = std({ color: "#b8d4e6", metalness: 0.4, roughness: 0.1, emissive: "#9fc3dc", emissiveIntensity: 0.15 });
+  const windowMat = std({ color: "#b8d4e6", metalness: 0.2, roughness: 0.1, emissive: "#9fc3dc", emissiveIntensity: 0.15 });
   for (let i = 0; i < 6; i++) { const win = mesh(box(3.6, 0.9, 0.05), windowMat, false); win.position.set(-13 + i * 5.2, 7.2, -15.33); factory.add(win); }
-  const roll = mesh(box(4.2, 4.6, 0.05), std({ color: "#c9cdd0", metalness: 0.5, roughness: 0.45 }), false);
+  const roll = mesh(box(4.2, 4.6, 0.05), std({ color: "#c9cdd0", metalness: 0.2, roughness: 0.45 }), false);
   roll.position.set(9.5, 2.3, -15.33); factory.add(roll);
   scene.add(factory);
 
@@ -142,10 +126,10 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const r = rng(42);
   const trunkGeo = track(new THREE.CylinderGeometry(0.12, 0.18, 1.6, 6));
   const pineGeo = track(new THREE.ConeGeometry(1.2, 3.6, 10));
-  const leafGeo = track(new THREE.IcosahedronGeometry(1.5, 2));
+  const leafGeo = track(new THREE.IcosahedronGeometry(1.5, 1));
   const trunkMat = std({ color: "#5b4636", roughness: 1 });
   const foliage = std({ color: "#ffffff", roughness: 0.9, flatShading: true });
-  const N = 70;
+  const N = 36;
   const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, N);
   const pines = new THREE.InstancedMesh(pineGeo, foliage, N);
   const leaves = new THREE.InstancedMesh(leafGeo, foliage, N);
@@ -247,12 +231,14 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const shell = mesh(track(new THREE.CylinderGeometry(0.4, 0.4, 1.6, 32)), blueMat); shell.position.y = 1.15; tank.add(shell);
   for (const yy of [0.35, 1.95]) { const cap = mesh(track(new THREE.SphereGeometry(0.4, 32, 12, 0, Math.PI * 2, yy > 1 ? 0 : Math.PI / 2, Math.PI / 2)), blueMat); cap.position.y = yy; tank.add(cap); }
   for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; const leg = mesh(box(0.05, 0.4, 0.05), frameMat); leg.position.set(Math.cos(a) * 0.3, 0.2, Math.sin(a) * 0.3); tank.add(leg); }
+  const tankShadow = new THREE.Mesh(track(new THREE.PlaneGeometry(1.6, 1.6)), track(new THREE.MeshBasicMaterial({ map: track(contactShadow()), transparent: true, depthWrite: false })));
+  tankShadow.rotation.x = -Math.PI / 2; tankShadow.position.y = -BASE + 0.014; tank.add(tankShadow);
   cabin.add(tank);
   cabin.add(pipe(new THREE.Vector3(W / 2 + 0.6, BASE + 1.85, -0.6), new THREE.Vector3(W / 2 + 0.6, BASE + 2.55, -0.6)));
   cabin.add(pipe(new THREE.Vector3(W / 2 + 0.6, BASE + 2.55, -0.6), new THREE.Vector3(W / 2 + 1.05, BASE + 2.55, -0.4)));
   cabin.add(pipe(new THREE.Vector3(W / 2 + 1.05, BASE + 2.55, -0.4), new THREE.Vector3(W / 2 + 1.05, BASE + 2.3, -0.4)));
 
-  // roof group (removable): roof sheet, exhaust hoods, LED strip
+  // roof: sheet, exhaust hoods, LED strip
   const roof = new THREE.Group();
   const roofSheet = mesh(box(W + 0.24, 0.08, D + 0.24), roofMat); roofSheet.position.y = BASE + H + 0.04; roof.add(roofSheet);
   for (const hx of [-0.9, 0.55]) {
@@ -263,8 +249,6 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const led = new THREE.Mesh(track(new THREE.PlaneGeometry(2.6, 0.08)), track(new THREE.MeshBasicMaterial({ color: "#f4f8ff" })));
   led.rotation.x = Math.PI / 2; led.position.set(0, BASE + H - 0.01, 0.2); roof.add(led);
   cabin.add(roof);
-  const roofMats = [roofMat, hoodMat];
-  const inLight = new THREE.PointLight("#f4f8ff", 0, 6, 1.6); inLight.position.set(0, BASE + H - 0.3, 0.2); cabin.add(inLight);
 
   // ---- loop
   const tweens: Tween[] = [];
@@ -273,11 +257,11 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   let slowFrames = 0, quality = 2;
   const degrade = () => {
     if (quality === 2) { renderer.setPixelRatio(1); quality = 1; }
-    else if (quality === 1) { renderer.shadowMap.enabled = false; scene.traverse((o) => { if ((o as THREE.Mesh).material) ((o as THREE.Mesh).material as THREE.Material).needsUpdate = true; }); quality = 0; }
+    else if (quality === 1) { renderer.setPixelRatio(0.85); quality = 0; }
     slowFrames = 0;
   };
   const animate = (from: number, to: number, dur: number, apply: (v: number) => void, done?: () => void) => {
-    if (opts.reducedMotion || dur === 0) { apply(to); done?.(); renderer.shadowMap.needsUpdate = true; kick(); return; }
+    if (opts.reducedMotion || dur === 0) { apply(to); done?.(); kick(); return; }
     tweens.push({ from, to, t: 0, dur, apply, done }); kick();
   };
   const tick = (now: number) => {
@@ -289,7 +273,6 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
       if (tw.t >= 1) { tweens.splice(i, 1); tw.done?.(); }
     }
     const moving = controls.update(dt);
-    if (tweens.length) renderer.shadowMap.needsUpdate = true;
     const t0 = performance.now();
     renderer.render(scene, camera);
     if (!first && (moving || tweens.length) && quality > 0) {
@@ -316,43 +299,21 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const io = new IntersectionObserver(([e]) => { visible = !!e?.isIntersecting; if (visible) kick(); }, { threshold: 0.01 }); io.observe(host);
 
   // ---- state
-  let roofOff = false, doorsOpen = false, inside = false;
-  const roofLift = (v: number) => {
-    roof.position.y = v * 2.4;
-    roofMats.forEach((m) => { m.transparent = v > 0; m.opacity = 1 - v; m.depthWrite = v < 0.5; });
-    roof.visible = v < 0.99;
-    inLight.intensity = (1 - v) * (inside || doorsOpen ? 2.2 : 0.8);
-  };
+  let doorsOpen = false;
   const doorAngle = (v: number) => { doors[0].rotation.y = -v * 1.75; doors[1].rotation.y = v * 1.75; };
-  const fly = (to: { pos: THREE.Vector3; target: THREE.Vector3 }, dur = 1.4, fov = 0) => {
-    const p0 = camera.position.clone(), t0 = controls.target.clone(), f0 = fovExtra;
-    controls.autoRotate = false;
-    animate(0, 1, dur, (v) => {
-      camera.position.lerpVectors(p0, to.pos, v); controls.target.lerpVectors(t0, to.target, v);
-      fovExtra = f0 + (fov - f0) * v; camera.fov = baseFov() + fovExtra; camera.updateProjectionMatrix();
-    });
+  const fly = (to: { pos: THREE.Vector3; target: THREE.Vector3 }, dur = 1.2) => {
+    const p0 = camera.position.clone(), t0 = controls.target.clone();
+    animate(0, 1, dur, (v) => { camera.position.lerpVectors(p0, to.pos, v); controls.target.lerpVectors(t0, to.target, v); });
   };
-  roofLift(0); doorAngle(0);
-  const go = () => { ready = true; renderer.shadowMap.needsUpdate = true; kick(); };
+  doorAngle(0);
+  const go = () => { ready = true; kick(); };
   // compile shaders in parallel when the GPU driver allows it; otherwise compile once up front
   if (renderer.extensions.has("KHR_parallel_shader_compile")) renderer.compileAsync(scene, camera).catch(() => undefined).then(go);
   else { renderer.compile(scene, camera); go(); }
 
   const api: SafetyAirScene = {
-    setRoof(removed) { if (removed === roofOff) return; roofOff = removed; animate(removed ? 0 : 1, removed ? 1 : 0, 1.1, roofLift); if (!inside) fly(removed ? TOP : HOME, 1.4); },
-    setDoors(open) { if (open === doorsOpen) return; doorsOpen = open; animate(open ? 0 : 1, open ? 1 : 0, 1.0, doorAngle); inLight.intensity = roofOff ? 0 : open ? 2.2 : 0.8; },
-    setInside(next) {
-      if (next === inside) return; inside = next;
-      if (next) {
-        if (!doorsOpen) api.setDoors(true);
-        controls.minDistance = 0.4; controls.maxDistance = 3.2; controls.maxPolarAngle = Math.PI * 0.62;
-        fly(INSIDE, 1.8, 18);
-      } else {
-        controls.minDistance = 3.2; controls.maxDistance = 17; controls.maxPolarAngle = Math.PI * 0.47;
-        fly(HOME, 1.5);
-      }
-    },
-    reset() { api.setInside(false); api.setRoof(false); api.setDoors(false); fly(HOME, 1.2); },
+    setDoors(open) { if (open === doorsOpen) return; doorsOpen = open; animate(open ? 0 : 1, open ? 1 : 0, 1.0, doorAngle); },
+    reset() { api.setDoors(false); fly(HOME); },
     dispose() {
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); controls.dispose(); document.removeEventListener("visibilitychange", onVisibility);
       scene.traverse((o) => { if (o instanceof THREE.InstancedMesh) o.dispose(); });
