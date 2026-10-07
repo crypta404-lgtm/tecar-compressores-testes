@@ -27,6 +27,9 @@ export const LEAK_TARGET_PERCENT = 5;
 export const NETWORK_DROP_LIMIT_PERCENT = 10;
 /** DOE Sourcebook: ~1% energy per 2 psig (≈0.138 bar) of setpoint reduction */
 export const BAR_PER_PERCENT = 0.1378952;
+const CFM_TO_M3MIN = 0.0283168;
+/** Brazilian grid, 2025: 64,8 kg CO2e per MWh (BEN 2026 / EPE) */
+export const CO2_KG_PER_KWH = 0.0648;
 
 export const money = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 export const number = (value: number, digits = 1) => value.toLocaleString("pt-BR", { maximumFractionDigits: digits, minimumFractionDigits: digits });
@@ -172,6 +175,20 @@ export function computePrelaudo(input: PrelaudoInputs) {
     });
   }
 
+  // Visual summary: where the annual cost goes, cost of air and benchmarks.
+  const unloadCost = model.noLoadKw * (1 - loadRatio) * hours * tariff;
+  const breakdown = [
+    { id: "unload", label: "Alívio (sem produzir ar)", value: unloadCost },
+    { id: "leaks", label: "Vazamentos", value: leakCost },
+    { id: "pressure", label: "Pressão acima do alvo", value: pressureSaving },
+  ];
+  const wasteCost = breakdown.reduce((sum, item) => sum + item.value, 0);
+  const usefulCost = Math.max(0, annualCost - wasteCost);
+  const producedM3 = model.flowCfm * CFM_TO_M3MIN * 60 * hours * loadRatio;
+  const costPerM3 = producedM3 > 0 ? annualCost / producedM3 : 0;
+  const co2Kg = annualKwh * CO2_KG_PER_KWH;
+  const specificBand: "good" | "watch" | "poor" = specificPower < 21 ? "good" : specificPower <= 28 ? "watch" : "poor";
+
   const withSaving = opportunities.filter((item) => item.saving !== null) as Array<Opportunity & { saving: number }>;
   const totalSaving = withSaving.reduce((sum, item) => sum + item.saving, 0);
   const totalMemory = withSaving.length
@@ -182,6 +199,8 @@ export function computePrelaudo(input: PrelaudoInputs) {
     loadRatio, leakPercent, averageKw, annualKwh, annualCost, reserveCfm, reservePercent, leakCfm, specificPower, leakPower, leakCost,
     pressureDrop, pressureDropPercent, setpointReduction, pressureSavingPercent, pressureSaving, pdpGap,
     memory, opportunities, totalSaving, totalMemory,
+    unloadCost, breakdown, wasteCost, usefulCost, producedM3, costPerM3, co2Kg, specificBand,
+    costAfter: Math.max(0, annualCost - totalSaving),
   };
 }
 
