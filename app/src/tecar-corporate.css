@@ -286,7 +286,7 @@
   transition: opacity .5s ease, transform .7s var(--cx-ease);
 }
 .cx-slide[data-active="true"] .cx-slide-caption { opacity: 1; transform: none; transition-delay: .45s; }
-.cx-slide-caption > span { display: block; font: 600 11px/1.4 var(--tc-font); letter-spacing: .14em; text-transform: uppercase; color: var(--cx-red-on-dark); }
+.cx-slide-caption > span { display: block; text-wrap: balance; font: 600 11px/1.4 var(--tc-font); letter-spacing: .14em; text-transform: uppercase; color: var(--cx-red-on-dark); }
 .tc-editorial .cx-slide-caption p { margin: 10px 0 14px; font-size: 14px; line-height: 1.6; color: #c9ccce; }
 .cx-slide-link { display: inline-flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, .4); font: 500 13px/1 var(--tc-font); color: var(--cx-white); text-decoration: none; transition: border-color .3s ease; }
 .cx-slide-link:hover { border-color: var(--cx-white); }

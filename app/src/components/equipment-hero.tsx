@@ -48,7 +48,7 @@ const slides = [
     word: "LOCAÇÃO",
     label: "Locação",
     text: "Equipamentos para contingência, expansão e demandas temporárias.",
-    model: "Compressor de parafuso Ingersoll Rand série R",
+    model: "Ingersoll Rand série\u00a0R",
     to: "/locacao",
     cta: "Conhecer a locação",
     image: "/assets/corporate/cat-compressor.webp",
