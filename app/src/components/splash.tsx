@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { MARK_PATHS, MARK_VIEWBOX } from "@/lib/tecar-mark";
 
 /*
- * Opening screen: white field and the TecAr logo with a short, vibrant red
- * glow rising from behind it (~1.7 s in total).
+ * Opening screen: white field, the TecAr monogram filling from bottom to top
+ * like a loading bar, and the company name at the bottom (~1.9 s in total).
  *
  * - Rendered in the server HTML and driven by CSS only, so it paints with the
  *   first frame and still leaves if JavaScript fails. The page content is
@@ -15,6 +16,12 @@ import { useState } from "react";
 export const splashSessionScript =
   "try{var s=window.sessionStorage;if(s.getItem('tc-splash')){document.documentElement.classList.add('tc-splash-off')}else{s.setItem('tc-splash','1')}}catch(e){}";
 
+function Mark({ className }: { className: string }) {
+  return <svg className={className} viewBox={MARK_VIEWBOX} aria-hidden="true">
+    {MARK_PATHS.map((path) => <path key={path.d.slice(0, 24)} className={path.tone === "ink" ? "tc-mark-ink" : "tc-mark-red"} d={path.d} />)}
+  </svg>;
+}
+
 export function Splash() {
   const [done, setDone] = useState(false);
   if (done) return null;
@@ -23,7 +30,10 @@ export function Splash() {
     aria-hidden="true"
     onAnimationEnd={(event) => { if (event.target === event.currentTarget) setDone(true); }}
   >
-    <div className="tc-splash-glow" />
-    <img className="tc-splash-logo" src="/assets/tecar/logo-splash.webp" alt="" width="560" height="301" decoding="async" fetchPriority="high" />
+    <div className="tc-splash-mark">
+      <Mark className="tc-splash-base" />
+      <Mark className="tc-splash-fill" />
+    </div>
+    <p className="tc-splash-name">TecAr Compressores Ltda</p>
   </div>;
 }

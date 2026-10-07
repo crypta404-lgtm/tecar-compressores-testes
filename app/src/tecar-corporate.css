@@ -696,50 +696,28 @@ html.cx-motion .tc-editorial .ap[data-reveal] .ap-grid > * { opacity: 1; transfo
 
 /* ============================================================ OPENING SCREEN */
 /* See src/components/splash.tsx. CSS-driven so it leaves even without JS.
-   Only the logo, with a short vibrant red glow rising from behind it. */
+   The monogram fills from bottom to top like a loading bar. */
 .tc-splash {
   position: fixed;
   z-index: 1000;
   inset: 0;
   display: grid;
-  /* fixed track so every layer stays centred */
-  grid-template: 100% / 100%;
+  grid-template: 1fr auto / 100%;
   place-items: center;
-  overflow: hidden;
   background: #ffffff;
   pointer-events: none;
-  animation: tc-splash-out .4s cubic-bezier(.65, 0, .35, 1) 1.3s forwards;
+  animation: tc-splash-out .35s cubic-bezier(.65, 0, .35, 1) 1.6s forwards;
 }
-.tc-splash > * { grid-area: 1 / 1; }
 html.tc-splash-off .tc-splash { display: none; }
-
-/* soft bloom sitting behind the logo */
-.tc-splash-glow {
-  width: min(52vw, 340px);
-  aspect-ratio: 2 / 1;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 36, 44, .55), rgba(255, 36, 44, .18) 55%, rgba(255, 36, 44, 0));
-  filter: blur(14px);
-  opacity: 0;
-  transform: scale(.55);
-  animation: tc-splash-glow 1.15s cubic-bezier(.22, .8, .2, 1) .22s forwards;
-}
-.tc-splash-logo {
-  position: relative;
-  width: min(62vw, 300px);
-  height: auto;
-  opacity: 0;
-  transform: scale(.96);
-  filter: drop-shadow(0 0 0 rgba(255, 36, 44, 0));
-  animation: tc-splash-logo 1.2s cubic-bezier(.22, .8, .2, 1) .05s forwards;
-}
-
-@keyframes tc-splash-glow { 45% { opacity: 1; transform: scale(1.08); } to { opacity: .35; transform: scale(1); } }
-@keyframes tc-splash-logo {
-  35% { opacity: 1; transform: none; filter: drop-shadow(0 0 0 rgba(255, 36, 44, 0)); }
-  60% { opacity: 1; transform: none; filter: drop-shadow(0 0 16px rgba(255, 36, 44, .75)); }
-  to { opacity: 1; transform: none; filter: drop-shadow(0 0 6px rgba(255, 36, 44, .3)); }
-}
+.tc-splash-mark { position: relative; width: min(46vw, 220px); aspect-ratio: 385 / 261; animation: tc-splash-in .4s ease both; }
+.tc-splash-mark svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tc-splash-base path { fill: #ebedee; }
+.tc-splash-fill .tc-mark-ink { fill: #141414; }
+.tc-splash-fill .tc-mark-red { fill: #d71920; }
+.tc-splash-fill { clip-path: inset(100% 0 0 0); animation: tc-splash-fill 1.25s cubic-bezier(.45, 0, .2, 1) .2s forwards; }
+.tc-splash-name { margin: 0 0 clamp(36px, 8vh, 72px); font: 500 14px/1 var(--tc-font, "Inter Tight", Arial, sans-serif); letter-spacing: .08em; color: #3a3f43; animation: tc-splash-in .5s ease .15s both; }
+@keyframes tc-splash-fill { to { clip-path: inset(0 0 0 0); } }
+@keyframes tc-splash-in { from { opacity: 0; } }
 @keyframes tc-splash-out { to { opacity: 0; visibility: hidden; } }
 
 @media (prefers-reduced-motion: reduce) { .tc-splash { display: none; } }
@@ -939,3 +917,13 @@ html.tc-splash-off .tc-splash { display: none; }
   .v2-dx-print-detail .pl-tiles { grid-template-columns: repeat(4, 1fr); }
   .v2-dx-print-detail .pl-tiles b { font-size: 1.05rem; }
 }
+
+/* ============================================================ DIAGNÓSTICOS: "O QUE OBSERVAMOS" BESIDE THE PANEL (dark head) */
+.v2-dx-studio-head.has-aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 420px); gap: clamp(24px, 4vw, 64px); align-items: end; }
+.v2-dx-observe > span { display: block; margin-bottom: 10px; font: 700 .65rem/1 var(--tc-font); letter-spacing: .14em; text-transform: uppercase; color: #ff7a7e; }
+.v2-dx-observe ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(255, 255, 255, .18); }
+.v2-dx-observe li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(255, 255, 255, .18); }
+.v2-dx-observe li > b { font: 600 .7rem var(--tc-font); color: #9da2a6; font-variant-numeric: tabular-nums; }
+.v2-dx-observe li strong { display: block; font: 600 .86rem/1.3 var(--tc-font); color: #fff; }
+.v2-dx-observe li small { display: block; font-size: .74rem; line-height: 1.4; color: #b9bec2; }
+@media (max-width: 900px) { .v2-dx-studio-head.has-aside { grid-template-columns: 1fr; } }

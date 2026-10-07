@@ -2,7 +2,7 @@ import {
   Activity, AirVent, ArrowDownRight, Bolt, ClipboardCheck, Copy, Droplets,
   Calculator, Factory, FileText, Gauge, LayoutDashboard, PiggyBank, Printer, ShieldCheck, ThermometerSun, Wind,
 } from "lucide-react";
-import { useMemo, useState, type ComponentType } from "react";
+import { useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
 import { PRINT_WATERMARK } from "@/lib/print-watermark";
 import { BeforeAfter, CostBreakdown, DataTable, OpportunityBars, SpecificPowerMeter, StatTiles } from "@/components/prelaudo-charts";
@@ -99,7 +99,7 @@ function Opportunities({items,report}:{items:Opportunity[];report:ReportId}){
   return <div className="v2-dx-opportunities">{list.map(item=><OpportunityAlert key={item.id} item={item}/>)}</div>
 }
 
-export function DiagnosticReportStudio(){
+export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
   const [active,setActive]=useState<TabId>("overview");
   const [industryId,setIndustryId]=useState("metal");
   const [powerKw,setPowerKw]=useState(22);
@@ -189,7 +189,7 @@ export function DiagnosticReportStudio(){
   const cta=<div className="v2-dx-cta"><p>Render mais e gastar menos com o seu ar comprimido. O atendimento técnico da TecAr valida esses números em campo e monta o plano.</p><WhatsAppLink href={whatsapp}><FileText size={17}/>Falar com o atendimento técnico</WhatsAppLink></div>;
 
   return <div className="v2-dx-studio">
-    <div className="v2-dx-studio-head"><div><span className="v2-kicker">PAINEL INTERATIVO</span><h2>Pré-laudo técnico em poucos minutos.</h2><p>Descreva o compressor e a operação. Os gráficos mudam em tempo real.</p></div></div>
+    <div className={"v2-dx-studio-head"+(aside?" has-aside":"")}><div><span className="v2-kicker">PAINEL INTERATIVO</span><h2>Pré-laudo técnico em poucos minutos.</h2><p>Descreva o compressor e a operação. Os gráficos mudam em tempo real.</p></div>{aside}</div>
     <div className="v2-dx-context">
       <label><span>Tipo de indústria</span><select value={industryId} onChange={e=>setIndustryId(e.target.value)}>{Object.entries(INDUSTRIES).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
       <label><span>Potência do compressor</span><select value={powerKw} disabled={useNameplate} onChange={e=>setPowerKw(Number(e.target.value))}>{POWER_CLASSES.map(item=><option key={item.kw} value={item.kw}>{number(item.kw,item.kw%1?1:0)} kW · {item.hp} hp</option>)}</select></label>
