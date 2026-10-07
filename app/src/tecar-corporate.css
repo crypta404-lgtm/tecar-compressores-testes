@@ -1213,3 +1213,94 @@ html.tc-splash-off .tc-splash { display: none; }
   .alm-scene, .alm-page-left, .alm-popup { animation: none; }
   .alm-rig, .v2-line-zoom, .v2-line-zoom img { transition: none; }
 }
+
+/* ==========================================================================
+ * Safety Air 3D
+ * ========================================================================== */
+.tc-editorial .sa3d-section { background: var(--cx-paper); }
+.tc-editorial .sa3d-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 6vw, 96px); align-items: end; margin-bottom: clamp(28px, 3vw, 40px); }
+.tc-editorial .sa3d-head p { margin: 0; font-size: 18px; line-height: 1.7; max-width: 52ch; }
+.sa3d { position: relative; margin: 0; height: clamp(420px, 62vw, 720px); border-radius: 24px; overflow: hidden; background: linear-gradient(#b9d3e8, #e3ecf1 55%, #dfe6e6); isolation: isolate; }
+.sa3d-canvas { position: absolute; inset: 0; cursor: grab; touch-action: none; }
+.sa3d-canvas:active { cursor: grabbing; }
+.sa3d-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sa3d[data-state="loading"] .sa3d-fallback { filter: blur(14px) saturate(.7) brightness(1.08); transform: scale(1.06); }
+.sa3d-loader { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 18px; background: rgb(247 246 243 / .72); backdrop-filter: blur(4px); }
+.sa3d-loader span { font-size: 13px; letter-spacing: .08em; color: var(--cx-steel); }
+.sa3d-loader-mark { position: relative; width: 120px; aspect-ratio: 385 / 261; }
+.sa3d-loader-mark svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sa3d-loader-mark path { fill: #e3e5e6; }
+.sa3d-loader-fill [data-tone="ink"] { fill: var(--cx-ink); } .sa3d-loader-fill [data-tone="red"] { fill: var(--cx-red); }
+.sa3d-loader-fill { clip-path: inset(100% 0 0 0); animation: sa3d-fill 1.6s cubic-bezier(.45, 0, .2, 1) infinite; }
+@keyframes sa3d-fill { 0% { clip-path: inset(100% 0 0 0); } 70%, 100% { clip-path: inset(0 0 0 0); } }
+.sa3d-controls { position: absolute; left: 50%; bottom: 18px; translate: -50% 0; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgb(255 255 255 / .82); backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgb(14 15 16 / .14); max-width: calc(100% - 24px); overflow-x: auto; scrollbar-width: none; }
+.sa3d-controls button { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--cx-ink); font: 500 14px var(--tc-font); cursor: pointer; transition: background .2s ease, color .2s ease; }
+.sa3d-controls button:hover { background: rgb(14 15 16 / .06); }
+.sa3d-controls button[aria-pressed="true"] { background: var(--cx-ink); color: var(--cx-white); }
+.sa3d-controls button:focus-visible { outline: 3px solid var(--cx-red); outline-offset: 1px; }
+.sa3d-controls button:last-child { padding: 0 12px; }
+.sa3d-short { display: none; }
+.sa3d-hint { position: absolute; top: 16px; left: 16px; margin: 0; padding: 7px 12px; border-radius: 999px; background: rgb(14 15 16 / .45); color: var(--cx-white); font-size: 12px; pointer-events: none; backdrop-filter: blur(6px); }
+@media (max-width: 900px) { .tc-editorial .sa3d-head { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .sa3d { height: 520px; border-radius: 16px; }
+  .sa3d-controls { left: 12px; right: 12px; translate: none; bottom: 12px; }
+  .sa3d-controls { justify-content: space-between; }
+  .sa3d-controls button { padding: 0 12px; font-size: 13px; gap: 6px; }
+  .sa3d-long { display: none; } .sa3d-short { display: inline; }
+  .sa3d-hint { display: none; }
+}
+
+/* ==========================================================================
+ * Produtos: palco 3D ao abrir um equipamento
+ * ========================================================================== */
+.tc-editorial .v2-product-detail[data-stage] { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+.ps3d {
+  position: relative; min-height: 480px; overflow: hidden; outline: none; cursor: grab; touch-action: pan-y;
+  display: grid; place-items: center; perspective: 1100px; perspective-origin: 50% 40%; container-type: inline-size;
+  background: radial-gradient(ellipse 70% 60% at 50% 42%, #fbfaf7, var(--cx-stone) 75%);
+}
+.ps3d:active { cursor: grabbing; }
+.ps3d:focus-visible { box-shadow: inset 0 0 0 3px var(--cx-red); }
+.ps3d-rig {
+  --ps-rx: 9deg; --ps-ry: -18deg;
+  position: relative; width: min(74cqw, 430px); aspect-ratio: 1; transform-style: preserve-3d;
+  transform: rotateX(var(--ps-rx)) rotateY(var(--ps-ry)); transition: transform .6s var(--cx-ease);
+  animation: ps-in 1s var(--cx-ease) both;
+}
+.ps3d-rig[data-fast="true"] { transition-duration: .08s; }
+@keyframes ps-in { from { opacity: 0; transform: rotateX(9deg) rotateY(-75deg) scale(.86); } }
+.ps3d-rig > * { position: absolute; }
+.ps3d-wall { inset: -6% -24% 24% -24%; transform: translateZ(-190px); border-radius: 18px; display: grid; place-items: center;
+  background: linear-gradient(rgb(14 15 16 / .035) 1px, transparent 1px) 0 0 / 22px 22px, linear-gradient(90deg, rgb(14 15 16 / .035) 1px, transparent 1px) 0 0 / 22px 22px;
+  -webkit-mask-image: radial-gradient(closest-side, black 40%, transparent); mask-image: radial-gradient(closest-side, black 40%, transparent); }
+.ps3d-wall svg { width: 30%; height: auto; opacity: .05; }
+.ps3d-floor { left: -4%; width: 108%; aspect-ratio: 1; top: 78%; translate: 0 -50%; transform: rotateX(90deg); border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / .9), rgb(255 255 255 / .45) 70%, transparent 100%); }
+.ps3d-floor i { position: absolute; inset: 8%; border-radius: 50%; border: 1px solid rgb(14 15 16 / .08); }
+.ps3d-floor i:nth-child(2) { inset: 22%; border-color: rgb(215 25 32 / .22); }
+.ps3d-floor i:nth-child(3) { inset: 36%; }
+.ps3d-shadow { left: 18%; width: 64%; aspect-ratio: 2.2; top: 78%; translate: 0 -50%; transform: rotateX(90deg); background: radial-gradient(closest-side, rgb(14 15 16 / .34), transparent); }
+.ps3d-product, .ps3d-reflection { left: 6%; right: 6%; display: flex; justify-content: center; pointer-events: none; }
+.ps3d-product { top: 4%; bottom: 22%; align-items: flex-end; transform: translateZ(1px); }
+.ps3d-product img, .ps3d-reflection img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; }
+.ps3d-product img { filter: drop-shadow(0 14px 18px rgb(14 15 16 / .16)); }
+.ps3d-reflection { top: 78%; height: 60%; align-items: flex-start; transform: translateZ(1px); opacity: .22; -webkit-mask-image: linear-gradient(black, transparent 38%); mask-image: linear-gradient(black, transparent 38%); }
+.ps3d-reflection img { transform: scaleY(-1); max-height: 122%; }
+.ps3d-product[data-remote] { background: #f7f6f2; -webkit-mask-image: radial-gradient(closest-side, black 82%, transparent); mask-image: radial-gradient(closest-side, black 82%, transparent); }
+.ps3d-product[data-remote] img { mix-blend-mode: multiply; filter: none; }
+.ps3d-reflection[data-remote] { display: none; }
+.ps3d-tag { padding: 7px 12px 7px 10px; border-radius: 999px; background: rgb(255 255 255 / .92); box-shadow: 0 8px 22px rgb(14 15 16 / .12); font: 500 13px/1.2 var(--tc-font); color: var(--cx-ink); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+.ps3d-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cx-red); }
+.ps3d-tag[data-slot="0"] { left: -6%; top: 14%; transform: translateZ(110px); }
+.ps3d-tag[data-slot="1"] { right: -8%; top: 40%; transform: translateZ(70px); }
+.ps3d-tag[data-slot="2"] { left: 2%; top: 62%; transform: translateZ(150px); }
+.ps3d-hint { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; margin: 0; padding: 6px 12px; border-radius: 999px; background: rgb(14 15 16 / .5); color: var(--cx-white); font-size: 12px; pointer-events: none; animation: alm-hint 4.5s 1.2s both; }
+@media (max-width: 900px) {
+  .tc-editorial .v2-product-detail[data-stage] { grid-template-columns: 1fr; }
+  .ps3d { min-height: 360px; }
+  .ps3d-tag { font-size: 12px; }
+  .ps3d-tag[data-slot="0"] { left: 0; }
+  .ps3d-tag[data-slot="1"] { right: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .ps3d-rig { animation: none; transition: none; } .ps3d-hint { display: none; } }
