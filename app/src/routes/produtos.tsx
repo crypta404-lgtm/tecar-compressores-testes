@@ -3,7 +3,7 @@ import { PageFrame, PageHero, SectionHead, ContactBand } from "@/components/site
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/produtos")({head:()=>pageMeta("/produtos","Produtos | TecAr Compressores","Compressores, secadores, linhas de ar, acessórios e Safety Air.","/assets/v2/compressors.jpg"),component:Page});
 const items=[
- ["/compressores","Compressores","Geração de ar para diferentes vazões, pressões e perfis de consumo.","/assets/unique/official/rental-c.webp"],
+ ["/compressores","Compressores","Geração de ar para diferentes vazões, pressões e perfis de consumo.","/assets/unique/official/rental-c-v2.webp"],
  ["/secadores","Secadores","Controle de umidade por refrigeração ou adsorção.","/assets/v2/dryers.jpg"],
  ["/linhas-de-ar","Linhas de ar","Distribuição em alumínio e redes com menor perda de carga.","/assets/unique/generated/catalog-distribution.webp"],
  ["/acessorios","Acessórios","Filtros, drenos e componentes do sistema.","/assets/v2/accessories.webp"],
