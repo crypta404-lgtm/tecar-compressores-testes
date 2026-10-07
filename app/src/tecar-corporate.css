@@ -1427,3 +1427,6 @@ html.tc-splash-off .tc-splash { display: none; }
   .tc-editorial .ed-steps:not([data-vertical]) i { margin: 0; grid-row: span 2; }
 }
 @media (prefers-reduced-motion: reduce) { .tc-editorial :is(.ed-cards article, .ed-services a, .ed-services img, .ed-products img) { transition: none; } }
+.tc-editorial .ed-with-tool > div > .ed-fact:first-child { margin-top: 0; }
+.tc-editorial .ed-fact + .ed-link { margin-top: 24px; }
+.tc-editorial .ed-steps:not([data-vertical]) li { padding-right: 16px; }
