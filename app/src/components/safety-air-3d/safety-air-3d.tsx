@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, DoorOpen, Footprints, RotateCcw } from "lucide-react";
+import { DoorOpen, RotateCcw } from "lucide-react";
 import { MARK_PATHS, MARK_VIEWBOX } from "@/lib/tecar-mark";
 import type { SafetyAirScene } from "./scene";
 
@@ -31,9 +31,7 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
   const host = useRef<HTMLDivElement>(null);
   const api = useRef<SafetyAirScene | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "fallback">("loading");
-  const [roofOff, setRoofOff] = useState(false);
   const [doorsOpen, setDoorsOpen] = useState(false);
-  const [inside, setInside] = useState(false);
 
   useEffect(() => {
     if (!host.current) return;
@@ -57,10 +55,8 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
     return () => { cancelled = true; io.disconnect(); api.current?.dispose(); api.current = null; };
   }, []);
 
-  const toggleRoof = () => { const v = !roofOff; setRoofOff(v); api.current?.setRoof(v); };
   const toggleDoors = () => { const v = !doorsOpen; setDoorsOpen(v); api.current?.setDoors(v); };
-  const toggleInside = () => { const v = !inside; setInside(v); if (v) setDoorsOpen(true); api.current?.setInside(v); };
-  const reset = () => { setRoofOff(false); setDoorsOpen(false); setInside(false); api.current?.reset(); };
+  const reset = () => { setDoorsOpen(false); api.current?.reset(); };
 
   return <figure className="sa3d" data-state={state}>
     <div className="sa3d-canvas" ref={host} role="img" aria-label="Modelo 3D interativo do Safety Air: cabine modular com compressor, secador e reservatório. Arraste para girar, use a roda do mouse ou o gesto de pinça para aproximar." />
@@ -71,9 +67,7 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
     </div>}
     {state === "ready" && <>
       <div className="sa3d-controls" role="toolbar" aria-label="Controles do modelo 3D">
-        <button type="button" aria-pressed={roofOff} onClick={toggleRoof}><Box size={16} aria-hidden="true" /><span className="sa3d-long">{roofOff ? "Colocar o teto" : "Tirar o teto"}</span><span className="sa3d-short">Teto</span></button>
-        <button type="button" aria-pressed={doorsOpen} onClick={toggleDoors}><DoorOpen size={16} aria-hidden="true" /><span className="sa3d-long">{doorsOpen ? "Fechar portas" : "Abrir portas"}</span><span className="sa3d-short">Portas</span></button>
-        <button type="button" aria-pressed={inside} onClick={toggleInside}><Footprints size={16} aria-hidden="true" /><span className="sa3d-long">{inside ? "Sair da cabine" : "Entrar na cabine"}</span><span className="sa3d-short">{inside ? "Sair" : "Entrar"}</span></button>
+        <button type="button" aria-pressed={doorsOpen} onClick={toggleDoors}><DoorOpen size={16} aria-hidden="true" />{doorsOpen ? "Fechar portas" : "Abrir portas"}</button>
         <button type="button" onClick={reset} aria-label="Voltar à vista inicial"><RotateCcw size={16} aria-hidden="true" /></button>
       </div>
       <figcaption className="sa3d-hint">Arraste para girar · role ou use a pinça para aproximar</figcaption>
