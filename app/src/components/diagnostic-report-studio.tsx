@@ -3,7 +3,8 @@ import {
   Factory, FileText, Gauge, Printer, ShieldCheck, ThermometerSun, Wind,
 } from "lucide-react";
 import { useMemo, useState, type ComponentType } from "react";
-import { CAGI_UP6S, COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
+import { COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
+import { CONTROLS, POWER_CLASSES, PRESSURE_CLASSES, customProfile, estimatedProfile, type Control, type FlowUnit, type PressureClass } from "@/lib/compressor-profiles";
 import { WhatsAppLink } from "@/components/site-v2";
 
 type ReportId = "flow" | "energy" | "pressure" | "quality";
@@ -70,7 +71,13 @@ export function DiagnosticHero(){
 export function DiagnosticReportStudio(){
   const [active,setActive]=useState<ReportId>("flow");
   const [industryId,setIndustryId]=useState("metal");
-  const [modelId,setModelId]=useState("up6s-30-125");
+  const [powerKw,setPowerKw]=useState(22);
+  const [pressureClass,setPressureClass]=useState<PressureClass>("8");
+  const [control,setControl]=useState<Control>("loadUnload");
+  const [useNameplate,setUseNameplate]=useState(false);
+  const [nameplateFlow,setNameplateFlow]=useState(116);
+  const [flowUnit,setFlowUnit]=useState<FlowUnit>("cfm");
+  const [nameplateKw,setNameplateKw]=useState(26);
   const [tariffId,setTariffId]=useState("a4-offpeak");
   const [hours,setHours]=useState(4000);
   const [loadPercent,setLoadPercent]=useState(72);
@@ -82,16 +89,16 @@ export function DiagnosticReportStudio(){
   const [pdpMeasured,setPdpMeasured]=useState(8);
   const [pdpRequired,setPdpRequired]=useState(3);
   const [copied,setCopied]=useState(false);
-  const model=CAGI_UP6S.find(item=>item.id===modelId)??CAGI_UP6S[4];
+  const model=useMemo(()=>useNameplate?customProfile(nameplateFlow,flowUnit,nameplateKw,control):estimatedProfile(powerKw,pressureClass,control),[control,flowUnit,nameplateFlow,nameplateKw,powerKw,pressureClass,useNameplate]);
   const tariff=COPEL_A4_TARIFFS.find(item=>item.id===tariffId)??COPEL_A4_TARIFFS[0];
   const industry=INDUSTRIES[industryId];
 
   const result=useMemo(()=>{
-    const loadRatio=clamp(loadPercent/100,0,1),packageKw=model.packageKw??0,noLoadKw=model.noLoadKw??0;
+    const loadRatio=clamp(loadPercent/100,0,1),packageKw=model.packageKw,noLoadKw=model.noLoadKw;
     const averageKw=packageKw*loadRatio+noLoadKw*(1-loadRatio),annualKwh=averageKw*hours,annualCost=annualKwh*tariff.value;
     const reserveCfm=model.flowCfm-demandCfm,reservePercent=model.flowCfm>0?reserveCfm/model.flowCfm*100:0;
     const leakCfm=demandCfm*clamp(leakInputPercent,0,100)/100;
-    const specificPower=model.specificKw100Cfm??packageKw/Math.max(model.flowCfm,1)*100;
+    const specificPower=model.specificKw100Cfm;
     const leakPower=Math.max(0,leakCfm)*specificPower/100,leakCost=leakPower*hours*tariff.value,leakPercent=clamp(leakInputPercent,0,100);
     const pressureDrop=Math.max(0,supplyBar-pointBar),pressureDropPercent=supplyBar>0?pressureDrop/supplyBar*100:0;
     const pressureSavingPercent=Math.max(0,supplyBar-targetBar)/0.1378952,pressureSaving=packageKw*pressureSavingPercent/100*hours*tariff.value;
@@ -99,8 +106,8 @@ export function DiagnosticReportStudio(){
     return {averageKw,annualKwh,annualCost,reserveCfm,reservePercent,specificPower,leakCfm,leakPower,leakCost,leakPercent,pressureDrop,pressureDropPercent,pressureSavingPercent,pressureSaving,pdpGap};
   },[demandCfm,hours,leakInputPercent,loadPercent,model,pdpMeasured,pdpRequired,pointBar,supplyBar,targetBar,tariff.value]);
   const reportText=useMemo(()=>[
-    "PRÉ-LAUDO TECAR 360","Indústria: "+industry.label,"Modelo: "+model.model,
-    "Vazão publicada / demanda: "+number(model.flowCfm,0)+" / "+number(demandCfm,0)+" cfm",
+    "PRÉ-LAUDO TECAR 360","Indústria: "+industry.label,"Compressor: "+model.label+(model.estimated?" (estimativa por faixa de potência)":""),
+    "Vazão de referência / demanda: "+number(model.flowCfm,0)+" / "+number(demandCfm,0)+" cfm",
     "Reserva calculada: "+number(result.reserveCfm,0)+" cfm","Potência média: "+number(result.averageKw,2)+" kW",
     "Energia anual: "+number(result.annualKwh,0)+" kWh","Custo anual: "+money(result.annualCost),
     "Vazamento: "+number(leakInputPercent,0)+"% da demanda ("+number(result.leakCfm,1)+" cfm) | "+money(result.leakCost)+"/ano",
@@ -117,8 +124,21 @@ export function DiagnosticReportStudio(){
     <div className="v2-dx-benchmarks"><article><b>&lt;10%</b><span>vazamentos em sistema bem mantido</span></article><article><b>20–30%</b><span>perdas possíveis em sistema mal mantido</span></article><article><b>0,14 bar</b><span>redução associada a cerca de 1% de energia</span></article><article><b>&lt;10%</b><span>referência máxima de queda na distribuição</span></article></div>
     <div className="v2-dx-context">
       <label><span>Tipo de indústria</span><select value={industryId} onChange={e=>setIndustryId(e.target.value)}>{Object.entries(INDUSTRIES).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
-      <label><span>Compressor de referência CAGI</span><select value={modelId} onChange={e=>setModelId(e.target.value)}>{CAGI_UP6S.map(item=><option key={item.id} value={item.id}>{item.model}</option>)}</select></label>
+      <label><span>Potência do compressor</span><select value={powerKw} disabled={useNameplate} onChange={e=>setPowerKw(Number(e.target.value))}>{POWER_CLASSES.map(item=><option key={item.kw} value={item.kw}>{number(item.kw,item.kw%1?1:0)} kW · {item.hp} hp</option>)}</select></label>
       <label><span>Tarifa de referência</span><select value={tariffId} onChange={e=>setTariffId(e.target.value)}>{COPEL_A4_TARIFFS.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+    </div>
+    <div className="v2-dx-compressor">
+      <div className="v2-dx-compressor-fields">
+        <label><span>Pressão máxima</span><select value={pressureClass} disabled={useNameplate} onChange={e=>setPressureClass(e.target.value as PressureClass)}>{(Object.keys(PRESSURE_CLASSES) as PressureClass[]).map(id=><option key={id} value={id}>{PRESSURE_CLASSES[id].label}</option>)}</select></label>
+        <label><span>Controle</span><select value={control} onChange={e=>setControl(e.target.value as Control)}>{(Object.keys(CONTROLS) as Control[]).map(id=><option key={id} value={id}>{CONTROLS[id].label}</option>)}</select></label>
+        <label className="v2-dx-check"><input type="checkbox" checked={useNameplate} onChange={e=>setUseNameplate(e.target.checked)}/><span>Tenho a vazão e a potência da placa ou ficha técnica</span></label>
+      </div>
+      {useNameplate&&<div className="v2-dx-inputs v2-dx-inputs-three">
+        <Input label="Vazão (FAD) do compressor" suffix={flowUnit==="cfm"?"cfm":"m³/min"} value={nameplateFlow} min={0} step={flowUnit==="cfm"?1:.1} onChange={setNameplateFlow}/>
+        <label className="v2-dx-field"><span>Unidade da vazão</span><div><select value={flowUnit} onChange={e=>setFlowUnit(e.target.value as FlowUnit)}><option value="cfm">cfm</option><option value="m3min">m³/min</option></select></div></label>
+        <Input label="Potência total em carga" suffix="kW" value={nameplateKw} min={0} step={.1} onChange={setNameplateKw}/>
+      </div>}
+      <div className="v2-dx-compressor-summary"><span>{model.basis}</span><b>{number(model.flowCfm,0)} cfm</b><b>{number(model.packageKw,1)} kW em carga</b><b>{number(model.noLoadKw,1)} kW em alívio</b><b>{number(model.specificKw100Cfm,1)} kW/100 cfm</b></div>
     </div>
     <div className="v2-dx-industry"><Factory size={24}/><div><b>{industry.label}</b><span>{industry.focus}</span></div><div className="v2-dx-industry-tags">{industry.risks.map(risk=><span key={risk}>{risk}</span>)}</div></div>
 
@@ -129,19 +149,19 @@ export function DiagnosticReportStudio(){
           <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Vazão, demanda e vazamentos</h3></div></div>
           <p className="v2-dx-explain">Informe a demanda total estimada da planta e qual parte dela pode estar escapando. A porcentagem é uma hipótese inicial: confirme em campo antes de usar estes valores para decisão ou orçamento.</p>
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Demanda total da planta" suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Vazamento estimado" suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas pressurizadas no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
-          <div className="v2-dx-kpis v2-dx-kpis-four"><div><span>Capacidade CAGI</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda útil estimada</span><b>{number(Math.max(0,demandCfm-result.leakCfm),1)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva nominal</span><b>{number(result.reserveCfm,0)} cfm</b></div><div className={result.leakPercent>=10?"is-risk":""}><span>Perda informada</span><b>{number(result.leakPercent,0)}%</b></div></div>
-          <div className="v2-dx-chart"><Meter label="Capacidade publicada" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda total informada" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Parte atribuída a vazamentos" value={result.leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(result.leakCfm,1)+" cfm"} tone="risk"/></div>
+          <div className="v2-dx-kpis v2-dx-kpis-four"><div><span>Capacidade de referência</span><b>{number(model.flowCfm,0)} cfm</b></div><div><span>Demanda útil estimada</span><b>{number(Math.max(0,demandCfm-result.leakCfm),1)} cfm</b></div><div className={result.reserveCfm<0?"is-risk":""}><span>Reserva nominal</span><b>{number(result.reserveCfm,0)} cfm</b></div><div className={result.leakPercent>=10?"is-risk":""}><span>Perda informada</span><b>{number(result.leakPercent,0)}%</b></div></div>
+          <div className="v2-dx-chart"><Meter label="Capacidade de referência" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda total informada" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Parte atribuída a vazamentos" value={result.leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(result.leakCfm,1)+" cfm"} tone="risk"/></div>
           <div className="v2-dx-leak-summary"><div className="v2-dx-leak-ring"><span>{number(result.leakPercent,0)}%</span><small>da demanda informada</small></div><div><span>Vazão desperdiçada (estimativa)</span><strong>{number(result.leakCfm,1)} cfm</strong><span>Potência proporcional</span><strong>{number(result.leakPower,2)} kW</strong></div><div><span>Energia em {number(hours,0)} horas</span><strong>{number(result.leakPower*hours,0)} kWh</strong><span>Custo anual indicativo</span><strong>{money(result.leakCost)}</strong></div></div>
-          <div className="v2-dx-breakdown"><b>Como este cenário é calculado</b><span>Vazamento em cfm = demanda total × porcentagem informada / 100.</span><span>Reserva nominal = capacidade CAGI − demanda total, já incluindo a parte estimada como vazamento.</span><span>Potência proporcional = vazamento em cfm × potência específica CAGI / 100; custo = potência × horas pressurizadas × tarifa de referência.</span></div>
+          <div className="v2-dx-breakdown"><b>Como este cenário é calculado</b><span>Vazamento em cfm = demanda total × porcentagem informada / 100.</span><span>Reserva nominal = capacidade de referência − demanda total, já incluindo a parte estimada como vazamento.</span><span>Potência proporcional = vazamento em cfm × potência específica do compressor / 100; custo = potência × horas pressurizadas × tarifa de referência.</span></div>
           <p className="v2-dx-disclaimer">A estimativa de custo supõe consumo proporcional à vazão perdida. Controle de carga, alívio, inversor e demanda real podem mudar bastante o resultado; a reserva é nominal, não uma garantia operacional. A referência de &lt;10% para sistemas bem mantidos considera a capacidade produzida, enquanto o percentual informado acima se refere à demanda da planta: compare somente após medir ambos na mesma base.</p>
-          <div className={"v2-dx-finding "+(result.reserveCfm<0?"risk":"ok")}><ClipboardCheck size={20}/><p><b>{result.reserveCfm<0?"Demanda acima da capacidade publicada.":"Existe reserva nominal no cenário informado."}</b> Confirme vazão, perfil de carga e vazamentos com medição durante um turno representativo.</p></div>
+          <div className={"v2-dx-finding "+(result.reserveCfm<0?"risk":"ok")}><ClipboardCheck size={20}/><p><b>{result.reserveCfm<0?"Demanda acima da capacidade de referência.":"Existe reserva nominal no cenário informado."}</b> Confirme vazão, perfil de carga e vazamentos com medição durante um turno representativo.</p></div>
           <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.cagiVerify,TECH_SOURCES.doe,TECH_SOURCES.copel]}/>
         </div>}
         {active==="energy"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Bolt/><div><span>RELATÓRIO 02</span><h3>Uso e custo de energia</h3></div></div>
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas de operação no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo estimado em carga" suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
           <div className="v2-dx-energy-visual v2-dx-energy-visual-four"><div><Activity/><span>Potência média estimada</span><strong>{number(result.averageKw,2)} kW</strong></div><div><Bolt/><span>Energia anual</span><strong>{number(result.annualKwh,0)} kWh</strong></div><div><FileText/><span>Custo anual de referência</span><strong>{money(result.annualCost)}</strong></div><div><Gauge/><span>Perfil informado</span><strong>{number(loadPercent,0)}% carga</strong></div></div>
-          <div className="v2-dx-visual-block"><b>Distribuição do tempo informado</b><div className="v2-dx-load-track" role="img" aria-label={"Em carga "+number(loadPercent,0)+"%, em alívio "+number(100-loadPercent,0)+"%"}><i style={{width:loadPercent+"%"}}/><em style={{width:(100-loadPercent)+"%"}}/></div><div className="v2-dx-legend"><span><i/> Em carga {number(loadPercent,0)}%</span><span><i/> Em alívio {number(100-loadPercent,0)}%</span></div><Meter label="Potência média em relação à potência em carga" value={result.averageKw} max={Math.max(model.packageKw??0,1)} display={number(result.averageKw,2)+" kW"} tone="good"/></div>
+          <div className="v2-dx-visual-block"><b>Distribuição do tempo informado</b><div className="v2-dx-load-track" role="img" aria-label={"Em carga "+number(loadPercent,0)+"%, em alívio "+number(100-loadPercent,0)+"%"}><i style={{width:loadPercent+"%"}}/><em style={{width:(100-loadPercent)+"%"}}/></div><div className="v2-dx-legend"><span><i/> Em carga {number(loadPercent,0)}%</span><span><i/> Em alívio {number(100-loadPercent,0)}%</span></div><Meter label="Potência média em relação à potência em carga" value={result.averageKw} max={Math.max(model.packageKw,1)} display={number(result.averageKw,2)+" kW"} tone="good"/></div>
           <div className="v2-dx-formula"><b>Memória de cálculo</b><code>kW médio = kW em carga × % carga + kW em alívio × % alívio</code><code>custo anual = kW médio × horas/ano × tarifa de referência</code></div>
           <p className="v2-dx-disclaimer">A tarifa considera TE + TUSD de energia do subgrupo A4. Demanda, tributos, bandeiras e outros itens da fatura não estão incluídos.</p>
           <SourceLinks links={[{label:model.sourceLabel,url:model.sourceUrl},TECH_SOURCES.copel,TECH_SOURCES.aneel]}/>
@@ -170,10 +190,10 @@ export function DiagnosticReportStudio(){
     <section className="v2-dx-prelaudo">
       <div className="v2-dx-prelaudo-head"><div><span>PRÉ-LAUDO GERADO</span><h3>Resumo executivo do cenário</h3></div><div className="v2-dx-prelaudo-actions"><button type="button" onClick={copyReport}><Copy size={17}/>{copied?"Copiado":"Copiar"}</button><button type="button" onClick={()=>window.print()}><Printer size={17}/>Salvar em PDF</button><WhatsAppLink href={whatsapp}><FileText size={17}/>Enviar à TecAr</WhatsAppLink></div></div>
       <img className="v2-dx-print-watermark" src="/assets/tecar/logo-cropped.png" alt="" aria-hidden="true"/>
-      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Equipamento</span><b>{model.model}</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento estimado</span><b>{number(result.leakPercent,0)}% · {money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
+      <div className="v2-dx-prelaudo-grid"><div><span>Indústria</span><b>{industry.label}</b></div><div><span>Compressor</span><b>{model.label}</b></div><div><span>Vazão de referência</span><b>{number(model.flowCfm,0)} cfm · {number(model.packageKw,1)} kW</b></div><div><span>Reserva de vazão</span><b>{number(result.reservePercent,1)}%</b></div><div><span>Custo de energia</span><b>{money(result.annualCost)}/ano</b></div><div><span>Vazamento estimado</span><b>{number(result.leakPercent,0)}% · {money(result.leakCost)}/ano</b></div><div><span>Queda de pressão</span><b>{number(result.pressureDropPercent,1)}%</b></div><div><span>Perfil em carga</span><b>{number(loadPercent,0)}%</b></div></div>
       <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Contatar a equipe TecAr e revisar os dados com um técnico antes de tomar decisões.</span><span>2. Medir pressão, vazão e potência durante um ciclo produtivo representativo.</span><span>3. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>4. Validar qualidade do ar no ponto de uso conforme a exigência do processo.</span></div>
-      <div className="v2-dx-report-evidence"><b>Base e limites deste pré-laudo</b><span>Modelo e potência específica: <a href={model.sourceUrl} target="_blank" rel="noopener noreferrer">{model.sourceLabel}</a> (CAGI). Tarifa: <a href={TECH_SOURCES.copel.url} target="_blank" rel="noopener noreferrer">Copel</a>. Métodos e referências de vazamento/pressão: <a href={TECH_SOURCES.doe.url} target="_blank" rel="noopener noreferrer">DOE Sourcebook</a>.</span><span>Demanda, percentual de vazamento, horas, pressão e ponto de orvalho foram informados pelo usuário; o custo de vazamentos é indicativo e requer validação em campo.</span></div>
-      <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e dados CAGI devem ser confirmados por avaliação técnica.</p>
+      <div className="v2-dx-report-evidence"><b>Base e limites deste pré-laudo</b><span>Compressor: {model.basis}{model.estimated?" — valores típicos de compressores parafuso lubrificados; substitua pelos dados da placa para maior precisão":""}. Referência de desempenho: <a href={TECH_SOURCES.cagiVerify.url} target="_blank" rel="noopener noreferrer">CAGI</a>. Tarifa: <a href={TECH_SOURCES.copel.url} target="_blank" rel="noopener noreferrer">Copel</a>. Métodos e referências de vazamento/pressão: <a href={TECH_SOURCES.doe.url} target="_blank" rel="noopener noreferrer">DOE Sourcebook</a>.</span><span>Demanda, percentual de vazamento, horas, pressão e ponto de orvalho foram informados pelo usuário; o custo de vazamentos é indicativo e requer validação em campo.</span></div>
+      <p>Documento preliminar, sem valor de certificação. Entradas do usuário, fórmulas públicas e valores de referência devem ser confirmados por avaliação técnica.</p>
     </section>
   </div>
 }
