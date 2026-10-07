@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 /*
- * Opening screen: white field, TecAr logo with red light bursting behind it
- * and a short loading bar (~1.7 s in total).
+ * Opening screen: white field and the TecAr logo with a short, vibrant red
+ * glow rising from behind it (~1.7 s in total).
  *
  * - Rendered in the server HTML and driven by CSS only, so it paints with the
  *   first frame and still leaves if JavaScript fails. The page content is
@@ -24,10 +24,6 @@ export function Splash() {
     onAnimationEnd={(event) => { if (event.target === event.currentTarget) setDone(true); }}
   >
     <div className="tc-splash-glow" />
-    <div className="tc-splash-rays" />
-    <div className="tc-splash-ring" />
-    <div className="tc-splash-ring tc-splash-ring--late" />
     <img className="tc-splash-logo" src="/assets/tecar/logo-splash.webp" alt="" width="560" height="301" decoding="async" fetchPriority="high" />
-    <div className="tc-splash-bar"><i /></div>
   </div>;
 }
