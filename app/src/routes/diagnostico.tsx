@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageFrame, ContactBand } from "@/components/site-v2";
-import { DiagnosticToolsGrid } from "@/components/engineering-diagnostics";
+import { VerifiedCompressorTable } from "@/components/engineering-diagnostics";
 import { DiagnosticHero, DiagnosticReportStudio, DiagnosticSourceLibrary } from "@/components/diagnostic-report-studio";
 import { pageMeta } from "@/lib/page-meta";
 
@@ -28,7 +28,7 @@ function Page(){
     <nav className="v2-dx-anchorbar" aria-label="Atalhos dos diagnósticos">
       <div className="v2-container">
         <a href="#estudio-diagnostico">Pré-laudo 360</a>
-        <a href="#ensaios-tecnicos">Calculadoras técnicas</a>
+        <a href="#ensaios-tecnicos">Modelos verificados</a>
         <a href="#fontes-tecnicas">Fontes</a>
       </div>
     </nav>
@@ -44,14 +44,13 @@ function Page(){
 
     <section id="ensaios-tecnicos" className="v2-section v2-dx-reference-section">
       <div className="v2-container">
-        <div className="v2-dx-chapter"><span>01 / BASE DE COMPARAÇÃO</span><div><h2>Memória de cálculo</h2><p>Explore os modelos verificados e compare potência mecânica com dados elétricos publicados.</p></div></div>
-        <DiagnosticToolsGrid/>
+        <VerifiedCompressorTable/>
       </div>
     </section>
 
     <section id="fontes-tecnicas" className="v2-section v2-dx-sources-section">
       <div className="v2-container">
-        <div className="v2-dx-chapter"><span>02 / RASTREABILIDADE</span><div><h2>A resposta indica a rota. A avaliação técnica confirma a causa.</h2><p>Dados publicados, informações do cliente e medições de campo precisam ficar separados. Consulte cada fonte do pré-laudo.</p></div></div>
+        <div className="v2-dx-chapter"><span>01 / RASTREABILIDADE</span><div><h2>A resposta indica a rota. A avaliação técnica confirma a causa.</h2><p>Dados publicados, informações do cliente e medições de campo precisam ficar separados. Consulte cada fonte do pré-laudo.</p></div></div>
         <DiagnosticSourceLibrary/>
       </div>
     </section>

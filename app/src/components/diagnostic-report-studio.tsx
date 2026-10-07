@@ -5,7 +5,8 @@ import {
 import { useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
 import { PRINT_WATERMARK } from "@/lib/print-watermark";
-import { BeforeAfter, CostBreakdown, DataTable, OpportunityBars, SpecificPowerMeter, StatTiles } from "@/components/prelaudo-charts";
+import { BeforeAfter, CostBreakdown, DataTable, OpportunityBars, SimpleBars, SpecificPowerMeter, StatTiles } from "@/components/prelaudo-charts";
+import { explainPrelaudo, type ExplainedTopic } from "@/lib/prelaudo-explanations";
 import { LEAK_TARGET_PERCENT, NETWORK_DROP_LIMIT_PERCENT, computePrelaudo, money, number, type Opportunity, type ReportId } from "@/lib/prelaudo-opportunities";
 import { CONTROLS, POWER_CLASSES, PRESSURE_CLASSES, customProfile, estimatedProfile, type Control, type FlowUnit, type PressureClass } from "@/lib/compressor-profiles";
 import { WhatsAppLink } from "@/components/site-v2";
@@ -24,11 +25,11 @@ const INDUSTRIES:Record<string,IndustryProfile>={
 };
 
 const REPORTS:Array<{id:TabId;label:string;short:string;icon:ComponentType<{size?:number;strokeWidth?:number}>}>=[
-  {id:"overview",label:"Visão geral",short:"Custo, eficiência e economia",icon:LayoutDashboard},
   {id:"flow",label:"Vazão e vazamentos",short:"Demanda, perdas e custo",icon:Wind},
   {id:"energy",label:"Energia",short:"kWh, potência e custo anual",icon:Bolt},
   {id:"pressure",label:"Pressão",short:"Queda de rede e oportunidade",icon:Gauge},
   {id:"quality",label:"Qualidade do ar",short:"PDP, contaminantes e evidências",icon:Droplets},
+  {id:"overview",label:"Visão geral",short:"Custo, eficiência e economia",icon:LayoutDashboard},
   {id:"savings",label:"Oportunidades de economia",short:"Alertas e potencial somado",icon:PiggyBank},
   {id:"calc",label:"Memória de cálculo",short:"Todas as contas e fontes",icon:Calculator},
 ];
@@ -99,8 +100,17 @@ function Opportunities({items,report}:{items:Opportunity[];report:ReportId}){
   return <div className="v2-dx-opportunities">{list.map(item=><OpportunityAlert key={item.id} item={item}/>)}</div>
 }
 
+function ExplainedTopics({topics,compact}:{topics:ExplainedTopic[];compact?:boolean}){
+  return <div className={"pl-explain"+(compact?" is-compact":"")}>{topics.map(topic=><article key={topic.id}>
+    <h4>{topic.title}</h4>
+    <div className="pl-why"><b>Por que isso importa</b>{topic.why.map(text=><p key={text}>{text}</p>)}</div>
+    {topic.alerts.map(alert=><div key={alert.id} className="pl-why pl-why-alert"><b><WarningTriangle/>{alert.title}{alert.saving!==null?" · "+money(alert.saving)+"/ano":""}</b>{alert.why.map(text=><p key={text}>{text}</p>)}{!compact&&<CalcMemory lines={alert.memory.filter(line=>!topic.memory.includes(line))}/>}</div>)}
+    <CalcMemory lines={topic.memory}/>
+  </article>)}</div>
+}
+
 export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
-  const [active,setActive]=useState<TabId>("overview");
+  const [active,setActive]=useState<TabId>("flow");
   const [industryId,setIndustryId]=useState("metal");
   const [powerKw,setPowerKw]=useState(22);
   const [pressureClass,setPressureClass]=useState<PressureClass>("8");
@@ -147,18 +157,9 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
   const whatsapp="https://wa.me/5541996441330?text="+encodeURIComponent("Olá, gerei um pré-laudo no Diagnóstico TecAr 360.\n\n"+reportText);
   const copyReport=async()=>{if(typeof navigator==="undefined"||!navigator.clipboard)return;await navigator.clipboard.writeText(reportText);setCopied(true);window.setTimeout(()=>setCopied(false),1800)};
 
-  const calcSections:Array<{title:string;lines:string[]}>=[
-    {title:"Vazão e vazamentos",lines:[...result.memory.flow,...opportunities.filter(item=>item.report==="flow"&&item.saving!==null).flatMap(item=>item.memory)]},
-    {title:"Energia",lines:[...result.memory.energy,...opportunities.filter(item=>item.report==="energy").flatMap(item=>item.memory)]},
-    {title:"Pressão",lines:result.memory.pressure},
-    {title:"Indicadores da visão geral",lines:[
-      `Ar produzido = ${number(model.flowCfm,0)} cfm × 0,0283 m³/ft³ × 60 min × ${number(hours,0)} h × ${number(loadPercent,0)}% em carga = ${number(result.producedM3,0)} m³/ano`,
-      `Custo do ar = ${money(result.annualCost)} ÷ ${number(result.producedM3,0)} m³ = R$ ${number(result.costPerM3,3)}/m³`,
-      `Emissões = ${number(result.annualKwh,0)} kWh × 0,0648 kg CO₂e/kWh (rede brasileira 2025, BEN 2026) = ${number(result.co2Kg/1000,2)} t CO₂e/ano`,
-      `Custo em alívio = ${number(model.noLoadKw,1)} kW × ${number(100-loadPercent,0)}% × ${number(hours,0)} h × R$ ${number(tariff.value,5)}/kWh = ${money(result.unloadCost)}/ano`,
-    ]},
-    {title:"Oportunidades de economia",lines:result.totalMemory},
-  ];
+  const topics=useMemo(()=>explainPrelaudo(result,{model,control,hours,loadPercent,demandCfm,supplyBar,pointBar,targetBar,pdpMeasured,pdpRequired}),[control,demandCfm,hours,loadPercent,model,pdpMeasured,pdpRequired,pointBar,result,supplyBar,targetBar]);
+  const loadCost=Math.max(0,result.annualCost-result.unloadCost);
+  const energyBars=<SimpleBars title="Custo anual de energia por estado" subtitle="em carga produz ar; em alívio gira sem produzir" rows={[{label:"Em carga",value:loadCost,display:money(loadCost)},{label:"Em alívio",value:result.unloadCost,display:money(result.unloadCost),accent:result.unloadCost>0}]}/>;
 
   const overviewTiles=[
     {label:"Custo anual de energia",value:money(result.annualCost),note:number(result.annualKwh,0)+" kWh/ano"},
@@ -230,6 +231,7 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
           <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas de operação no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo estimado em carga" suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
           <StatTiles tiles={[{label:"Potência média",value:number(result.averageKw,1)+" kW"},{label:"Energia anual",value:number(result.annualKwh/1000,1)+" MWh"},{label:"Custo anual",value:money(result.annualCost)},{label:"Gasto em alívio",value:money(result.unloadCost),note:number(100-loadPercent,0)+"% do tempo sem produzir ar",tone:result.unloadCost>0&&control==="loadUnload"?"risk":undefined}]}/>
           <div className="v2-dx-visual-block"><b>Tempo do compressor</b><div className="v2-dx-load-track" role="img" aria-label={"Em carga "+number(loadPercent,0)+"%, em alívio "+number(100-loadPercent,0)+"%"}><i style={{width:loadPercent+"%"}}/><em style={{width:(100-loadPercent)+"%"}}/></div><div className="v2-dx-legend"><span><i/> Em carga {number(loadPercent,0)}%</span><span><i/> Em alívio {number(100-loadPercent,0)}%</span></div></div>
+          {energyBars}
           <SpecificPowerMeter value={model.specificKw100Cfm} band={result.specificBand}/>
           <Opportunities items={opportunities} report="energy"/>
         </div>}
@@ -256,8 +258,8 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
           {cta}
         </div>}
         {active==="calc"&&<div className="v2-dx-report-panel">
-          <div className="v2-dx-report-title"><Calculator/><div><span>MEMÓRIA DE CÁLCULO</span><h3>Todas as contas deste pré-laudo</h3></div></div>
-          {calcSections.filter(section=>section.lines.length).map(section=><div key={section.title} className="pl-calc"><h4>{section.title}</h4><CalcMemory lines={section.lines}/></div>)}
+          <div className="v2-dx-report-title"><Calculator/><div><span>MEMÓRIA DE CÁLCULO</span><h3>As contas e o porquê de cada resultado</h3></div></div>
+          <ExplainedTopics topics={topics}/>
           <div className="v2-dx-report-evidence pl-limits"><b>Base e limites</b><span>Compressor: {model.basis}{model.estimated?" — valores típicos de compressores parafuso lubrificados; substitua pelos dados da placa para maior precisão":""}.</span><span>Tarifa: TE + TUSD de energia do subgrupo A4; demanda, tributos e bandeiras não incluídos. Pressão: cerca de 1% de energia a cada 0,14 bar (DOE). Meta de vazamento: {LEAK_TARGET_PERCENT}% (o DOE considera bem mantido abaixo de 10%).</span><span>As economias se sobrepõem em parte (corrigir vazamentos muda o tempo em alívio): o total é uma referência para priorizar e requer validação em campo.</span></div>
           <SourceLinks links={[TECH_SOURCES.cagiVerify,TECH_SOURCES.doe,TECH_SOURCES.copel,TECH_SOURCES.aneel,TECH_SOURCES.iso8573,TECH_SOURCES.irOptimization]}/>
         </div>}
@@ -275,27 +277,30 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
       </div>
 
       <div className="v2-dx-print-detail">
-        <section><h4>Visão geral · {industry.label}</h4>{overviewCharts}</section>
-        <section><h4>01 · Vazão, demanda e vazamentos</h4>
-          <DataTable rows={[["Demanda total da planta",number(demandCfm,0)+" cfm"],["Vazamento estimado",number(result.leakPercent,0)+"% · "+number(result.leakCfm,1)+" cfm"],["Capacidade de referência",number(model.flowCfm,0)+" cfm"],["Reserva nominal",number(result.reserveCfm,0)+" cfm ("+number(result.reservePercent,1)+"%)"],["Horas pressurizadas no ano",number(hours,0)+" h"],["Custo anual dos vazamentos",money(result.leakCost)]]}/>
+        <header className="pl-print-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><div><b>Pré-laudo TecAr 360</b><span>{industry.label} · gerado em tecarcompressores.com.br</span></div><img className="pl-print-mark" src="/assets/tecar/logo-ta-v1.svg" alt=""/></header>
+        <section><h4>Visão geral</h4>{overviewCharts}</section>
+        <section><h4>1 · Vazão e vazamentos</h4>
+          <SimpleBars title="Ar disponível × ar usado" subtitle="cfm" rows={[{label:"Capacidade do compressor",value:model.flowCfm,display:number(model.flowCfm,0)+" cfm"},{label:"Demanda da planta",value:demandCfm,display:number(demandCfm,0)+" cfm",accent:demandCfm>model.flowCfm},{label:"Perdido em vazamentos",value:result.leakCfm,display:number(result.leakCfm,1)+" cfm",accent:true}]}/>
+          <DataTable rows={[["Reserva de capacidade",number(result.reservePercent,0)+"%"],["Custo anual dos vazamentos",money(result.leakCost)]]}/>
           <Opportunities items={opportunities} report="flow"/>
         </section>
-        <section><h4>02 · Uso e custo de energia</h4>
-          <DataTable rows={[["Compressor",model.label],["Potência em carga / em alívio",number(model.packageKw,1)+" kW / "+number(model.noLoadKw,1)+" kW"],["Tempo em carga / em alívio",number(loadPercent,0)+"% / "+number(100-loadPercent,0)+"%"],["Tarifa aplicada",tariff.label+" · R$ "+number(tariff.value,5)+"/kWh"],["Potência média",number(result.averageKw,2)+" kW"],["Energia anual",number(result.annualKwh,0)+" kWh"],["Custo anual",money(result.annualCost)],["Gasto em alívio",money(result.unloadCost)+"/ano"]]}/>
+        <section><h4>2 · Energia</h4>
+          {energyBars}
+          <DataTable rows={[["Compressor",model.label],["Tempo em carga / em alívio",number(loadPercent,0)+"% / "+number(100-loadPercent,0)+"%"],["Energia anual",number(result.annualKwh,0)+" kWh"],["Tarifa",tariff.label]]}/>
           <Opportunities items={opportunities} report="energy"/>
         </section>
-        <section><h4>03 · Pressão, queda e oportunidade</h4>
-          <DataTable rows={[["Saída do reservatório",number(supplyBar,1)+" bar"],["Ponto crítico de uso",number(pointBar,1)+" bar"],["Setpoint alvo",number(targetBar,1)+" bar"],["Queda na rede",number(result.pressureDrop,2)+" bar ("+number(result.pressureDropPercent,1)+"%)"],["Economia possível",money(result.pressureSaving)+"/ano"]]}/>
+        <section><h4>3 · Pressão</h4>
+          <SimpleBars title="Pressão na rede" subtitle="bar" rows={[{label:"Saída do reservatório",value:supplyBar,display:number(supplyBar,1)+" bar",accent:supplyBar>targetBar},{label:"Ponto crítico de uso",value:pointBar,display:number(pointBar,1)+" bar"},{label:"Necessário (alvo)",value:targetBar,display:number(targetBar,1)+" bar"}]}/>
+          <DataTable rows={[["Queda na rede",number(result.pressureDropPercent,1)+"%"],["Economia possível no setpoint",money(result.pressureSaving)+"/ano"]]}/>
           <Opportunities items={opportunities} report="pressure"/>
         </section>
-        <section><h4>04 · Qualidade do ar e ponto de orvalho</h4>
-          <DataTable rows={[["PDP medido / requerido",number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C"],["Água",result.pdpGap>0?"Investigar":"Dentro do informado"],["Óleo e partículas","Exigem medição"],["Medições recomendadas",industry.measurements.join(" · ")]]}/>
+        <section><h4>4 · Qualidade do ar</h4>
+          <DataTable rows={[["Ponto de orvalho medido / requerido",number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C"],["Água",result.pdpGap>0?"Investigar":"Dentro do informado"],["Óleo e partículas","Exigem medição"],["Medições recomendadas",industry.measurements.join(" · ")]]}/>
           <Opportunities items={opportunities} report="quality"/>
         </section>
-        <section><h4>05 · Oportunidades de economia</h4>{savingsTotal}{alertList}<p className="v2-dx-print-cta">Consulte o atendimento técnico da TecAr: (41) 99644-1330 · tecarcompressores.com.br</p></section>
-        <section><h4>06 · Memória de cálculo</h4>{calcSections.filter(section=>section.lines.length).map(section=><div key={section.title} className="pl-calc"><h5>{section.title}</h5><CalcMemory lines={section.lines}/></div>)}</section>
-        <div className="v2-dx-priority-list"><b>Próximas verificações sugeridas</b><span>1. Revisar os dados com um técnico da TecAr antes de decidir.</span><span>2. Medir pressão, vazão e potência num ciclo produtivo representativo.</span><span>3. Confirmar vazamentos com teste de ciclo, queda de pressão ou ultrassom.</span><span>4. Validar a qualidade do ar no ponto de uso.</span></div>
-        <div className="v2-dx-report-evidence"><b>Base e limites deste pré-laudo</b><span>Compressor: {model.basis}. Referências: CAGI, DOE Sourcebook, Copel/ANEEL, ISO 8573-1, BEN 2026.</span><span>Valores informados pelo usuário; as economias são indicativas, se sobrepõem em parte e requerem validação em campo. Documento preliminar, sem valor de certificação.</span></div>
+        <section><h4>5 · Oportunidades de economia</h4>{savingsTotal}<OpportunityBars items={opportunities}/><p className="v2-dx-print-cta">Fale com o atendimento técnico da TecAr: (41) 99644-1330 · tecarcompressores.com.br</p></section>
+        <section className="pl-print-calc"><h4>6 · Entenda os resultados</h4><ExplainedTopics topics={topics} compact/></section>
+        <p className="pl-print-foot">Pré-laudo preliminar, sem valor de certificação. Valores informados pelo usuário e referências públicas (CAGI, DOE, Copel/ANEEL, ISO 8573-1, BEN 2026); as economias se sobrepõem em parte e precisam de validação em campo pela TecAr.</p>
       </div>
     </section>
   </div>

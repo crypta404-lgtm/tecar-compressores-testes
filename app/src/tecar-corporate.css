@@ -927,3 +927,38 @@ html.tc-splash-off .tc-splash { display: none; }
 .v2-dx-observe li strong { display: block; font: 600 .86rem/1.3 var(--tc-font); color: #fff; }
 .v2-dx-observe li small { display: block; font-size: .74rem; line-height: 1.4; color: #b9bec2; }
 @media (max-width: 900px) { .v2-dx-studio-head.has-aside { grid-template-columns: 1fr; } }
+
+/* ============================================================ PRÉ-LAUDO: SIMPLE BARS, EXPLANATIONS, PDF BRAND */
+.pl-bars-simple .pl-bar-row i { background: #8c979d; }
+.pl-bars-simple .pl-bar-row[data-accent="true"] i { background: var(--pl-unload); }
+
+.pl-explain { display: grid; gap: 14px; }
+.pl-explain article { padding: 18px 20px; background: #fff; border: 1px solid var(--pl-rule); }
+.pl-explain article > h4 { margin: 0 0 10px; font: 700 1rem var(--tc-font); color: var(--pl-ink); }
+.pl-why { margin-bottom: 12px; }
+.pl-why > b { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font: 700 .72rem/1.3 var(--tc-font); letter-spacing: .06em; text-transform: uppercase; color: var(--pl-muted); }
+.tc-editorial .pl-why p { margin: 0 0 6px; max-width: 75ch; font-size: .86rem; line-height: 1.6; color: var(--pl-ink); }
+.pl-why-alert { padding: 12px 14px; background: #fff7d6; border-left: 4px solid #f2b705; }
+.pl-why-alert > b { text-transform: none; letter-spacing: 0; font-size: .85rem; color: var(--pl-ink); }
+.pl-why-alert .v2-dx-warn-icon { width: 20px; height: 20px; }
+.pl-why-alert .v2-dx-formula { margin-top: 8px; }
+
+.pl-print-brand { display: none; }
+@media print {
+  .pl-print-brand { display: flex; align-items: center; gap: 14px; padding-bottom: 12px; border-bottom: 2px solid #222; }
+  .pl-print-brand > img:first-child { width: 96px; height: auto; }
+  .pl-print-brand div { display: grid; gap: 2px; flex: 1; }
+  .pl-print-brand b { font: 700 15pt var(--tc-font); color: #222; }
+  .pl-print-brand span { font-size: 8.5pt; color: #555; }
+  .pl-print-mark { width: 40px; height: auto; }
+  /* the new TA mark signs the main cards of the PDF */
+  .v2-dx-print-detail :is(.pl-chart, .pl-tiles > div, .v2-dx-total) { position: relative; }
+  .v2-dx-print-detail :is(.pl-chart, .pl-tiles > div, .v2-dx-total)::after { content: ""; position: absolute; top: 8px; right: 10px; width: 20px; height: 14px; background: url("/assets/tecar/logo-ta-v1.svg") no-repeat center / contain; opacity: .7; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .v2-dx-print-detail .pl-tiles > div::after { top: auto; bottom: 8px; }
+  .v2-dx-print-detail .pl-chart figcaption, .v2-dx-print-detail .v2-dx-total > div { padding-right: 34px; }
+  .v2-dx-print-detail .pl-explain.is-compact article { padding: 10px 12px; break-inside: avoid; }
+  .v2-dx-print-detail .tc-editorial .pl-why p, .v2-dx-print-detail .pl-why p { font-size: 8.5pt; line-height: 1.45; }
+  .pl-print-foot { margin: 6px 0 0; font-size: 8pt; color: #666; }
+  /* the on-screen summary block repeats the header numbers: hide it in print, the PDF has its own brand header */
+  .v2-dx-prelaudo-head, .pl-summary, .v2-dx-prelaudo-actions { display: none !important; }
+}
