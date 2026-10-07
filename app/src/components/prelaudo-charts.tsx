@@ -94,3 +94,17 @@ export function StatTiles({ tiles }: { tiles: Array<{ label: string; value: stri
 export function DataTable({ rows }: { rows: Array<[string, string]> }) {
   return <table className="pl-table"><tbody>{rows.map(([label, value]) => <tr key={label}><th>{label}</th><td>{value}</td></tr>)}</tbody></table>;
 }
+
+/** Simple horizontal bars from a zero baseline. One accent (brand red) for the row the story is about, gray for context. */
+export function SimpleBars({ title, subtitle, rows }: { title: string; subtitle?: string; rows: Array<{ label: string; value: number; display: string; accent?: boolean }> }) {
+  const max = Math.max(...rows.map((row) => row.value), 0.0001);
+  return <figure className="pl-chart">
+    <figcaption><b>{title}</b>{subtitle && <span>{subtitle}</span>}</figcaption>
+    <div className="pl-bars pl-bars-simple">
+      {rows.map((row) => <div key={row.label} className="pl-bar-row" data-accent={row.accent ? "true" : "false"} title={`${row.label}: ${row.display}`}>
+        <span>{row.label}</span>
+        <div><i style={{ width: `${Math.max(2, (Math.max(0, row.value) / max) * 100)}%` }} /><b>{row.display}</b></div>
+      </div>)}
+    </div>
+  </figure>;
+}
