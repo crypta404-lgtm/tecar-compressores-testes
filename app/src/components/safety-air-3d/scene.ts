@@ -34,13 +34,21 @@ type Tween = { from: number; to: number; t: number; dur: number; apply: (v: numb
 const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
 export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: boolean; onFirstFrame?: () => void }): SafetyAirScene {
-  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // Performance budget: MSAA only on 1x screens (on retina the extra pixels already smooth edges),
+  // pixel ratio capped, and the default GPU (no forced switch to the discrete GPU on laptops).
+  const dpr = window.devicePixelRatio || 1;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const maxRatio = Math.min(dpr, coarse ? 1.25 : 1.5);
+  const renderer = new THREE.WebGLRenderer({ antialias: dpr < 1.5, powerPreference: "default" });
+  renderer.setPixelRatio(maxRatio);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
+  // the scene is static: shadows are drawn once and again only while the roof or doors move
+  renderer.shadowMap.autoUpdate = false;
+  renderer.shadowMap.needsUpdate = true;
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";
@@ -68,7 +76,7 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   controls.minDistance = 3.2;
   controls.maxDistance = 17;
   controls.maxPolarAngle = Math.PI * 0.47;
-  controls.autoRotate = !opts.reducedMotion;
+  controls.autoRotate = false;
   controls.autoRotateSpeed = 0.55;
   controls.update();
 
@@ -77,10 +85,10 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const sun = new THREE.DirectionalLight("#fff4e2", 2.4);
   sun.position.set(-5.5, 10, 6.5);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(coarse ? 1024 : 1536, coarse ? 1024 : 1536);
   sun.shadow.camera.left = -7; sun.shadow.camera.right = 7; sun.shadow.camera.top = 7; sun.shadow.camera.bottom = -7;
   sun.shadow.camera.near = 1; sun.shadow.camera.far = 30;
-  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 4;
+  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
   scene.add(sun);
 
   const disposables: Array<{ dispose: () => void }> = [envTex, pmrem];
@@ -260,24 +268,40 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
 
   // ---- loop
   const tweens: Tween[] = [];
-  let raf = 0, visible = true, last = performance.now(), first = true;
+  let raf = 0, visible = true, last = performance.now(), first = true, ready = false;
+  // adaptive quality: if the device cannot hold ~40 fps while moving, drop resolution, then shadows
+  let slowFrames = 0, quality = 2;
+  const degrade = () => {
+    if (quality === 2) { renderer.setPixelRatio(1); quality = 1; }
+    else if (quality === 1) { renderer.shadowMap.enabled = false; scene.traverse((o) => { if ((o as THREE.Mesh).material) ((o as THREE.Mesh).material as THREE.Material).needsUpdate = true; }); quality = 0; }
+    slowFrames = 0;
+  };
   const animate = (from: number, to: number, dur: number, apply: (v: number) => void, done?: () => void) => {
-    if (opts.reducedMotion || dur === 0) { apply(to); done?.(); kick(); return; }
+    if (opts.reducedMotion || dur === 0) { apply(to); done?.(); renderer.shadowMap.needsUpdate = true; kick(); return; }
     tweens.push({ from, to, t: 0, dur, apply, done }); kick();
   };
   const tick = (now: number) => {
     raf = 0;
-    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const gap = now - last;
+    const dt = Math.min(0.05, gap / 1000); last = now;
     for (let i = tweens.length - 1; i >= 0; i--) {
       const tw = tweens[i]; tw.t = Math.min(1, tw.t + dt / tw.dur); tw.apply(tw.from + (tw.to - tw.from) * ease(tw.t));
       if (tw.t >= 1) { tweens.splice(i, 1); tw.done?.(); }
     }
     const moving = controls.update(dt);
+    if (tweens.length) renderer.shadowMap.needsUpdate = true;
+    const t0 = performance.now();
     renderer.render(scene, camera);
+    if (!first && (moving || tweens.length) && quality > 0) {
+      slowFrames = (gap > 25 || performance.now() - t0 > 18) ? slowFrames + 1 : Math.max(0, slowFrames - 1);
+      if (slowFrames > 20) degrade();
+    }
     if (first) { first = false; opts.onFirstFrame?.(); }
-    if (visible && (moving || tweens.length || controls.autoRotate)) raf = requestAnimationFrame(tick);
+    if (visible && (moving || tweens.length)) raf = requestAnimationFrame(tick);
   };
-  const kick = () => { if (!raf && visible) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+  const kick = () => { if (ready && !raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+  const onVisibility = () => { if (!document.hidden) kick(); };
+  document.addEventListener("visibilitychange", onVisibility);
   controls.addEventListener("change", kick);
   controls.addEventListener("start", () => { controls.autoRotate = false; });
 
@@ -309,7 +333,10 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
     });
   };
   roofLift(0); doorAngle(0);
-  kick();
+  const go = () => { ready = true; renderer.shadowMap.needsUpdate = true; kick(); };
+  // compile shaders in parallel when the GPU driver allows it; otherwise compile once up front
+  if (renderer.extensions.has("KHR_parallel_shader_compile")) renderer.compileAsync(scene, camera).catch(() => undefined).then(go);
+  else { renderer.compile(scene, camera); go(); }
 
   const api: SafetyAirScene = {
     setRoof(removed) { if (removed === roofOff) return; roofOff = removed; animate(removed ? 0 : 1, removed ? 1 : 0, 1.1, roofLift); if (!inside) fly(removed ? TOP : HOME, 1.4); },
@@ -327,7 +354,7 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
     },
     reset() { api.setInside(false); api.setRoof(false); api.setDoors(false); fly(HOME, 1.2); },
     dispose() {
-      cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); controls.dispose();
+      cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); controls.dispose(); document.removeEventListener("visibilitychange", onVisibility);
       scene.traverse((o) => { if (o instanceof THREE.InstancedMesh) o.dispose(); });
       disposables.forEach((d) => d.dispose());
       renderer.dispose(); renderer.domElement.remove();

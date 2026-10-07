@@ -16,7 +16,7 @@ const tex = (c: HTMLCanvasElement, color: boolean, repeat: [number, number] = [1
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(repeat[0], repeat[1]);
-  t.anisotropy = 8;
+  t.anisotropy = 4;
   if (color) t.colorSpace = THREE.SRGBColorSpace;
   return t;
 };
