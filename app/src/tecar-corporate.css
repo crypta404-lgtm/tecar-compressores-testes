@@ -241,21 +241,21 @@
 .tc-editorial .cx-slide-word {
   position: absolute;
   left: max(var(--cx-gutter), calc((100% - 1440px) / 2));
-  /* extra padding keeps tilde and cedilla inside the clip; top compensates so the word does not move */
-  top: calc(clamp(4px, 1.2vw, 20px) - .12em);
+  /* No clipping box: letters fade and slide in, so tilde and cedilla can never be cut, whatever the font or engine. */
+  top: clamp(4px, 1.2vw, 20px);
   margin: 0;
   display: flex;
-  overflow: hidden;
-  padding: .26em 0 .32em;
+  overflow: visible;
+  padding: .14em 0 .1em;
   font: 600 clamp(52px, 9.6vw, 184px)/.86 var(--tc-font);
   letter-spacing: -.06em;
   color: var(--cx-white);
   white-space: nowrap;
   user-select: none;
 }
-.cx-slide-word span { display: inline-block; transform: translateY(-160%); transition: transform .6s var(--cx-ease-in-out); transition-delay: calc(var(--i) * 22ms); }
-.cx-slide[data-active="true"] .cx-slide-word span { transform: none; animation: cx-letter-in .95s var(--cx-ease) both; animation-delay: calc(240ms + var(--i) * 38ms); }
-@keyframes cx-letter-in { from { transform: translateY(160%); } to { transform: none; } }
+.cx-slide-word span { display: inline-block; opacity: 0; transform: translateY(-.35em); transition: opacity .4s ease, transform .5s var(--cx-ease-in-out); transition-delay: calc(var(--i) * 18ms); }
+.cx-slide[data-active="true"] .cx-slide-word span { opacity: 1; transform: none; animation: cx-letter-in .95s var(--cx-ease) both; animation-delay: calc(240ms + var(--i) * 38ms); }
+@keyframes cx-letter-in { from { opacity: 0; transform: translateY(.45em); } to { transform: none; } }
 
 .cx-slide-machine {
   position: absolute;
