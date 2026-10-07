@@ -45,7 +45,6 @@ function buildHead(meta: AppMeta) {
       { rel: "stylesheet", href: siteV2Css },
       { rel: "stylesheet", href: editorialCss },
       { rel: "stylesheet", href: corporateCss },
-      { rel: "preload", as: "image", href: "/assets/tecar/logo-splash.webp", type: "image/webp" },
       { rel: "icon", href: "/favicon-32.png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },

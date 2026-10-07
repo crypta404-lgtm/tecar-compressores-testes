@@ -15,10 +15,10 @@ export const Route=createFileRoute("/diagnostico")({
 });
 
 const fronts=[
-  ["Condição do equipamento","Temperatura, alarmes, comportamento, falhas recorrentes, manutenção e sinais observados."],
-  ["Eficiência do sistema","Consumo energético, regime de carga, vazamentos, pressão e possíveis perdas no sistema."],
-  ["Qualidade do ar","Umidade, ponto de orvalho, tratamento, secagem, filtragem e condensado."],
-  ["Risco operacional","Criticidade do compressor, impacto de parada, contingência, redundância e urgência do atendimento."]
+  ["Condição do equipamento","Temperatura, alarmes e falhas recorrentes"],
+  ["Eficiência do sistema","Energia, carga, vazamentos e pressão"],
+  ["Qualidade do ar","Umidade, secagem, filtragem e condensado"],
+  ["Risco operacional","Criticidade, contingência e urgência"]
 ];
 
 function Page(){
@@ -29,36 +29,29 @@ function Page(){
       <div className="v2-container">
         <a href="#estudio-diagnostico">Pré-laudo 360</a>
         <a href="#ensaios-tecnicos">Calculadoras técnicas</a>
-        <a href="#observamos">O que observamos</a>
         <a href="#fontes-tecnicas">Fontes</a>
       </div>
     </nav>
 
     <section id="estudio-diagnostico" className="v2-section v2-soft v2-dx-work-section">
       <div className="v2-container">
-        <DiagnosticReportStudio/>
-      </div>
-    </section>
-
-    <section id="observamos" className="v2-section v2-dx-observe-section">
-      <div className="v2-container">
-        <div className="v2-dx-chapter"><span>01 / LEITURA DO SISTEMA</span><div><h2>O que observamos</h2><p>O pré-laudo organiza números. A avaliação técnica cruza os sinais da máquina com o que acontece na produção.</p></div></div>
-        <div className="v2-diagnostic-fronts">
-          {fronts.map(([title,text],index)=><article key={title}><strong>0{index+1}</strong><h3>{title}</h3><p>{text}</p></article>)}
-        </div>
+        <DiagnosticReportStudio aside={<aside className="v2-dx-observe" aria-labelledby="observamos-title">
+          <span id="observamos-title">O que observamos</span>
+          <ol>{fronts.map(([title,text],index)=><li key={title}><b>0{index+1}</b><div><strong>{title}</strong><small>{text}</small></div></li>)}</ol>
+        </aside>}/>
       </div>
     </section>
 
     <section id="ensaios-tecnicos" className="v2-section v2-dx-reference-section">
       <div className="v2-container">
-        <div className="v2-dx-chapter"><span>02 / BASE DE COMPARAÇÃO</span><div><h2>Memória de cálculo</h2><p>Explore os modelos verificados e compare potência mecânica com dados elétricos publicados.</p></div></div>
+        <div className="v2-dx-chapter"><span>01 / BASE DE COMPARAÇÃO</span><div><h2>Memória de cálculo</h2><p>Explore os modelos verificados e compare potência mecânica com dados elétricos publicados.</p></div></div>
         <DiagnosticToolsGrid/>
       </div>
     </section>
 
     <section id="fontes-tecnicas" className="v2-section v2-dx-sources-section">
       <div className="v2-container">
-        <div className="v2-dx-chapter"><span>03 / RASTREABILIDADE</span><div><h2>A resposta indica a rota. A avaliação técnica confirma a causa.</h2><p>Dados publicados, informações do cliente e medições de campo precisam ficar separados. Consulte cada fonte do pré-laudo.</p></div></div>
+        <div className="v2-dx-chapter"><span>02 / RASTREABILIDADE</span><div><h2>A resposta indica a rota. A avaliação técnica confirma a causa.</h2><p>Dados publicados, informações do cliente e medições de campo precisam ficar separados. Consulte cada fonte do pré-laudo.</p></div></div>
         <DiagnosticSourceLibrary/>
       </div>
     </section>
