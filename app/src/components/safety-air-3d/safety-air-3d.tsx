@@ -15,7 +15,13 @@ import type { SafetyAirScene } from "./scene";
 
 const loadScene = () => import("./scene");
 let preload: ReturnType<typeof loadScene> | null = null;
-export function preloadSafetyAir3D() { if (typeof window !== "undefined") preload ??= loadScene(); return preload; }
+const idle = (fn: () => void) => { if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 400); };
+/** Download (not run) the 3D chunk once the browser is idle, so it never competes with the page itself. */
+export function preloadSafetyAir3D() {
+  if (typeof window === "undefined") return null;
+  if (!preload) idle(() => { preload ??= loadScene(); });
+  return preload;
+}
 
 function webglAvailable() {
   try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; }
@@ -34,13 +40,21 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
     if (!webglAvailable()) { setState("fallback"); return; }
     let cancelled = false;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    (preloadSafetyAir3D() ?? loadScene()).then(({ createSafetyAirScene }) => {
-      if (cancelled || !host.current) return;
-      try {
-        api.current = createSafetyAirScene(host.current, { reducedMotion, onFirstFrame: () => setState("ready") });
-      } catch { setState("fallback"); }
-    }).catch(() => setState("fallback"));
-    return () => { cancelled = true; api.current?.dispose(); api.current = null; };
+    // Build the scene only when the viewer is about to be seen, and in an idle slot,
+    // so opening the page never freezes on WebGL setup.
+    const start = () => {
+      (preload ??= loadScene()).then(({ createSafetyAirScene }) => {
+        if (cancelled || !host.current) return;
+        idle(() => {
+          if (cancelled || !host.current) return;
+          try { api.current = createSafetyAirScene(host.current, { reducedMotion, onFirstFrame: () => setState("ready") }); }
+          catch { setState("fallback"); }
+        });
+      }).catch(() => setState("fallback"));
+    };
+    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { io.disconnect(); start(); } }, { rootMargin: "300px 0px" });
+    io.observe(host.current);
+    return () => { cancelled = true; io.disconnect(); api.current?.dispose(); api.current = null; };
   }, []);
 
   const toggleRoof = () => { const v = !roofOff; setRoofOff(v); api.current?.setRoof(v); };
