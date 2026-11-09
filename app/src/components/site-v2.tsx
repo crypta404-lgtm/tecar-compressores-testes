@@ -85,7 +85,6 @@ export function SiteHeader() {
 
 export function SiteFooter(){
   return <footer className="v2-footer">
-    <div className="v2-container tc-footer-top"><span>Engenharia em ar comprimido.</span><Link to="/empresa">Desde 1999 <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
     <div className="v2-container v2-footer-grid">
       <div className="v2-footer-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><p>Ar comprimido industrial: equipamentos, assistência, engenharia e locação.</p></div>
       <div><h4>Curitiba</h4><p>R. das Carmelitas, 1935<br/>Boqueirão, Curitiba PR</p><a href="tel:+554133769966">(41) 3376-9966</a><a href="mailto:tecarindustrial@tecarcompressores.com.br">tecarindustrial@tecarcompressores.com.br</a></div>

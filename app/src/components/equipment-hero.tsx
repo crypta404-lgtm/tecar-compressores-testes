@@ -109,12 +109,6 @@ export function EquipmentHero() {
       <path d="M-40 640 C 340 610, 600 720, 880 660 S 1260 560, 1500 610" />
     </svg>
 
-    <div className="v2-container cx-hero-meta">
-      <span>TecAr Compressores</span>
-      <span>Assistência e revenda autorizada Ingersoll Rand</span>
-      <span>Curitiba · Paranaguá · Desde 1999</span>
-    </div>
-
     <div className="cx-hero-stage">
       {slides.map((slide, index) => <div
         key={slide.id}
