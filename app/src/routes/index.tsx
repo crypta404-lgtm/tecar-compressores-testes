@@ -9,7 +9,7 @@ import { DiagnosticQuestionnaire } from "@/components/diagnostic-questionnaire";
 import { pageMeta } from "@/lib/page-meta";
 
 export const Route = createFileRoute("/")({
-  head: () => pageMeta("/", "TecAr Compressores | Engenharia para a sua operação", "Compressores, manutenção, locação, engenharia e monitoramento para indústrias em Curitiba e Paranaguá.", "/assets/corporate/og-tecar.jpg"),
+  head: () => pageMeta("/", "TecAr Compressores | Engenharia para a sua operação", "Compressores, manutenção, locação, engenharia e monitoramento para indústrias em todo o Paraná.", "/assets/corporate/og-tecar.jpg"),
   component: Home,
 });
 
@@ -49,7 +49,7 @@ function Home() {
       <div className="v2-container cx-facts-grid">
         <div><strong><CountUp value={yearsActive} /> anos</strong><span>Ao lado da indústria, desde 1999</span></div>
         <div><strong><CountUp value={500} suffix="+" /></strong><span>Clientes atendidos</span></div>
-        <div><strong><CountUp value={2} /> unidades</strong><span>Curitiba e Paranaguá</span></div>
+        <div><strong>Paraná</strong><span>Atendimento em todo o estado</span></div>
         <div><strong>Ingersoll Rand</strong><span>Assistência e revenda autorizada</span></div>
       </div>
     </section>
@@ -81,7 +81,7 @@ function Home() {
         <div className="cx-company-card">
           <h2 id="company-title">Engenharia que acompanha a sua operação.</h2>
           <p>O ar comprimido faz parte do que move a sua empresa. A TecAr reúne equipamentos, assistência e engenharia para cuidar desse sistema por inteiro.</p>
-          <p>Desde 1999, com presença em Curitiba e Paranaguá e uma relação próxima com quem está à frente da operação.</p>
+          <p>Desde 1999, atendendo indústrias em todo o Paraná, com uma relação próxima com quem está à frente da operação.</p>
           <Link to="/empresa" className="tc-text-link">Conheça a TecAr <ArrowUpRight aria-hidden="true" /></Link>
         </div>
         <ServiceShowcase />

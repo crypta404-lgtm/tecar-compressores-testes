@@ -17,7 +17,7 @@ export const scrollScrubScenes: ScrollScrubScene[] = [
     mobileClip: "/assets/world/scene-01-mobile.mp4",
     mobilePoster: "/assets/world/scene-01-mobile-poster.png",
     poster: "/assets/world/scene-01-poster.png",
-    tags: ["Curitiba", "Paranaguá", "Desde 1999"],
+    tags: ["Paraná", "Desde 1999"],
     title: "Ar comprimido sob controle.",
   },
 ];

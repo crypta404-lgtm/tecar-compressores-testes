@@ -8,7 +8,6 @@ import corporateCss from "../tecar-corporate.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import appMetaJson from "../app-meta.json";
 import { scrollScrubTheme } from "../scroll-scrub-scenes";
-import { Splash, splashSessionScript } from "../components/splash";
 
 declare const __HF_DESIGN_INSPECTOR__: boolean;
 type AppMeta = { og_title?: string|null; og_description?: string|null; og_image_url?: string|null; favicon_url?: string|null; og_video_url?: string|null; marketplace_cover_url?: string|null };
@@ -72,7 +71,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  return <html lang="pt-BR" style={{ colorScheme: "light" }} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: splashSessionScript }} /><HeadContent /></head><body className="tecarBody"><Splash />{children}<Scripts /></body></html>;
+  return <html lang="pt-BR" style={{ colorScheme: "light" }} suppressHydrationWarning><head><HeadContent /></head><body className="tecarBody">{children}<Scripts /></body></html>;
 }
 
 function RootComponent() {
