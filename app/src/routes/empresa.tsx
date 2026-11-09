@@ -8,7 +8,7 @@ export const Route=createFileRoute("/empresa")({head:()=>pageMeta("/empresa","Em
 const VALUES=["Ética","Segurança","Qualidade técnica","Responsabilidade","Melhoria contínua","Compromisso com o cliente"];
 
 const STORIES=[
- {icon:Gift,title:"Um Natal mais próximo",text:"Entregamos presentes de Natal para crianças de comunidades ribeirinhas de Paranaguá. É uma oportunidade de compartilhar alegria e fortalecer os vínculos com as famílias da região."},
+ {icon:Gift,title:"Um Natal mais próximo",text:"Entregamos presentes de Natal para crianças de comunidades ribeirinhas do Paraná. É uma oportunidade de compartilhar alegria e fortalecer os vínculos com as famílias da região."},
  {icon:HandHeart,title:"Cuidado em todas as idades",text:"Apoiamos lares de idosos e participamos de iniciativas de acolhimento e convivência. Doações, visitas e atenção fazem parte desse compromisso com as pessoas."},
  {icon:Users,title:"Uma equipe que participa",text:"Ações de Páscoa, campanhas como o Agosto Lilás e outras iniciativas mobilizam nossa equipe em torno da solidariedade e do cuidado com a comunidade."},
 ];
@@ -24,13 +24,12 @@ const PILLARS=[
  {icon:History,title:"Experiência",text:"Atuação contínua no mercado industrial desde 1999."},
  {icon:BadgeCheck,title:"Autorização",text:"Assistência técnica e revenda autorizada Ingersoll Rand."},
  {icon:GraduationCap,title:"Capacitação",text:"Técnicos certificados e atualizações recorrentes de diagnóstico e tecnologia."},
- {icon:MapPin,title:"Presença",text:"Estrutura em Curitiba e Paranaguá para aproximar o suporte do cliente."},
+ {icon:MapPin,title:"Presença",text:"Sede em Curitiba e atendimento em todo o Paraná, perto de quem está na operação."},
  {icon:Award,title:"Pós-vendas",text:"Histórico de reconhecimento da operação de pós-vendas da TecAr."},
 ];
 
 const UNITS=[
  {city:"Curitiba",address:"R. das Carmelitas, 1935, Boqueirão, Curitiba PR",phone:"(41) 3376-9966",tel:"+554133769966",mail:"tecarindustrial@tecarcompressores.com.br"},
- {city:"Paranaguá",address:"R. Prof. Décio, 197, Rocio, Paranaguá PR",phone:"(41) 3422-7855",tel:"+554134227855",mail:"tecarportuaria@tecarcompressores.com.br"},
 ];
 
 function Page(){return <PageFrame>
@@ -38,7 +37,7 @@ function Page(){return <PageFrame>
 
 <section className="ab-section ab-intro"><div className="v2-container">
  <div className="ab-intro-copy"><h2>Compressores e competência.</h2><p>A empresa é assistência técnica e revendedora autorizada Ingersoll Rand desde 1999. A equipe técnica recebe capacitação e atualização para acompanhar equipamentos, ferramentas de diagnóstico e novas tecnologias.</p></div>
- <dl className="ab-stats"><div><dt>início da atuação</dt><dd>1999</dd></div><div><dt>clientes atendidos</dt><dd>500<span>+</span></dd></div><div><dt>unidades operacionais</dt><dd>2</dd></div></dl>
+ <dl className="ab-stats"><div><dt>início da atuação</dt><dd>1999</dd></div><div><dt>clientes atendidos</dt><dd>500<span>+</span></dd></div><div><dt>atendimento em todo o</dt><dd>PR</dd></div></dl>
 </div></section>
 
 <section className="ab-section ab-purpose"><div className="v2-container">
@@ -76,7 +75,7 @@ function Page(){return <PageFrame>
 </div></section>
 
 <section className="ab-section ab-units"><div className="v2-container">
- <h2>Duas unidades, uma operação integrada.</h2>
+ <h2>Sede em Curitiba, atendimento em todo o Paraná.</h2>
  <div className="ab-unit-grid">{UNITS.map((u)=><article key={u.city}><h3>{u.city}</h3><p><MapPin aria-hidden="true" size={18}/>{u.address}</p><a href={`tel:${u.tel}`}><Phone aria-hidden="true" size={18}/>{u.phone}</a><a href={`mailto:${u.mail}`}><Mail aria-hidden="true" size={18}/>{u.mail}</a></article>)}</div>
 </div></section>
 <ContactBand/></PageFrame>}

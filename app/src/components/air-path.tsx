@@ -118,7 +118,6 @@ export function AirPath() {
 
   return <section className="ap" aria-labelledby="ap-title" data-step={active}>
     <div className="v2-container ap-head">
-      <span className="tc-eyebrow">O caminho do ar</span>
       <h2 id="ap-title">Do ar atmosférico ao ponto de uso, um sistema inteiro sob a mesma responsabilidade.</h2>
     </div>
 

@@ -57,7 +57,6 @@ export function SiteHeader() {
 
   return <header className="tc-header" ref={headerRef}>
     <a href="#main-content" className="tc-skip-link">Ir para o conteúdo</a>
-    <div className="tc-utility"><div className="v2-container"><span>Engenharia em ar comprimido. Desde 1999.</span><div><a href="tel:+554133769966">Curitiba <span>(41) 3376-9966</span></a><a href="tel:+554134227855">Paranaguá <span>(41) 3422-7855</span></a></div></div></div>
     <div className="v2-container tc-navrow">
       <Link to="/" className="tc-logo" aria-label="TecAr Compressores, início"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores" width="160" height="68" /></Link>
       <nav className="tc-nav" aria-label="Navegação principal"><Link to="/diagnostico" activeProps={{ "data-active": "true" }}>Diagnósticos</Link>
@@ -85,11 +84,9 @@ export function SiteHeader() {
 
 export function SiteFooter(){
   return <footer className="v2-footer">
-    <div className="v2-container tc-footer-top"><span>Engenharia em ar comprimido.</span><Link to="/empresa">Desde 1999 <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
     <div className="v2-container v2-footer-grid">
       <div className="v2-footer-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><p>Ar comprimido industrial: equipamentos, assistência, engenharia e locação.</p></div>
       <div><h4>Curitiba</h4><p>R. das Carmelitas, 1935<br/>Boqueirão, Curitiba PR</p><a href="tel:+554133769966">(41) 3376-9966</a><a href="mailto:tecarindustrial@tecarcompressores.com.br">tecarindustrial@tecarcompressores.com.br</a></div>
-      <div><h4>Paranaguá</h4><p>R. Prof. Décio, 197<br/>Rocio, Paranaguá PR</p><a href="tel:+554134227855">(41) 3422-7855</a><a href="mailto:tecarportuaria@tecarcompressores.com.br">tecarportuaria@tecarcompressores.com.br</a></div>
       <div className="v2-footer-quick"><h4>Acesso rápido</h4><Link to="/diagnostico">Diagnóstico</Link><Link to="/manutencao">Manutenção</Link><Link to="/locacao">Locação</Link><Link to="/engenharia">Engenharia</Link><Link to="/tecar-connect">Monitoramento</Link><Link to="/trabalhe-conosco">Trabalhe conosco</Link></div>
     </div>
 
