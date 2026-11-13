@@ -1,5 +1,4 @@
 import { useRef, type KeyboardEvent, type PointerEvent } from "react";
-import { MARK_PATHS, MARK_VIEWBOX } from "@/lib/tecar-mark";
 
 /*
  * Product "3D" stage for the product pages (compressores, secadores,
@@ -48,7 +47,6 @@ export function ProductStage3D({ image, name, facts = [] }: { image: string; nam
   return <div className="ps3d" tabIndex={0} role="img" aria-label={`${name} em 3D. Arraste ou use as setas para girar.`}
     onPointerMove={onMove} onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={onUp} onPointerLeave={onLeave} onKeyDown={onKey}>
     <div className="ps3d-rig" ref={rig}>
-      <div className="ps3d-wall" aria-hidden="true"><svg viewBox={MARK_VIEWBOX}>{MARK_PATHS.map((m) => <path key={m.d.slice(0, 24)} d={m.d} />)}</svg></div>
       <div className="ps3d-floor" aria-hidden="true"><i /><i /><i /></div>
       <div className="ps3d-shadow" aria-hidden="true" />
       <div className="ps3d-reflection" aria-hidden="true" data-remote={remote || undefined}><img src={image} alt="" draggable={false} /></div>

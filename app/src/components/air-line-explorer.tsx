@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
-import { MARK_PATHS, MARK_VIEWBOX } from "@/lib/tecar-mark";
 
 /*
  * "Explore sua rede": the photo has four hotspots. Choosing one zooms into the
@@ -158,7 +157,6 @@ export function AirLineExplorer(){
      <div className="alm-page alm-page-right">
       <header><span>Fig. {String(selected!+1).padStart(2,"0")}</span><b>{current.label}</b></header>
       <p>{current.purpose}</p>
-      <svg className="alm-mark" viewBox={MARK_VIEWBOX} aria-hidden="true">{MARK_PATHS.map((m)=><path key={m.d.slice(0,24)} data-tone={m.tone} d={m.d}/>)}</svg>
      </div>
      <div className="alm-popup" data-active={part||undefined}>
       <div className="alm-card"><div className="alm-fig"><svg viewBox="0 0 360 250" role="img" aria-label={`Desenho técnico: ${current.label}`}>{drawings[current.id]}</svg>

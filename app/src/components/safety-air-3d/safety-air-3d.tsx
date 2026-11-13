@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { DoorOpen, RotateCcw } from "lucide-react";
-import { MARK_PATHS, MARK_VIEWBOX } from "@/lib/tecar-mark";
 import type { SafetyAirScene } from "./scene";
 
 /*
@@ -62,7 +61,6 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
     <div className="sa3d-canvas" ref={host} role="img" aria-label="Modelo 3D interativo do Safety Air: cabine modular com compressor, secador e reservatório. Arraste para girar, use a roda do mouse ou o gesto de pinça para aproximar." />
     {state !== "ready" && <img className="sa3d-fallback" src={fallback} alt="Safety Air TecAr instalado em uma planta industrial" />}
     {state === "loading" && <div className="sa3d-loader" aria-live="polite">
-      <div className="sa3d-loader-mark"><svg viewBox={MARK_VIEWBOX} aria-hidden="true">{MARK_PATHS.map((m) => <path key={m.d.slice(0, 24)} data-tone={m.tone} d={m.d} />)}</svg><svg viewBox={MARK_VIEWBOX} aria-hidden="true" className="sa3d-loader-fill">{MARK_PATHS.map((m) => <path key={m.d.slice(0, 24)} data-tone={m.tone} d={m.d} />)}</svg></div>
       <span>Carregando o modelo 3D</span>
     </div>}
     {state === "ready" && <>
