@@ -59,7 +59,7 @@ function Page(){return <PageFrame>
 <section className="ab-section ab-awards" id="premios"><div className="v2-container">
  <div className="ab-awards-head"><span className="v2-kicker">RECONHECIMENTO</span><h2>Competência reconhecida. Compromisso renovado.</h2><p>Os reconhecimentos recebidos pela TecAr refletem o trabalho da equipe em vendas, capacitação e pós-venda. Para nossos clientes, representam uma trajetória de dedicação ao atendimento e à construção de soluções de valor.</p></div>
  <div className="ab-awards-grid">
-  <figure className="ab-awards-photo"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/><figcaption>Reconhecimentos Ingersoll Rand que fazem parte da história da TecAr.</figcaption></figure>
+  <figure className="ab-awards-photo"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/></figure>
   <ol className="ab-awards-list">{AWARDS.map((group)=><li key={group.year}><span className="ab-year" data-text={/^\d+$/.test(group.year)?undefined:"true"}>{group.year}</span><ul>{group.items.map((item)=><li key={item.title+(item.note??"")}><b>{item.title}</b>{item.note&&<small>{item.note}</small>}</li>)}</ul></li>)}</ol>
  </div>
 </div></section>

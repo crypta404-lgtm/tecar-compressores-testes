@@ -1616,13 +1616,20 @@ html.tc-splash-off .tc-splash { display: none; }
 
 /* ============================================================ A TECAR: INSTITUTO HEAD + AWARDS POLISH */
 .tc-editorial .ab-community-head-solo { grid-template-columns: 1fr; }
-
-/* Awards: same layout as before, a little more finish */
-.tc-editorial .ab-awards-photo { overflow: hidden; border-radius: var(--ab-radius); }
-.tc-editorial .ab-awards-photo img { transition: transform .8s var(--cx-ease); }
+/* Awards: big photo, year groups as frosted glass cards */
+.tc-editorial .ab-awards-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: clamp(24px, 3vw, 40px); align-items: stretch; }
+.tc-editorial .ab-awards-photo { overflow: hidden; border-radius: 24px; min-height: 100%; }
+.tc-editorial .ab-awards-photo img { width: 100%; height: 100%; min-height: 420px; aspect-ratio: auto; object-fit: cover; border-radius: 24px; transition: transform .8s var(--cx-ease); }
 .tc-editorial .ab-awards-photo:hover img { transform: scale(1.03); }
-.tc-editorial .ab-awards-photo figcaption { padding: 0 2px; }
-.tc-editorial .ab-awards-list .ab-year { color: var(--cx-red); }
-.tc-editorial .ab-awards-list ul > li { padding: 12px 16px; margin: 0 -16px; border-radius: 10px; transition: background .25s ease; }
-.tc-editorial .ab-awards-list ul > li:hover { background: var(--ab-warm); }
-.tc-editorial .ab-awards-list ul { gap: 2px; }
+.tc-editorial .ab-awards-list { display: grid; gap: 14px; align-content: start; }
+.tc-editorial .ab-awards-list > li, .tc-editorial .ab-awards-list > li:first-child { grid-template-columns: 1fr; gap: 10px; padding: 20px 22px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 20px; background: rgba(255, 255, 255, .62); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset, 0 12px 32px -18px rgba(14, 15, 16, .28); transition: transform .35s var(--cx-ease), box-shadow .35s ease; }
+.tc-editorial .ab-awards-list > li:hover { transform: translateY(-3px); box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset, 0 20px 40px -20px rgba(14, 15, 16, .32); }
+.tc-editorial .ab-awards-list .ab-year { font-size: 28px; }
+.tc-editorial .ab-awards-list ul { gap: 8px; }
+.tc-editorial .ab-awards-list b { font-size: 17px; }
+.tc-editorial .ab-awards { background: var(--ab-warm); }
+@media (max-width: 900px) {
+  .tc-editorial .ab-awards-grid { grid-template-columns: 1fr; }
+  .tc-editorial .ab-awards-photo img { min-height: 0; aspect-ratio: 645 / 374; }
+}
+.tc-editorial .ab-awards-list .ab-year[data-text] { font-size: 13px; }
