@@ -1614,42 +1614,15 @@ html.tc-splash-off .tc-splash { display: none; }
 .tc-editorial .cx-company .cx-services-body p { font-size: 13px; line-height: 1.45; margin: 0; }
 .cx-company-card { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
 
-/* ============================================================ A TECAR: INSTITUTO HEAD + AWARDS WALL */
+/* ============================================================ A TECAR: INSTITUTO HEAD + AWARDS POLISH */
 .tc-editorial .ab-community-head-solo { grid-template-columns: 1fr; }
 
-.tc-editorial .ab-awards-wall { background: var(--ab-warm); }
-.tc-editorial .aw-head { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, .5fr); gap: clamp(32px, 5vw, 80px); align-items: end; margin-bottom: clamp(36px, 4vw, 56px); }
-.tc-editorial .aw-head h2 { max-width: 18ch; }
-.tc-editorial .aw-head p { margin: 22px 0 0; max-width: 60ch; font-size: 17px; line-height: 1.7; color: var(--cx-steel); }
-.tc-editorial .aw-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0; }
-.tc-editorial .aw-stats dd { margin: 0; font: 500 clamp(52px, 5.5vw, 80px)/1 var(--tc-font); letter-spacing: -.04em; color: var(--cx-red); font-variant-numeric: tabular-nums; }
-.tc-editorial .aw-stats dt { margin-top: 8px; font: 600 11px/1.4 var(--tc-font); letter-spacing: .12em; text-transform: uppercase; color: var(--cx-mute); }
-
-.tc-editorial .aw-wall { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
-.tc-editorial .aw-photo { grid-column: span 2; grid-row: span 2; overflow: hidden; border-radius: var(--ab-radius); background: var(--cx-white); }
-.tc-editorial .aw-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.tc-editorial .aw-tile { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; min-height: 190px; padding: 24px; border-radius: var(--ab-radius); background: var(--cx-white); transition: transform .35s var(--cx-ease), box-shadow .35s ease; }
-.tc-editorial .aw-tile:hover { transform: translateY(-4px); box-shadow: 0 24px 40px -28px rgba(14, 15, 16, .35); }
-.tc-editorial .aw-tile-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ab-warm); color: var(--cx-red); }
-.tc-editorial .aw-tile-year { margin-top: auto; padding-top: 22px; font: 600 12px/1.4 var(--tc-font); letter-spacing: .12em; text-transform: uppercase; color: var(--cx-red); }
-.tc-editorial .aw-tile b { display: block; margin-top: 6px; font: 500 19px/1.3 var(--tc-font); color: var(--cx-ink); }
-.tc-editorial .aw-tile small { display: block; margin-top: 4px; font-size: 13px; color: var(--cx-mute); }
-.tc-editorial .aw-tile-brand { background: var(--cx-ink); }
-.tc-editorial .aw-tile-brand b { color: var(--cx-white); }
-.tc-editorial .aw-tile-brand .aw-tile-icon { background: rgba(255, 255, 255, .1); color: var(--cx-white); }
-.tc-editorial .aw-tile-brand .aw-tile-year { color: var(--cx-red-on-dark); }
-
-/* tiles rise one after another when the section enters (only once JS is running) */
-html.cx-motion .tc-editorial .ab-awards-wall .aw-tile { transition: transform .35s var(--cx-ease), box-shadow .35s ease, opacity .6s ease calc(.3s + var(--d) * .07s), translate .8s var(--cx-ease) calc(.3s + var(--d) * .07s); }
-html.cx-motion .tc-editorial .ab-awards-wall:not([data-inview]) .aw-tile { opacity: 0; translate: 0 24px; }
-
-@media (max-width: 1100px) {
-  .tc-editorial .aw-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 900px) {
-  .tc-editorial .aw-head { grid-template-columns: 1fr; }
-}
-@media (max-width: 560px) {
-  .tc-editorial .aw-tile { min-height: 0; padding: 20px; }
-  .tc-editorial .aw-tile b { font-size: 17px; }
-}
+/* Awards: same layout as before, a little more finish */
+.tc-editorial .ab-awards-photo { overflow: hidden; border-radius: var(--ab-radius); }
+.tc-editorial .ab-awards-photo img { transition: transform .8s var(--cx-ease); }
+.tc-editorial .ab-awards-photo:hover img { transform: scale(1.03); }
+.tc-editorial .ab-awards-photo figcaption { padding: 0 2px; }
+.tc-editorial .ab-awards-list .ab-year { color: var(--cx-red); }
+.tc-editorial .ab-awards-list ul > li { padding: 12px 16px; margin: 0 -16px; border-radius: 10px; transition: background .25s ease; }
+.tc-editorial .ab-awards-list ul > li:hover { background: var(--ab-warm); }
+.tc-editorial .ab-awards-list ul { gap: 2px; }

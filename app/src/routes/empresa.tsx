@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type { CSSProperties } from "react";
 import { Award, BadgeCheck, Gift, GraduationCap, HandHeart, History, Mail, MapPin, Phone, Users } from "lucide-react";
 import { PageFrame, PageHero, ContactBand, VideoEmbed } from "@/components/site-v2";
-import { CountUp } from "@/components/motion";
 import { CommunityGallery } from "@/components/community-gallery";
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/empresa")({head:()=>pageMeta("/empresa","Empresa | TecAr Compressores","Conheça a TecAr Compressores, sua trajetória desde 1999, o Instituto Luiz Gonzaga e as ações sociais realizadas pela empresa.","/assets/v2/tecar-service.png"),component:Page});
@@ -21,12 +19,6 @@ const AWARDS:Array<{year:string;items:Array<{title:string;note?:string}>}>=[
  {year:"2017",items:[{title:"Destaque de vendas",note:"Segmento comercial e premium"},{title:"Destaque de vendas",note:"Contact Cooled"}]},
  {year:"Processos comerciais",items:[{title:"Melhores práticas do Salesforce"}]},
 ];
-
-// Add new awards to AWARDS; the counters and the timeline follow automatically.
-const AWARD_ITEMS=AWARDS.flatMap((group)=>group.items);
-const AWARD_TILES=AWARDS.flatMap((group)=>group.items.map((item)=>({year:group.year,...item})));
-const AWARD_COUNT=AWARD_ITEMS.length;
-const AWARD_YEARS=AWARDS.filter((group)=>/^\d{4}$/.test(group.year)).length;
 
 const PILLARS=[
  {icon:History,title:"Experiência",text:"Atuação contínua no mercado industrial desde 1999."},
@@ -64,28 +56,12 @@ function Page(){return <PageFrame>
  <div className="ab-stories">{STORIES.map(({icon:Icon,title,text})=><article key={title}><span className="ab-icon"><Icon aria-hidden="true" size={22}/></span><h3>{title}</h3><p>{text}</p></article>)}</div>
 </div></section>
 
-<section className="ab-section ab-awards ab-awards-wall" id="premios" aria-labelledby="premios-title"><div className="v2-container">
- <div className="aw-head">
-  <div><span className="v2-kicker">RECONHECIMENTO</span><h2 id="premios-title">Competência reconhecida. Compromisso renovado.</h2><p>Os reconhecimentos recebidos pela TecAr refletem o trabalho da equipe em vendas, capacitação e pós-venda. Para nossos clientes, representam uma trajetória de dedicação ao atendimento e à construção de soluções de valor.</p></div>
-  <dl className="aw-stats">
-   <div><dd><CountUp value={AWARD_COUNT}/></dd><dt>reconhecimentos Ingersoll Rand</dt></div>
-   <div><dd><CountUp value={AWARD_YEARS}/></dd><dt>anos com premiação</dt></div>
-  </dl>
+<section className="ab-section ab-awards" id="premios"><div className="v2-container">
+ <div className="ab-awards-head"><span className="v2-kicker">RECONHECIMENTO</span><h2>Competência reconhecida. Compromisso renovado.</h2><p>Os reconhecimentos recebidos pela TecAr refletem o trabalho da equipe em vendas, capacitação e pós-venda. Para nossos clientes, representam uma trajetória de dedicação ao atendimento e à construção de soluções de valor.</p></div>
+ <div className="ab-awards-grid">
+  <figure className="ab-awards-photo"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/><figcaption>Reconhecimentos Ingersoll Rand que fazem parte da história da TecAr.</figcaption></figure>
+  <ol className="ab-awards-list">{AWARDS.map((group)=><li key={group.year}><span className="ab-year" data-text={/^\d+$/.test(group.year)?undefined:"true"}>{group.year}</span><ul>{group.items.map((item)=><li key={item.title+(item.note??"")}><b>{item.title}</b>{item.note&&<small>{item.note}</small>}</li>)}</ul></li>)}</ol>
  </div>
- <ul className="aw-wall">
-  <li className="aw-photo"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/></li>
-  {AWARD_TILES.map((tile,index)=><li key={tile.year+tile.title+(tile.note??"")} className="aw-tile" style={{"--d":index} as CSSProperties}>
-   <span className="aw-tile-icon" aria-hidden="true"><Award size={22}/></span>
-   <span className="aw-tile-year">{tile.year}</span>
-   <b>{tile.title}</b>
-   {tile.note&&<small>{tile.note}</small>}
-  </li>)}
-  <li className="aw-tile aw-tile-brand" style={{"--d":AWARD_TILES.length} as CSSProperties}>
-   <span className="aw-tile-icon" aria-hidden="true"><BadgeCheck size={22}/></span>
-   <span className="aw-tile-year">Desde 1999</span>
-   <b>Assistência e revenda autorizada Ingersoll Rand</b>
-  </li>
- </ul>
 </div></section>
 
 <section className="ab-section ab-pillars"><div className="v2-container">
