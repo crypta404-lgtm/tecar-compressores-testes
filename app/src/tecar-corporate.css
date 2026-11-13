@@ -1633,3 +1633,7 @@ html.tc-splash-off .tc-splash { display: none; }
   .tc-editorial .ab-awards-photo img { min-height: 0; aspect-ratio: 645 / 374; }
 }
 .tc-editorial .ab-awards-list .ab-year[data-text] { font-size: 13px; }
+
+/* Pré-laudo: savings label above the amount */
+.v2-dx-opportunity strong em { display: block; margin-bottom: 4px; font: 600 .62rem/1.3 var(--tc-font); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: #8a6200; text-align: right; }
+.v2-dx-opportunity strong { text-align: right; }

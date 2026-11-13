@@ -81,9 +81,8 @@ function OpportunityAlert({item}:{item:Opportunity}){
     <div>
       <span>{item.saving!==null?"Possibilidade de economia identificada":"Possibilidade de melhoria identificada"}</span>
       <b>{item.title}</b>
-      <p>{item.solution}</p>
     </div>
-    {item.saving!==null&&<strong>{money(item.saving)}<small>/ano</small></strong>}
+    {item.saving!==null&&<strong><em>Economia identificada de</em>{money(item.saving)}<small>/ano</small></strong>}
   </div>
 }
 
@@ -102,7 +101,7 @@ function ExplainedTopics({topics,compact}:{topics:ExplainedTopic[];compact?:bool
   return <div className={"pl-explain"+(compact?" is-compact":"")}>{topics.map(topic=><article key={topic.id}>
     <h4>{topic.title}</h4>
     <div className="pl-why"><b>Por que isso importa</b>{topic.why.map(text=><p key={text}>{text}</p>)}</div>
-    {topic.alerts.map(alert=><div key={alert.id} className="pl-why pl-why-alert"><b><WarningTriangle/>{alert.title}{alert.saving!==null?" · "+money(alert.saving)+"/ano":""}</b>{alert.why.map(text=><p key={text}>{text}</p>)}{!compact&&<CalcMemory lines={alert.memory.filter(line=>!topic.memory.includes(line))}/>}</div>)}
+    {topic.alerts.map(alert=><div key={alert.id} className="pl-why pl-why-alert"><b><WarningTriangle/>{alert.title}{alert.saving!==null?" · Economia identificada de "+money(alert.saving)+"/ano":""}</b>{!compact&&<CalcMemory lines={alert.memory.filter(line=>!topic.memory.includes(line))}/>}</div>)}
     <CalcMemory lines={topic.memory}/>
   </article>)}</div>
 }
@@ -146,7 +145,7 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
     "PDP medido / requerido: "+number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C",
     "",
     "OPORTUNIDADES IDENTIFICADAS",
-    ...(opportunities.length?opportunities.map(item=>"• "+item.title+(item.saving!==null?" — "+money(item.saving)+"/ano":"")):["Nenhuma com os dados informados."]),
+    ...(opportunities.length?opportunities.map(item=>"• "+item.title+(item.saving!==null?" — economia identificada de "+money(item.saving)+"/ano":"")):["Nenhuma com os dados informados."]),
     ...(result.totalSaving>0?["Potencial de economia: "+money(result.totalSaving)+"/ano"]:[]),
     "",
     "Resultado preliminar baseado em dados informados e referências públicas. Requer validação em campo."

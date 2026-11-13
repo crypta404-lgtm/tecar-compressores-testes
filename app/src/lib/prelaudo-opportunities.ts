@@ -96,7 +96,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     opportunities.push({
       id: "capacity",
       report: "flow",
-      title: "Demanda acima da capacidade de referência",
+      title: "Demanda acima da capacidade identificada",
       solution: "Reavaliar o dimensionamento: ampliação, compressor adicional ou locação para cobrir os picos sem perder pressão.",
       saving: null,
       memory: [`Demanda ${number(demandCfm, 0)} cfm > capacidade ${number(model.flowCfm, 0)} cfm (déficit de ${number(-reserveCfm, 0)} cfm)`],
@@ -110,7 +110,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     opportunities.push({
       id: "leaks",
       report: "flow",
-      title: `Vazamento de ${number(leakPercent, 0)}%: meta de ${LEAK_TARGET_PERCENT}% com programa de vazamentos`,
+      title: "Vazamento identificado",
       solution: "Detecção por ultrassom, correção de engates, conexões e drenos, e rotina de verificação periódica.",
       saving,
       memory: [
@@ -130,7 +130,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
       opportunities.push({
         id: "unload",
         report: "energy",
-        title: `${number((1 - loadRatio) * 100, 0)}% do tempo em alívio: energia gasta sem produzir ar`,
+        title: "Tempo em alívio identificado",
         solution: "Compressor com velocidade variável (inversor) ou controle central que ajusta a produção à demanda e elimina o tempo em alívio.",
         saving,
         memory: [
@@ -146,7 +146,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     opportunities.push({
       id: "setpoint",
       report: "pressure",
-      title: `Setpoint ${number(setpointReduction, 2)} bar acima do alvo`,
+      title: "Pressão acima do necessário identificada",
       solution: "Reduzir o setpoint com pressão estabilizada no ponto crítico: ajuste de controle, reservatório e rede.",
       saving: pressureSaving,
       memory: memory.pressure.slice(1),
@@ -157,7 +157,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     opportunities.push({
       id: "network",
       report: "pressure",
-      title: `Queda de ${number(pressureDropPercent, 1)}% na rede (referência: até ${NETWORK_DROP_LIMIT_PERCENT}%)`,
+      title: "Queda de pressão na rede identificada",
       solution: "Revisão da rede de distribuição: diâmetros, anel, filtros e conexões. Uma rede melhor permite operar com setpoint menor.",
       saving: null,
       memory: [memory.pressure[0]],
@@ -168,7 +168,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     opportunities.push({
       id: "dewpoint",
       report: "quality",
-      title: `Ponto de orvalho ${number(pdpGap, 1)} °C acima do requisito`,
+      title: "Umidade acima do requisito identificada",
       solution: "Adequar secador, filtros e drenos ao requisito do processo e confirmar com medição no ponto de uso.",
       saving: null,
       memory: [`PDP medido ${number(pdpMeasured, 0)} °C − requerido ${number(pdpRequired, 0)} °C = ${number(pdpGap, 1)} °C`],
