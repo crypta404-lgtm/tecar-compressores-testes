@@ -1613,3 +1613,61 @@ html.tc-splash-off .tc-splash { display: none; }
 .tc-editorial .cx-company .cx-services-body h3 { font-size: clamp(18px, 1.6vw, 22px); margin: 0 0 4px; }
 .tc-editorial .cx-company .cx-services-body p { font-size: 13px; line-height: 1.45; margin: 0; }
 .cx-company-card { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+
+/* ============================================================ A TECAR: INSTITUTO HEAD + AWARDS v3 */
+.tc-editorial .ab-community-head-solo { grid-template-columns: 1fr; }
+
+.tc-editorial .ab-awards-v3 { position: relative; overflow: hidden; isolation: isolate; background: #15181b; color: var(--cx-white); }
+.tc-editorial .ab-awards-v3::before { content: ""; position: absolute; z-index: -1; width: 70vw; height: 70vw; max-width: 980px; max-height: 980px; right: -20vw; top: -30vw; background: radial-gradient(closest-side, rgba(215, 25, 32, .32), rgba(215, 25, 32, 0)); animation: aw-glow 14s ease-in-out infinite alternate; }
+.tc-editorial .ab-awards-v3::after { content: ""; position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%); mask-image: linear-gradient(180deg, #000 0%, transparent 70%); }
+@keyframes aw-glow { to { transform: translate(-8vw, 10vw) scale(1.1); } }
+
+.tc-editorial .aw-head { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .6fr); gap: clamp(32px, 5vw, 80px); align-items: end; margin-bottom: clamp(40px, 5vw, 72px); }
+.tc-editorial .ab-awards-v3 .v2-kicker { color: var(--cx-red-on-dark); }
+.tc-editorial .ab-awards-v3 h2 { color: var(--cx-white); max-width: 18ch; }
+.tc-editorial .aw-head p { margin: 22px 0 0; max-width: 60ch; font-size: 17px; line-height: 1.7; color: rgba(255, 255, 255, .7); }
+.tc-editorial .aw-stats { display: grid; gap: 22px; margin: 0; }
+.tc-editorial .aw-stats > div { padding-left: 20px; border-left: 2px solid var(--cx-red); }
+.tc-editorial .aw-stats dd { margin: 0; font: 500 clamp(48px, 5vw, 72px)/1 var(--tc-font); letter-spacing: -.04em; color: var(--cx-white); font-variant-numeric: tabular-nums; }
+.tc-editorial .aw-stats dt { margin-top: 6px; font: 600 11px/1.4 var(--tc-font); letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .55); }
+
+.tc-editorial .aw-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+.tc-editorial .aw-photo { position: sticky; top: calc(var(--cx-header) + 32px); margin: 0; }
+.tc-editorial .aw-photo-frame { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid rgba(255, 255, 255, .1); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .8); }
+.tc-editorial .aw-photo-frame img { display: block; width: 100%; height: auto; aspect-ratio: 645 / 374; object-fit: cover; }
+html.cx-motion .tc-editorial .ab-awards-v3 .aw-photo-frame img { transition: transform 2.4s var(--cx-ease); }
+html.cx-motion .tc-editorial .ab-awards-v3:not([data-inview]) .aw-photo-frame img { transform: scale(1.08); }
+.tc-editorial .aw-photo-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .28) 50%, transparent 65%); transform: translateX(-120%); animation: aw-shine 6s ease-in-out 1.5s infinite; pointer-events: none; }
+@keyframes aw-shine { 0%, 70% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+.tc-editorial .aw-photo figcaption { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, .5); }
+
+.tc-editorial .aw-timeline { position: relative; padding-left: 36px; }
+.tc-editorial .aw-rail { position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+.tc-editorial .aw-rail::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--cx-red-on-dark), var(--cx-red)); transform-origin: top; }
+html.cx-motion .tc-editorial .ab-awards-v3 .aw-rail::after { transition: transform 1.8s var(--cx-ease) .3s; }
+html.cx-motion .tc-editorial .ab-awards-v3:not([data-inview]) .aw-rail::after { transform: scaleY(0); }
+.tc-editorial .aw-timeline ol, .tc-editorial .aw-timeline ul { margin: 0; padding: 0; list-style: none; }
+.tc-editorial .aw-year { position: relative; padding-bottom: 28px; }
+.tc-editorial .aw-year:last-child { padding-bottom: 0; }
+.tc-editorial .aw-year::before { content: ""; position: absolute; left: -36px; top: 1px; width: 16px; height: 16px; border-radius: 50%; background: #15181b; border: 2px solid var(--cx-red-on-dark); box-shadow: 0 0 0 6px rgba(215, 25, 32, .15); animation: aw-pulse 2.8s ease-in-out infinite; }
+@keyframes aw-pulse { 50% { box-shadow: 0 0 0 10px rgba(215, 25, 32, 0); } }
+.tc-editorial .aw-year-label { display: block; margin-bottom: 12px; font: 600 13px/1.4 var(--tc-font); letter-spacing: .14em; text-transform: uppercase; color: var(--cx-red-on-dark); }
+.tc-editorial .aw-year ul { display: grid; gap: 10px; }
+.tc-editorial .aw-card { position: relative; overflow: hidden; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px 18px; border-radius: 12px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08); transition: transform .35s var(--cx-ease), background .35s ease, border-color .35s ease; }
+.tc-editorial .aw-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, .12) 50%, transparent 70%); transform: translateX(-120%); transition: transform .8s ease; pointer-events: none; }
+.tc-editorial .aw-card:hover { transform: translateY(-3px); background: rgba(255, 255, 255, .07); border-color: rgba(255, 122, 126, .45); }
+.tc-editorial .aw-card:hover::after { transform: translateX(120%); }
+.tc-editorial .aw-card-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(215, 25, 32, .18); color: var(--cx-red-on-dark); }
+.tc-editorial .aw-card b { display: block; font: 500 17px/1.35 var(--tc-font); color: var(--cx-white); }
+.tc-editorial .aw-card small { display: block; margin-top: 2px; font-size: 13px; color: rgba(255, 255, 255, .55); }
+html.cx-motion .tc-editorial .ab-awards-v3 .aw-card { transition: transform .35s var(--cx-ease), background .35s ease, border-color .35s ease, opacity .7s ease calc(.45s + var(--d) * .09s), translate .9s var(--cx-ease) calc(.45s + var(--d) * .09s); }
+html.cx-motion .tc-editorial .ab-awards-v3:not([data-inview]) .aw-card { opacity: 0; translate: 28px 0; }
+
+@media (max-width: 900px) {
+  .tc-editorial .aw-head, .tc-editorial .aw-body { grid-template-columns: 1fr; }
+  .tc-editorial .aw-stats { grid-template-columns: 1fr 1fr; }
+  .tc-editorial .aw-photo { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tc-editorial .ab-awards-v3::before, .tc-editorial .aw-photo-frame::after, .tc-editorial .aw-year::before { animation: none; }
+}
