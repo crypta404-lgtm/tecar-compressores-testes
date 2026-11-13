@@ -28,10 +28,10 @@ const W = 4.2, D = 2.8, H = 2.5, T = 0.07, BASE = 0.16;
 const DOOR_W = 1.8, DOOR_H = 2.15;
 const HORIZON = "#dfe6e6";
 
-type Tween = { from: number; to: number; t: number; dur: number; apply: (v: number) => void; done?: () => void };
+type Tween = { key: string; from: number; to: number; t: number; dur: number; apply: (v: number) => void; done?: () => void };
 const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 
-export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: boolean; onFirstFrame?: () => void }): SafetyAirScene {
+export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: boolean; onFirstFrame?: () => void; onContextLost?: () => void }): SafetyAirScene {
   // Performance budget: MSAA only on 1x screens (on retina the extra pixels already smooth edges),
   // pixel ratio capped, and the default GPU (no forced switch to the discrete GPU on laptops).
   const dpr = window.devicePixelRatio || 1;
@@ -260,9 +260,12 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
     else if (quality === 1) { renderer.setPixelRatio(0.85); quality = 0; }
     slowFrames = 0;
   };
-  const animate = (from: number, to: number, dur: number, apply: (v: number) => void, done?: () => void) => {
+  // One tween per key: a new door or camera move replaces the running one instead of
+  // stacking on top of it (stacked tweens fought each other and made the doors flap).
+  const animate = (key: string, from: number, to: number, dur: number, apply: (v: number) => void, done?: () => void) => {
+    for (let i = tweens.length - 1; i >= 0; i--) if (tweens[i].key === key) tweens.splice(i, 1);
     if (opts.reducedMotion || dur === 0) { apply(to); done?.(); kick(); return; }
-    tweens.push({ from, to, t: 0, dur, apply, done }); kick();
+    tweens.push({ key, from, to, t: 0, dur, apply, done }); kick();
   };
   const tick = (now: number) => {
     raf = 0;
@@ -280,9 +283,12 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
       if (slowFrames > 20) degrade();
     }
     if (first) { first = false; opts.onFirstFrame?.(); }
-    if (visible && (moving || tweens.length)) raf = requestAnimationFrame(tick);
+    // controls.update() fires "change", which calls kick() and may already have queued the next
+    // frame; only queue one here if none is pending, so there is never more than one loop.
+    if (!raf && visible && !lost && (moving || tweens.length)) raf = requestAnimationFrame(tick);
   };
-  const kick = () => { if (ready && !raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+  let lost = false;
+  const kick = () => { if (ready && !lost && !raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } };
   const onVisibility = () => { if (!document.hidden) kick(); };
   document.addEventListener("visibilitychange", onVisibility);
   controls.addEventListener("change", kick);
@@ -299,23 +305,32 @@ export function createSafetyAirScene(host: HTMLElement, opts: { reducedMotion: b
   const io = new IntersectionObserver(([e]) => { visible = !!e?.isIntersecting; if (visible) kick(); }, { threshold: 0.01 }); io.observe(host);
 
   // ---- state
-  let doorsOpen = false;
-  const doorAngle = (v: number) => { doors[0].rotation.y = -v * 1.75; doors[1].rotation.y = v * 1.75; };
+  let doorsOpen = false, doorValue = 0;
+  const doorAngle = (v: number) => { doorValue = v; doors[0].rotation.y = -v * 1.75; doors[1].rotation.y = v * 1.75; };
   const fly = (to: { pos: THREE.Vector3; target: THREE.Vector3 }, dur = 1.2) => {
     const p0 = camera.position.clone(), t0 = controls.target.clone();
-    animate(0, 1, dur, (v) => { camera.position.lerpVectors(p0, to.pos, v); controls.target.lerpVectors(t0, to.target, v); });
+    animate("camera", 0, 1, dur, (v) => { camera.position.lerpVectors(p0, to.pos, v); controls.target.lerpVectors(t0, to.target, v); });
   };
   doorAngle(0);
+  // GPU reset or memory pressure: stop drawing and let the page show the photo instead of freezing.
+  const onLost = (e: Event) => { e.preventDefault(); lost = true; tweens.length = 0; cancelAnimationFrame(raf); raf = 0; opts.onContextLost?.(); };
+  renderer.domElement.addEventListener("webglcontextlost", onLost);
   const go = () => { ready = true; kick(); };
   // compile shaders in parallel when the GPU driver allows it; otherwise compile once up front
   if (renderer.extensions.has("KHR_parallel_shader_compile")) renderer.compileAsync(scene, camera).catch(() => undefined).then(go);
   else { renderer.compile(scene, camera); go(); }
 
   const api: SafetyAirScene = {
-    setDoors(open) { if (open === doorsOpen) return; doorsOpen = open; animate(open ? 0 : 1, open ? 1 : 0, 1.0, doorAngle); },
+    setDoors(open) {
+      if (open === doorsOpen) return;
+      doorsOpen = open;
+      // start from where the doors are now, so reversing mid-way is smooth and never jumps
+      const to = open ? 1 : 0, dur = Math.max(0.15, Math.abs(to - doorValue));
+      animate("doors", doorValue, to, dur, doorAngle);
+    },
     reset() { api.setDoors(false); fly(HOME); },
     dispose() {
-      cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); controls.dispose(); document.removeEventListener("visibilitychange", onVisibility);
+      cancelAnimationFrame(raf); tweens.length = 0; renderer.domElement.removeEventListener("webglcontextlost", onLost); ro.disconnect(); io.disconnect(); controls.dispose(); document.removeEventListener("visibilitychange", onVisibility);
       scene.traverse((o) => { if (o instanceof THREE.InstancedMesh) o.dispose(); });
       disposables.forEach((d) => d.dispose());
       renderer.dispose(); renderer.domElement.remove();

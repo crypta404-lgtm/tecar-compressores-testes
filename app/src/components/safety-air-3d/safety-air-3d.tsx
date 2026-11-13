@@ -45,7 +45,7 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
         if (cancelled || !host.current) return;
         idle(() => {
           if (cancelled || !host.current) return;
-          try { api.current = createSafetyAirScene(host.current, { reducedMotion, onFirstFrame: () => setState("ready") }); }
+          try { api.current = createSafetyAirScene(host.current, { reducedMotion, onFirstFrame: () => setState("ready"), onContextLost: () => setState("fallback") }); }
           catch { setState("fallback"); }
         });
       }).catch(() => setState("fallback"));
@@ -55,7 +55,7 @@ export function SafetyAir3D({ fallback }: { fallback: string }) {
     return () => { cancelled = true; io.disconnect(); api.current?.dispose(); api.current = null; };
   }, []);
 
-  const toggleDoors = () => { const v = !doorsOpen; setDoorsOpen(v); api.current?.setDoors(v); };
+  const toggleDoors = () => { if (!api.current) return; const v = !doorsOpen; setDoorsOpen(v); api.current.setDoors(v); };
   const reset = () => { setDoorsOpen(false); api.current?.reset(); };
 
   return <figure className="sa3d" data-state={state}>
