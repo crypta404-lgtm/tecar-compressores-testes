@@ -39,7 +39,7 @@ export function ProductExplorer({groups,ctaLabel="Falar com a TecAr"}:{groups:Pr
 
     <div className="v2-product-explorer-head">
       <div><span>{groups.length>1?"FAMÍLIA":"PRODUTOS"}</span><h2>{group.label}</h2></div>
-      {group.intro&&<p>{group.intro}</p>}
+      
     </div>
 
     <div className="v2-product-cards" role="list">

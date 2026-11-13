@@ -19,7 +19,7 @@ export function EdSection({ tone = "white", id, children }: { tone?: Tone; id?: 
 export function EdHead({ kicker, title, text, side = false }: { kicker?: string; title: string; text?: string; side?: boolean }) {
   return <div className="ed-head" data-side={side ? "true" : undefined}>
     <div>{kicker && <span className="v2-kicker">{kicker}</span>}<h2>{title}</h2></div>
-    {text && <p>{text}</p>}
+    {text && !side && <p>{text}</p>}
   </div>;
 }
 
