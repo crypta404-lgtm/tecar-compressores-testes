@@ -26,7 +26,7 @@ function ServiceShowcase() {
   const [active, setActive] = useState(0);
   return <div className="cx-services">
     <div className="cx-services-media" aria-hidden="true">
-      {services.map((service, index) => <img key={service.to} src={service.image} alt="" loading="lazy" width="1200" height="1200" data-active={index === active ? "true" : "false"} />)}
+      {services.map((service, index) => <img key={service.to} src={service.image} alt="" loading="eager" decoding="async" width="1200" height="1200" data-active={index === active ? "true" : "false"} />)}
     </div>
     <ul className="cx-services-list">
       {services.map((service, index) => <li key={service.to}>
