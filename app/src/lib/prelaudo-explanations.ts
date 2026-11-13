@@ -43,7 +43,7 @@ function alertWhy(item: Opportunity, result: PrelaudoResult, ctx: Context): stri
     case "leaks":
       return [
         `Todo ar que vaza já foi comprimido e pago. Com ${number(result.leakPercent, 0)}% de vazamento, cerca de ${number(result.leakCfm, 1)} cfm saem pela rede sem fazer trabalho nenhum.`,
-        "O vazamento não para: continua à noite, no almoço e no fim de semana enquanto a rede estiver pressurizada. Ele também derruba a pressão no ponto de uso, e a reação comum é subir o setpoint, o que encarece ainda mais.",
+        "O vazamento não para: continua à noite, no almoço e no fim de semana enquanto a rede estiver pressurizada. Ele também derruba a pressão no ponto de uso, e a reação comum é subir a pressão do compressor, o que encarece ainda mais.",
         `Sistemas mal mantidos perdem de 20% a 30% do ar. Um programa de detecção por ultrassom com correção de engates, conexões e drenos traz o sistema para perto de ${LEAK_TARGET_PERCENT}%.`,
       ];
     case "unload":
@@ -56,7 +56,7 @@ function alertWhy(item: Opportunity, result: PrelaudoResult, ctx: Context): stri
       return [
         `A rede está saindo com ${number(ctx.supplyBar, 1)} bar e o processo precisa de ${number(ctx.targetBar, 1)} bar: são ${number(result.setpointReduction, 2)} bar a mais do que o necessário.`,
         "Comprimir mais alto exige mais energia: cerca de 1% a mais a cada 0,14 bar, ou perto de 7% por bar. Além disso, com pressão maior, os vazamentos e os usos sem regulador consomem mais ar (demanda artificial), e válvulas, mangueiras e vedações sofrem mais.",
-        "Na prática, a pressão alta costuma ser um remédio para queda de pressão na rede ou para picos de consumo. Corrigir a causa (rede, reservatório, controle) permite baixar o setpoint sem faltar ar no ponto crítico.",
+        "Na prática, a pressão alta costuma ser um remédio para queda de pressão na rede ou para picos de consumo. Corrigir a causa (rede, reservatório, controle) permite baixar a pressão sem faltar ar na máquina mais distante.",
       ];
     case "network":
       return [
@@ -119,7 +119,7 @@ export function explainPrelaudo(result: PrelaudoResult, ctx: Context): Explained
       title: "Pressão",
       why: [
         "A pressão certa é a menor que ainda garante o funcionamento do ponto de uso mais exigente. Tudo acima disso é energia gasta à toa.",
-        "Duas perguntas guiam a análise: quanto a rede perde no caminho (queda de pressão) e quanto o setpoint está acima do que o processo precisa.",
+        "Duas perguntas guiam a análise: quanto a rede perde no caminho (queda de pressão) e quanto a pressão do compressor está acima do que as máquinas precisam.",
       ],
       memory: result.memory.pressure,
       alerts: withWhy("pressure"),
@@ -132,7 +132,7 @@ export function explainPrelaudo(result: PrelaudoResult, ctx: Context): Explained
         "O pré-laudo avalia a água pelo ponto de orvalho informado. Óleo e partículas só podem ser confirmados com medição no ponto de uso.",
       ],
       // same wording as the dew point alert, so the alert does not repeat it
-      memory: [`PDP medido ${number(ctx.pdpMeasured, 0)} °C − requerido ${number(ctx.pdpRequired, 0)} °C = ${number(result.pdpGap, 1)} °C`],
+      memory: [`Ponto de orvalho medido ${number(ctx.pdpMeasured, 0)} °C − exigido ${number(ctx.pdpRequired, 0)} °C = ${number(result.pdpGap, 1)} °C`],
       alerts: withWhy("quality"),
     },
     {

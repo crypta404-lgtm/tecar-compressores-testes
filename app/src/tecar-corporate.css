@@ -1637,3 +1637,6 @@ html.tc-splash-off .tc-splash { display: none; }
 /* Pré-laudo: savings label above the amount */
 .v2-dx-opportunity strong em { display: block; margin-bottom: 4px; font: 600 .62rem/1.3 var(--tc-font); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: #8a6200; text-align: right; }
 .v2-dx-opportunity strong { text-align: right; }
+
+/* Pré-laudo: plain-language hint under each field */
+.v2-dx-field .v2-dx-hint { display: block; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--cx-mute); font-weight: 400; letter-spacing: 0; text-transform: none; }

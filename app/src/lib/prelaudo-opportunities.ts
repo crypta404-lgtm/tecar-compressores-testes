@@ -84,7 +84,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     ],
     pressure: [
       `Queda na rede = ${number(supplyBar, 1)} bar − ${number(pointBar, 1)} bar = ${number(pressureDrop, 2)} bar (${number(pressureDropPercent, 1)}% da origem)`,
-      `Redução de setpoint avaliada = ${number(supplyBar, 1)} bar − ${number(targetBar, 1)} bar = ${number(setpointReduction, 2)} bar`,
+      `Pressão que pode baixar = ${number(supplyBar, 1)} bar − ${number(targetBar, 1)} bar = ${number(setpointReduction, 2)} bar`,
       `Economia de energia = ${number(setpointReduction, 2)} bar ÷ ${number(BAR_PER_PERCENT, 3)} bar por 1% = ${number(pressureSavingPercent, 1)}%`,
       `Referência anual = ${number(averageKw, 2)} kW médio × ${number(pressureSavingPercent, 1)}% × ${number(hours, 0)} h × ${t} = ${money(pressureSaving)}`,
     ],
@@ -147,7 +147,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
       id: "setpoint",
       report: "pressure",
       title: "Pressão acima do necessário identificada",
-      solution: "Reduzir o setpoint com pressão estabilizada no ponto crítico: ajuste de controle, reservatório e rede.",
+      solution: "Baixar a pressão do compressor mantendo a pressão estável na máquina mais distante: ajuste de controle, reservatório e rede.",
       saving: pressureSaving,
       memory: memory.pressure.slice(1),
     });
@@ -158,7 +158,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
       id: "network",
       report: "pressure",
       title: "Queda de pressão na rede identificada",
-      solution: "Revisão da rede de distribuição: diâmetros, anel, filtros e conexões. Uma rede melhor permite operar com setpoint menor.",
+      solution: "Revisão da rede de distribuição: diâmetros, anel, filtros e conexões. Uma rede melhor permite operar com pressão menor no compressor.",
       saving: null,
       memory: [memory.pressure[0]],
     });
@@ -171,7 +171,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
       title: "Umidade acima do requisito identificada",
       solution: "Adequar secador, filtros e drenos ao requisito do processo e confirmar com medição no ponto de uso.",
       saving: null,
-      memory: [`PDP medido ${number(pdpMeasured, 0)} °C − requerido ${number(pdpRequired, 0)} °C = ${number(pdpGap, 1)} °C`],
+      memory: [`Ponto de orvalho medido ${number(pdpMeasured, 0)} °C − exigido ${number(pdpRequired, 0)} °C = ${number(pdpGap, 1)} °C`],
     });
   }
 

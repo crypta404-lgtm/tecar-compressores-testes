@@ -17,7 +17,7 @@ type IndustryProfile = { label:string; focus:string; risks:string[]; measurement
 const INDUSTRIES:Record<string,IndustryProfile>={
   food:{label:"Alimentos e bebidas",focus:"Continuidade, condensado e risco de contaminação no ponto de uso.",risks:["Água e óleo no processo","Parada de linha","Pressão instável em picos"],measurements:["Ponto de orvalho","Óleo e partículas","Pressão no ponto crítico"]},
   pharma:{label:"Farmacêutica e cosmética",focus:"Qualidade comprovável do ar, rastreabilidade e estabilidade de processo.",risks:["Classe de pureza inadequada","Ausência de evidência","Falha de redundância"],measurements:["ISO 8573 por contaminante","Ponto de orvalho","Tendência de pressão"]},
-  metal:{label:"Metalmecânica",focus:"Vazão disponível, quedas de pressão e consumo durante os turnos.",risks:["Ferramentas sem desempenho","Vazamentos distribuídos","Setpoint elevado"],measurements:["Vazão por turno","Carga e alívio","Pressão na casa e no uso"]},
+  metal:{label:"Metalmecânica",focus:"Vazão disponível, quedas de pressão e consumo durante os turnos.",risks:["Ferramentas sem desempenho","Vazamentos distribuídos","Pressão acima do necessário"],measurements:["Vazão por turno","Carga e alívio","Pressão na casa e no uso"]},
   plastic:{label:"Plástico e embalagens",focus:"Demanda contínua, picos de sopro e estabilidade da secagem.",risks:["Picos acima da capacidade","Umidade no produto","Operação sem reserva"],measurements:["Perfil de vazão","Ponto de orvalho","Potência e pressão"]},
   wood:{label:"Madeira e móveis",focus:"Distribuição, condensado e perdas em múltiplos pontos de consumo.",risks:["Rede subdimensionada","Água nas linhas","Vazamentos em engates"],measurements:["Queda de pressão","Dreno e condensado","Ultrassom de vazamentos"]},
   agro:{label:"Agroindústria",focus:"Sazonalidade, ambiente severo e confiabilidade nos períodos de pico.",risks:["Contaminação ambiental","Pico sazonal","Manutenção fora da janela"],measurements:["Horas por safra","Temperatura ambiente","Vazão de pico"]},
@@ -28,7 +28,7 @@ const REPORTS:Array<{id:TabId;label:string;short:string;icon:ComponentType<{size
   {id:"flow",label:"Vazão e vazamentos",short:"Demanda, perdas e custo",icon:Wind},
   {id:"energy",label:"Energia",short:"kWh, potência e custo anual",icon:Bolt},
   {id:"pressure",label:"Pressão",short:"Queda de rede e oportunidade",icon:Gauge},
-  {id:"quality",label:"Qualidade do ar",short:"PDP, contaminantes e evidências",icon:Droplets},
+  {id:"quality",label:"Qualidade do ar",short:"Umidade, óleo e partículas",icon:Droplets},
   {id:"overview",label:"Visão geral",short:"Custo, eficiência e economia",icon:LayoutDashboard},
   {id:"savings",label:"Oportunidades de economia",short:"Alertas e potencial somado",icon:PiggyBank},
   {id:"calc",label:"Memória de cálculo",short:"Todas as contas e fontes",icon:Calculator},
@@ -36,7 +36,7 @@ const REPORTS:Array<{id:TabId;label:string;short:string;icon:ComponentType<{size
 
 const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
 
-function Input({label,suffix,value,min,max,step=1,onChange}:{label:string;suffix?:string;value:number;min?:number;max?:number;step?:number;onChange:(value:number)=>void}){
+function Input({label,hint,suffix,value,min,max,step=1,onChange}:{label:string;hint?:string;suffix?:string;value:number;min?:number;max?:number;step?:number;onChange:(value:number)=>void}){
   const handleChange=(raw:string)=>{
     if(raw.length>6 || /[eE+]/.test(raw)) return;
     if(raw===""){ onChange(0); return; }
@@ -44,7 +44,7 @@ function Input({label,suffix,value,min,max,step=1,onChange}:{label:string;suffix
     if(!Number.isFinite(next)) return;
     onChange(clamp(next,min??-999999,max??999999));
   };
-  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} maxLength={6} onChange={e=>handleChange(e.target.value)}/>{suffix&&<b>{suffix}</b>}</div></label>
+  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} maxLength={6} onChange={e=>handleChange(e.target.value)}/>{suffix&&<b>{suffix}</b>}</div>{hint&&<small className="v2-dx-hint">{hint}</small>}</label>
 }
 
 function Meter({label,value,max,display,tone="default"}:{label:string;value:number;max:number;display:string;tone?:"default"|"risk"|"good"}){
@@ -142,7 +142,7 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
     "Energia anual: "+number(result.annualKwh,0)+" kWh","Custo anual: "+money(result.annualCost),
     "Vazamento: "+number(result.leakPercent,0)+"% da demanda ("+number(result.leakCfm,1)+" cfm) | "+money(result.leakCost)+"/ano",
     "Queda de pressão: "+number(result.pressureDrop,2)+" bar ("+number(result.pressureDropPercent,1)+"%)",
-    "PDP medido / requerido: "+number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C",
+    "Ponto de orvalho medido / exigido: "+number(pdpMeasured,0)+" °C / "+number(pdpRequired,0)+" °C",
     "",
     "OPORTUNIDADES IDENTIFICADAS",
     ...(opportunities.length?opportunities.map(item=>"• "+item.title+(item.saving!==null?" — economia identificada de "+money(item.saving)+"/ano":"")):["Nenhuma com os dados informados."]),
@@ -191,18 +191,18 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
     <div className="v2-dx-context">
       <label><span>Tipo de indústria</span><select value={industryId} onChange={e=>setIndustryId(e.target.value)}>{Object.entries(INDUSTRIES).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
       <label><span>Potência do compressor</span><select value={powerKw} disabled={useNameplate} onChange={e=>setPowerKw(Number(e.target.value))}>{POWER_CLASSES.map(item=><option key={item.kw} value={item.kw}>{number(item.kw,item.kw%1?1:0)} kW · {item.hp} hp</option>)}</select></label>
-      <label><span>Tarifa de referência</span><select value={tariffId} onChange={e=>setTariffId(e.target.value)}>{COPEL_A4_TARIFFS.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+      <label><span>Tarifa de energia</span><select value={tariffId} onChange={e=>setTariffId(e.target.value)}>{COPEL_A4_TARIFFS.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
     </div>
     <div className="v2-dx-compressor">
       <div className="v2-dx-compressor-fields">
-        <label><span>Pressão máxima</span><select value={pressureClass} disabled={useNameplate} onChange={e=>setPressureClass(e.target.value as PressureClass)}>{(Object.keys(PRESSURE_CLASSES) as PressureClass[]).map(id=><option key={id} value={id}>{PRESSURE_CLASSES[id].label}</option>)}</select></label>
-        <label><span>Controle</span><select value={control} onChange={e=>setControl(e.target.value as Control)}>{(Object.keys(CONTROLS) as Control[]).map(id=><option key={id} value={id}>{CONTROLS[id].label}</option>)}</select></label>
-        <label className="v2-dx-check"><input type="checkbox" checked={useNameplate} onChange={e=>setUseNameplate(e.target.checked)}/><span>Tenho a vazão e a potência da placa ou ficha técnica</span></label>
+        <label><span>Pressão máxima do compressor</span><select value={pressureClass} disabled={useNameplate} onChange={e=>setPressureClass(e.target.value as PressureClass)}>{(Object.keys(PRESSURE_CLASSES) as PressureClass[]).map(id=><option key={id} value={id}>{PRESSURE_CLASSES[id].label}</option>)}</select></label>
+        <label><span>Como o compressor regula o ar</span><select value={control} onChange={e=>setControl(e.target.value as Control)}>{(Object.keys(CONTROLS) as Control[]).map(id=><option key={id} value={id}>{CONTROLS[id].label}</option>)}</select></label>
+        <label className="v2-dx-check"><input type="checkbox" checked={useNameplate} onChange={e=>setUseNameplate(e.target.checked)}/><span>Tenho os dados da placa do compressor</span></label>
       </div>
       {useNameplate&&<div className="v2-dx-inputs v2-dx-inputs-three">
-        <Input label="Vazão (FAD) do compressor" suffix={flowUnit==="cfm"?"cfm":"m³/min"} value={nameplateFlow} min={0} step={flowUnit==="cfm"?1:.1} onChange={setNameplateFlow}/>
-        <label className="v2-dx-field"><span>Unidade da vazão</span><div><select value={flowUnit} onChange={e=>setFlowUnit(e.target.value as FlowUnit)}><option value="cfm">cfm</option><option value="m3min">m³/min</option></select></div></label>
-        <Input label="Potência total em carga" suffix="kW" value={nameplateKw} min={0} step={.1} onChange={setNameplateKw}/>
+        <Input label="Ar que o compressor produz" hint="Na placa aparece como vazão ou FAD." suffix={flowUnit==="cfm"?"cfm":"m³/min"} value={nameplateFlow} min={0} step={flowUnit==="cfm"?1:.1} onChange={setNameplateFlow}/>
+        <label className="v2-dx-field"><span>Unidade</span><div><select value={flowUnit} onChange={e=>setFlowUnit(e.target.value as FlowUnit)}><option value="cfm">cfm</option><option value="m3min">m³/min</option></select></div></label>
+        <Input label="Potência do compressor" hint="Na placa, em kW." suffix="kW" value={nameplateKw} min={0} step={.1} onChange={setNameplateKw}/>
       </div>}
       <div className="v2-dx-compressor-summary"><span>{model.basis}</span><b>{number(model.flowCfm,0)} cfm</b><b>{number(model.packageKw,1)} kW em carga</b><b>{number(model.noLoadKw,1)} kW em alívio</b><b>{number(model.specificKw100Cfm,1)} kW/100 cfm</b></div>
     </div>
@@ -218,14 +218,14 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
         </div>}
         {active==="flow"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Vazão, demanda e vazamentos</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Demanda total da planta" suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Vazamento estimado" suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas pressurizadas no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Ar que a fábrica consome" hint="Se não souber, deixe o valor sugerido." suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Ar perdido em vazamentos" hint="Sem manutenção da rede, costuma passar de 20%." suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas por ano com a rede ligada" hint="2 turnos, 5 dias por semana ≈ 4.000 h." suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
           <StatTiles tiles={[{label:"Capacidade de referência",value:number(model.flowCfm,0)+" cfm"},{label:"Reserva nominal",value:number(result.reserveCfm,0)+" cfm",note:number(result.reservePercent,0)+"% da capacidade",tone:result.reserveCfm<0?"risk":undefined},{label:"Ar perdido em vazamentos",value:number(result.leakCfm,1)+" cfm",note:number(result.leakPercent,0)+"% da demanda",tone:result.leakPercent>=10?"risk":undefined},{label:"Custo dos vazamentos",value:money(result.leakCost),note:"por ano"}]}/>
           <div className="v2-dx-chart"><Meter label="Capacidade de referência" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda total informada" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Parte perdida em vazamentos" value={result.leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(result.leakCfm,1)+" cfm"} tone="risk"/></div>
           <Opportunities items={opportunities} report="flow"/>
         </div>}
         {active==="energy"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Bolt/><div><span>RELATÓRIO 02</span><h3>Uso e custo de energia</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas de operação no ano" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo estimado em carga" suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas por ano com o compressor ligado" hint="2 turnos, 5 dias por semana ≈ 4.000 h." suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo produzindo ar" hint="No painel: horas em carga ÷ horas totais." suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
           <StatTiles tiles={[{label:"Potência média",value:number(result.averageKw,1)+" kW"},{label:"Energia anual",value:number(result.annualKwh/1000,1)+" MWh"},{label:"Custo anual",value:money(result.annualCost)},{label:"Gasto em alívio",value:money(result.unloadCost),note:number(100-loadPercent,0)+"% do tempo sem produzir ar",tone:result.unloadCost>0&&control==="loadUnload"?"risk":undefined}]}/>
           <div className="v2-dx-visual-block"><b>Tempo do compressor</b><div className="v2-dx-load-track" role="img" aria-label={"Em carga "+number(loadPercent,0)+"%, em alívio "+number(100-loadPercent,0)+"%"}><i style={{width:loadPercent+"%"}}/><em style={{width:(100-loadPercent)+"%"}}/></div><div className="v2-dx-legend"><span><i/> Em carga {number(loadPercent,0)}%</span><span><i/> Em alívio {number(100-loadPercent,0)}%</span></div></div>
           {energyBars}
@@ -234,16 +234,16 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
         </div>}
         {active==="pressure"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Gauge/><div><span>RELATÓRIO 03</span><h3>Pressão, queda e oportunidade</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Saída do reservatório" suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Ponto crítico de uso" suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Setpoint alvo" suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Pressão no compressor" hint="Manômetro do reservatório ou painel do compressor." suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Pressão na máquina mais distante" hint="Manômetro da máquina que mais sente falta de ar." suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Pressão que as máquinas precisam" hint="Manual da máquina mais exigente. Costuma ser 6 bar." suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
           <div className="v2-dx-pressure-line"><div><Gauge/><span>Origem</span><b>{number(supplyBar,1)} bar</b></div><i><em style={{width:clamp(100-result.pressureDropPercent,5,100)+"%"}}/></i><div><ArrowDownRight/><span>Ponto de uso</span><b>{number(pointBar,1)} bar</b></div></div>
-          <StatTiles tiles={[{label:"Queda na rede",value:number(result.pressureDropPercent,1)+"%",note:number(result.pressureDrop,2)+" bar · referência até 10%",tone:result.pressureDropPercent>=NETWORK_DROP_LIMIT_PERCENT?"risk":undefined},{label:"Redução de setpoint",value:number(result.setpointReduction,2)+" bar",note:number(result.pressureSavingPercent,1)+"% de energia"},{label:"Economia possível",value:money(result.pressureSaving),note:"por ano"}]}/>
+          <StatTiles tiles={[{label:"Queda na rede",value:number(result.pressureDropPercent,1)+"%",note:number(result.pressureDrop,2)+" bar · referência até 10%",tone:result.pressureDropPercent>=NETWORK_DROP_LIMIT_PERCENT?"risk":undefined},{label:"Pressão que pode baixar",value:number(result.setpointReduction,2)+" bar",note:number(result.pressureSavingPercent,1)+"% de energia"},{label:"Economia possível",value:money(result.pressureSaving),note:"por ano"}]}/>
           <Opportunities items={opportunities} report="pressure"/>
         </div>}
         {active==="quality"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Droplets/><div><span>RELATÓRIO 04</span><h3>Qualidade do ar e ponto de orvalho</h3></div></div>
-          <div className="v2-dx-inputs"><Input label="PDP medido" suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="PDP requerido pelo processo" suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
-          <div className="v2-dx-visual-block"><b>Ponto de orvalho sob pressão (PDP)</b><div className="v2-dx-pdp-track"><span>−40 °C</span><div className="v2-dx-pdp-axis"><i style={{left:clamp((pdpMeasured+40)/80*100,0,100)+"%"}} title={"Medido: "+number(pdpMeasured,0)+" °C"}/><em style={{left:clamp((pdpRequired+40)/80*100,0,100)+"%"}} title={"Requerido: "+number(pdpRequired,0)+" °C"}/></div><span>+40 °C</span></div><div className="v2-dx-legend"><span><i/> Medido {number(pdpMeasured,0)} °C</span><span><i/> Requerido {number(pdpRequired,0)} °C</span></div></div>
-          <div className="v2-dx-quality-grid"><article><Droplets/><span>Água</span><b>{result.pdpGap>0?"Investigar":"Dentro do informado"}</b><p>PDP, drenagem e secador.</p></article><article><ShieldCheck/><span>Óleo</span><b>Exige medição</b><p>Não se presume pelo tipo de compressor.</p></article><article><Activity/><span>Partículas</span><b>Exige medição</b><p>Filtros, rede e ponto de coleta.</p></article></div>
+          <div className="v2-dx-inputs"><Input label="Ponto de orvalho medido" hint="Temperatura em que a umidade vira água. Veja no painel do secador." suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="Ponto de orvalho que o processo exige" hint="Secador comum: +3 °C. Processos sensíveis: −40 °C." suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
+          <div className="v2-dx-visual-block"><b>Ponto de orvalho (umidade do ar)</b><div className="v2-dx-pdp-track"><span>−40 °C</span><div className="v2-dx-pdp-axis"><i style={{left:clamp((pdpMeasured+40)/80*100,0,100)+"%"}} title={"Medido: "+number(pdpMeasured,0)+" °C"}/><em style={{left:clamp((pdpRequired+40)/80*100,0,100)+"%"}} title={"Requerido: "+number(pdpRequired,0)+" °C"}/></div><span>+40 °C</span></div><div className="v2-dx-legend"><span><i/> Medido {number(pdpMeasured,0)} °C</span><span><i/> Requerido {number(pdpRequired,0)} °C</span></div></div>
+          <div className="v2-dx-quality-grid"><article><Droplets/><span>Água</span><b>{result.pdpGap>0?"Investigar":"Dentro do informado"}</b><p>Umidade, drenos e secador.</p></article><article><ShieldCheck/><span>Óleo</span><b>Exige medição</b><p>Não se presume pelo tipo de compressor.</p></article><article><Activity/><span>Partículas</span><b>Exige medição</b><p>Filtros, rede e ponto de coleta.</p></article></div>
           <Opportunities items={opportunities} report="quality"/>
           <div className="v2-dx-measure-list"><span>Medições recomendadas para este setor</span>{industry.measurements.map(item=><b key={item}><ClipboardCheck size={15}/>{item}</b>)}</div>
         </div>}
@@ -274,7 +274,7 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
       </div>
 
       <div className="v2-dx-print-detail">
-        <header className="pl-print-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><div><b>Pré-laudo TecAr 360</b><span>{industry.label} · gerado em tecarcompressores.com.br</span></div><img className="pl-print-mark" src="/assets/tecar/logo-ta-v1.svg" alt=""/></header>
+        <header className="pl-print-brand"><img src="/assets/tecar/logo-cropped.png" alt="TecAr Compressores"/><div><b>Pré-laudo TecAr 360</b><span>{industry.label} · gerado em tecarcompressores.com.br</span></div></header>
         <section><h4>Visão geral</h4>{overviewCharts}</section>
         <section><h4>1 · Vazão e vazamentos</h4>
           <SimpleBars title="Ar disponível × ar usado" subtitle="cfm" rows={[{label:"Capacidade do compressor",value:model.flowCfm,display:number(model.flowCfm,0)+" cfm"},{label:"Demanda da planta",value:demandCfm,display:number(demandCfm,0)+" cfm",accent:demandCfm>model.flowCfm},{label:"Perdido em vazamentos",value:result.leakCfm,display:number(result.leakCfm,1)+" cfm",accent:true}]}/>
@@ -287,8 +287,8 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
           <Opportunities items={opportunities} report="energy"/>
         </section>
         <section><h4>3 · Pressão</h4>
-          <SimpleBars title="Pressão na rede" subtitle="bar" rows={[{label:"Saída do reservatório",value:supplyBar,display:number(supplyBar,1)+" bar",accent:supplyBar>targetBar},{label:"Ponto crítico de uso",value:pointBar,display:number(pointBar,1)+" bar"},{label:"Necessário (alvo)",value:targetBar,display:number(targetBar,1)+" bar"}]}/>
-          <DataTable rows={[["Queda na rede",number(result.pressureDropPercent,1)+"%"],["Economia possível no setpoint",money(result.pressureSaving)+"/ano"]]}/>
+          <SimpleBars title="Pressão na rede" subtitle="bar" rows={[{label:"No compressor",value:supplyBar,display:number(supplyBar,1)+" bar",accent:supplyBar>targetBar},{label:"Na máquina mais distante",value:pointBar,display:number(pointBar,1)+" bar"},{label:"Necessária nas máquinas",value:targetBar,display:number(targetBar,1)+" bar"}]}/>
+          <DataTable rows={[["Queda na rede",number(result.pressureDropPercent,1)+"%"],["Economia baixando a pressão",money(result.pressureSaving)+"/ano"]]}/>
           <Opportunities items={opportunities} report="pressure"/>
         </section>
         <section><h4>4 · Qualidade do ar</h4>

@@ -49,7 +49,7 @@ export function OpportunityBars({ items }: { items: Opportunity[] }) {
 const SHORT_NAMES: Record<string, string> = {
   unload: "Eliminar tempo em alívio",
   leaks: "Programa de vazamentos",
-  setpoint: "Reduzir setpoint",
+  setpoint: "Baixar a pressão",
 };
 
 export function BeforeAfter({ today, after }: { today: number; after: number }) {
