@@ -5,7 +5,7 @@ import { EdCards, EdHead, EdSection, EdSplit, EdSteps } from "@/components/edito
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/manutencao")({head:()=>pageMeta("/manutencao","Manutenção de Compressores | TecAr","Assistência técnica multimarcas, manutenção preventiva, corretiva, diagnóstico e suporte NR13 para sistemas de ar comprimido.","/assets/v2/tecar-service.png"),component:Page});
 function Page(){return <PageFrame>
-<PageHero kicker="MANUTENÇÃO" title="Menos improviso. Mais previsibilidade." text="Assistência técnica multimarcas, manutenção preventiva, corretiva e ferramentas de diagnóstico para reduzir tempo de parada e aumentar a assertividade do atendimento." image="/assets/unique/generated/maintenance-hero.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Solicitar atendimento</a></PageHero>
+<PageHero kicker="MANUTENÇÃO" title="Menos improviso. Mais previsibilidade." text="Assistência técnica multimarcas, manutenção preventiva, corretiva e ferramentas de diagnóstico para reduzir tempo de parada e aumentar a assertividade do atendimento." image="/assets/unique/generated/maintenance-hero-v2.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Solicitar atendimento</a></PageHero>
 <EdSection>
  <EdHead side title="Assistência técnica multimarcas" text="Planejamento, comunicação com o cliente e diagnóstico formam a base do atendimento. A manutenção deve preservar disponibilidade, não apenas reagir quando o equipamento para."/>
  <EdCards items={[

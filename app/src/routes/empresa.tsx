@@ -33,7 +33,7 @@ const UNITS=[
 ];
 
 function Page(){return <PageFrame>
-<PageHero kicker="A TECAR" title="Experiência técnica construída desde 1999." text="A TecAr atua com soluções para ar comprimido, reunindo equipamentos, assistência, engenharia, locação e tecnologia para atender a indústria." image="/assets/unique/generated/company-hero.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Falar com a TecAr</a></PageHero>
+<PageHero kicker="A TECAR" title="Experiência técnica construída desde 1999." text="A TecAr atua com soluções para ar comprimido, reunindo equipamentos, assistência, engenharia, locação e tecnologia para atender a indústria." image="/assets/unique/generated/company-hero-v2.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Falar com a TecAr</a></PageHero>
 
 <section className="ab-section ab-intro"><div className="v2-container">
  <div className="ab-intro-copy"><h2>Compressores e competência.</h2><p>A empresa é assistência técnica e revendedora autorizada Ingersoll Rand desde 1999. A equipe técnica recebe capacitação e atualização para acompanhar equipamentos, ferramentas de diagnóstico e novas tecnologias.</p></div>

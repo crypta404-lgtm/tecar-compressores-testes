@@ -5,7 +5,7 @@ import { EdCards, EdHead, EdSection, EdSteps } from "@/components/editorial";
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/locacao")({head:()=>pageMeta("/locacao","Locação de Compressores | TecAr","Locação emergencial e contratos de longo prazo para compressores, secadores e reservatórios de ar comprimido.","/assets/v2/rental.png"),component:Page});
 function Page(){return <PageFrame>
-<PageHero kicker="LOCAÇÃO" title="Geração de ar com flexibilidade operacional." text="A TecAr oferece locação de compressores, secadores e reservatórios para necessidades emergenciais e contratos de longo prazo, inclusive no modelo de venda de ar." image="/assets/unique/generated/rental-hero.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Consultar disponibilidade</a></PageHero>
+<PageHero kicker="LOCAÇÃO" title="Geração de ar com flexibilidade operacional." text="A TecAr oferece locação de compressores, secadores e reservatórios para necessidades emergenciais e contratos de longo prazo, inclusive no modelo de venda de ar." image="/assets/unique/generated/rental-hero-v2.webp"><a href="https://wa.me/5541996441330?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20TecAr." target="_blank" rel="noopener noreferrer" className="v2-primary">Consultar disponibilidade</a></PageHero>
 <EdSection>
  <EdHead title="Quando a locação faz sentido"/>
  <EdCards items={[

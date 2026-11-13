@@ -95,7 +95,7 @@ export function ProjectToPlant() {
         </div>
       </div>
       <figure className="ptp-photo">
-        <img src="/assets/unique/generated/compressor-hero.webp" alt="Casa de máquinas com compressores, reservatório, filtros e rede em alumínio azul" loading="lazy" />
+        <img src="/assets/unique/generated/compressor-hero-v2.webp" alt="Casa de máquinas com compressores, reservatório, filtros e rede em alumínio azul" loading="lazy" />
         {PINS.map((p) => <span key={p.label} style={{ left: `${p.x}%`, top: `${p.y}%` }}>{p.label}</span>)}
         <figcaption>Imagem ilustrativa</figcaption>
       </figure>

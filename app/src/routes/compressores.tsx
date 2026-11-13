@@ -55,7 +55,7 @@ const groups:ProductGroup[]=[
 ];
 
 function Page(){return <PageFrame>
-  <PageHero kicker="COMPRESSORES" title="Escolha primeiro a família. Depois o equipamento." text="Clique no tipo de compressor e veja somente as opções daquela tecnologia." image="/assets/unique/generated/compressor-hero.webp"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
+  <PageHero kicker="COMPRESSORES" title="Escolha primeiro a família. Depois o equipamento." text="Clique no tipo de compressor e veja somente as opções daquela tecnologia." image="/assets/unique/generated/compressor-hero-v2.webp"><Link to="/diagnostico" className="v2-primary">Precisa dimensionar?</Link></PageHero>
   <section className="v2-section v2-product-section"><div className="v2-container"><ProductExplorer groups={groups} ctaLabel="Consultar este equipamento"/></div></section>
   <ContactBand/>
 </PageFrame>}

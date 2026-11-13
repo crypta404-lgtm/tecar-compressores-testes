@@ -59,7 +59,7 @@ function SourceLinks({links}:{links:Array<{label:string;url:string}>}){
 export function DiagnosticHero(){
   return <section className="v2-dx-hero v2-dx-hero-glass">
     <div className="v2-dx-hero-media">
-      <img src="/assets/unique/generated/diagnostic-hero.webp" alt="Imagem ilustrativa de instrumentos de diagnóstico industrial, criada por IA"/><span className="tc-image-credit">Imagem ilustrativa · IA</span>
+      <img src="/assets/unique/generated/diagnostic-hero-v2.webp" alt="Imagem ilustrativa de instrumentos de diagnóstico industrial, criada por IA"/><span className="tc-image-credit">Imagem ilustrativa · IA</span>
     </div>
     <div className="v2-container v2-dx-hero-grid">
     <div className="v2-dx-hero-copy">

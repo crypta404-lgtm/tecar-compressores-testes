@@ -9,9 +9,9 @@ export const Route=createFileRoute("/servicos")({
 });
 
 const items=[
- {to:"/manutencao",title:"Manutenção",image:"/assets/unique/generated/service-maintenance.webp",short:"Manter o equipamento disponível.",detail:"Preventivas, corretivas, diagnóstico técnico e assistência para compressores e periféricos. Ideal quando existe falha, alarme, queda de desempenho ou necessidade de plano preventivo."},
+ {to:"/manutencao",title:"Manutenção",image:"/assets/unique/generated/service-maintenance-v2.webp",short:"Manter o equipamento disponível.",detail:"Preventivas, corretivas, diagnóstico técnico e assistência para compressores e periféricos. Ideal quando existe falha, alarme, queda de desempenho ou necessidade de plano preventivo."},
  {to:"/engenharia",title:"Engenharia",image:"/assets/unique/generated/service-engineering.webp",short:"Melhorar o sistema como um todo.",detail:"Medições, eficiência energética, redes, pressão, vazão, perdas e dimensionamento. Para quem quer corrigir gargalos ou planejar expansão com dados."},
- {to:"/locacao",title:"Locação",image:"/assets/unique/generated/service-rental.webp",short:"Ar comprimido quando a operação não pode esperar.",detail:"Soluções temporárias para contingência, obra, pico de demanda ou contrato. A configuração é definida conforme vazão, pressão e criticidade da planta."},
+ {to:"/locacao",title:"Locação",image:"/assets/unique/generated/service-rental-v2.webp",short:"Ar comprimido quando a operação não pode esperar.",detail:"Soluções temporárias para contingência, obra, pico de demanda ou contrato. A configuração é definida conforme vazão, pressão e criticidade da planta."},
  {to:"/tecar-connect",title:"TecAr Connect",image:"/assets/unique/generated/service-monitoring.webp",short:"Mais visibilidade sobre a operação.",detail:"Monitoramento remoto para acompanhar condição e comportamento do equipamento e facilitar a identificação de tendências antes que virem parada."},
 ] as const;
 
