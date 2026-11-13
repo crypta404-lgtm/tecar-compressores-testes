@@ -24,7 +24,7 @@ const AWARDS:Array<{year:string;items:Array<{title:string;note?:string}>}>=[
 
 // Add new awards to AWARDS; the counters and the timeline follow automatically.
 const AWARD_ITEMS=AWARDS.flatMap((group)=>group.items);
-const AWARD_INDEX=new Map(AWARD_ITEMS.map((item,index)=>[item,index]));
+const AWARD_TILES=AWARDS.flatMap((group)=>group.items.map((item)=>({year:group.year,...item})));
 const AWARD_COUNT=AWARD_ITEMS.length;
 const AWARD_YEARS=AWARDS.filter((group)=>/^\d{4}$/.test(group.year)).length;
 
@@ -64,7 +64,7 @@ function Page(){return <PageFrame>
  <div className="ab-stories">{STORIES.map(({icon:Icon,title,text})=><article key={title}><span className="ab-icon"><Icon aria-hidden="true" size={22}/></span><h3>{title}</h3><p>{text}</p></article>)}</div>
 </div></section>
 
-<section className="ab-section ab-awards ab-awards-v3" id="premios" aria-labelledby="premios-title"><div className="v2-container">
+<section className="ab-section ab-awards ab-awards-wall" id="premios" aria-labelledby="premios-title"><div className="v2-container">
  <div className="aw-head">
   <div><span className="v2-kicker">RECONHECIMENTO</span><h2 id="premios-title">Competência reconhecida. Compromisso renovado.</h2><p>Os reconhecimentos recebidos pela TecAr refletem o trabalho da equipe em vendas, capacitação e pós-venda. Para nossos clientes, representam uma trajetória de dedicação ao atendimento e à construção de soluções de valor.</p></div>
   <dl className="aw-stats">
@@ -72,12 +72,20 @@ function Page(){return <PageFrame>
    <div><dd><CountUp value={AWARD_YEARS}/></dd><dt>anos com premiação</dt></div>
   </dl>
  </div>
- <div className="aw-body">
-  <figure className="aw-photo"><div className="aw-photo-frame"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/></div><figcaption>Reconhecimentos Ingersoll Rand que fazem parte da história da TecAr.</figcaption></figure>
-  <div className="aw-timeline"><span className="aw-rail" aria-hidden="true"/>
-   <ol>{AWARDS.map((group)=><li key={group.year} className="aw-year"><span className="aw-year-label">{group.year}</span><ul>{group.items.map((item)=><li key={item.title+(item.note??"")} className="aw-card" style={{"--d":AWARD_INDEX.get(item)??0} as CSSProperties}><span className="aw-card-icon" aria-hidden="true"><Award size={20}/></span><div><b>{item.title}</b>{item.note&&<small>{item.note}</small>}</div></li>)}</ul></li>)}</ol>
-  </div>
- </div>
+ <ul className="aw-wall">
+  <li className="aw-photo"><img src="/assets/community/premios-tecar-v2.webp" width="645" height="374" loading="lazy" alt="Troféus e reconhecimentos da TecAr expostos junto às marcas TecAr e Ingersoll Rand"/></li>
+  {AWARD_TILES.map((tile,index)=><li key={tile.year+tile.title+(tile.note??"")} className="aw-tile" style={{"--d":index} as CSSProperties}>
+   <span className="aw-tile-icon" aria-hidden="true"><Award size={22}/></span>
+   <span className="aw-tile-year">{tile.year}</span>
+   <b>{tile.title}</b>
+   {tile.note&&<small>{tile.note}</small>}
+  </li>)}
+  <li className="aw-tile aw-tile-brand" style={{"--d":AWARD_TILES.length} as CSSProperties}>
+   <span className="aw-tile-icon" aria-hidden="true"><BadgeCheck size={22}/></span>
+   <span className="aw-tile-year">Desde 1999</span>
+   <b>Assistência e revenda autorizada Ingersoll Rand</b>
+  </li>
+ </ul>
 </div></section>
 
 <section className="ab-section ab-pillars"><div className="v2-container">
