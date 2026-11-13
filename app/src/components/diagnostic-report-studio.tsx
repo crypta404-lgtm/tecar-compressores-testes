@@ -2,7 +2,7 @@ import {
   Activity, AirVent, ArrowDownRight, Bolt, ClipboardCheck, Copy, Droplets,
   Calculator, Factory, FileText, Gauge, LayoutDashboard, PiggyBank, Printer, ShieldCheck, ThermometerSun, Wind,
 } from "lucide-react";
-import { useMemo, useState, type ComponentType, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { COPEL_A4_TARIFFS, TECH_SOURCES } from "@/lib/diagnostic-data";
 import { PRINT_WATERMARK } from "@/lib/print-watermark";
 import { BeforeAfter, CostBreakdown, DataTable, OpportunityBars, SimpleBars, SpecificPowerMeter, StatTiles } from "@/components/prelaudo-charts";
@@ -36,15 +36,21 @@ const REPORTS:Array<{id:TabId;label:string;short:string;icon:ComponentType<{size
 
 const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
 
-function Input({label,hint,suffix,value,min,max,step=1,onChange}:{label:string;hint?:string;suffix?:string;value:number;min?:number;max?:number;step?:number;onChange:(value:number)=>void}){
+function Input({label,suffix,value,min,max,step=1,onChange}:{label:string;suffix?:string;value:number;min?:number;max?:number;step?:number;onChange:(value:number)=>void}){
+  // The field keeps the typed text: clearing it leaves it empty (no forced "0")
+  // and a leading zero is dropped ("05" -> "5"). The number is only sent up when valid.
+  const [text,setText]=useState(String(value));
+  useEffect(()=>{ setText(current=>Number(current)===value&&current!==""?current:String(value)); },[value]);
   const handleChange=(raw:string)=>{
     if(raw.length>6 || /[eE+]/.test(raw)) return;
-    if(raw===""){ onChange(0); return; }
-    const next=Number(raw);
+    const cleaned=raw.replace(/^(-?)0+(?=\d)/,"$1");
+    setText(cleaned);
+    if(cleaned===""||cleaned==="-") return;
+    const next=Number(cleaned);
     if(!Number.isFinite(next)) return;
     onChange(clamp(next,min??-999999,max??999999));
   };
-  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" value={value} min={min} max={max} step={step} maxLength={6} onChange={e=>handleChange(e.target.value)}/>{suffix&&<b>{suffix}</b>}</div>{hint&&<small className="v2-dx-hint">{hint}</small>}</label>
+  return <label className="v2-dx-field"><span>{label}</span><div><input type="number" inputMode="decimal" value={text} min={min} max={max} step={step} onChange={e=>handleChange(e.target.value)} onBlur={()=>{ if(text===""||text==="-") setText(String(value)); }}/>{suffix&&<b>{suffix}</b>}</div></label>
 }
 
 function Meter({label,value,max,display,tone="default"}:{label:string;value:number;max:number;display:string;tone?:"default"|"risk"|"good"}){
@@ -118,16 +124,32 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
   const [nameplateKw,setNameplateKw]=useState(26);
   const [tariffId,setTariffId]=useState("a4-offpeak");
   const [hours,setHours]=useState(4000);
-  const [loadPercent,setLoadPercent]=useState(72);
+  const [loadPercent,setLoadPercent]=useState(81);
   const [demandCfm,setDemandCfm]=useState(92);
   const [leakInputPercent,setLeakInputPercent]=useState(10);
   const [supplyBar,setSupplyBar]=useState(7.5);
   const [pointBar,setPointBar]=useState(6.9);
-  const [targetBar,setTargetBar]=useState(7);
+  const [targetBar,setTargetBar]=useState(6.5);
   const [pdpMeasured,setPdpMeasured]=useState(8);
   const [pdpRequired,setPdpRequired]=useState(3);
   const [copied,setCopied]=useState(false);
   const model=useMemo(()=>useNameplate?customProfile(nameplateFlow,flowUnit,nameplateKw,control):estimatedProfile(powerKw,pressureClass,control),[control,flowUnit,nameplateFlow,nameplateKw,powerKw,pressureClass,useNameplate]);
+  // Picking (or changing) the compressor pre-fills the plant with typical values for it;
+  // the visitor then only corrects what they know. Skipped on first render (defaults).
+  const firstFill=useRef(true);
+  useEffect(()=>{
+    if(firstFill.current){ firstFill.current=false; return; }
+    const demand=Math.round(model.flowCfm*0.75);
+    setDemandCfm(demand);
+    setLoadPercent(75);
+    const top=useNameplate?8.5:pressureClass==="13"?13:pressureClass==="10"?10:8.5;
+    const supply=Math.round((top-1)*10)/10;
+    setSupplyBar(supply);
+    setPointBar(Math.round((supply-0.6)*10)/10);
+    setTargetBar(Math.round((supply-1)*10)/10);
+  },[model.flowCfm,control,pressureClass,useNameplate]);
+  // The share of time producing air follows the plant demand (demand ÷ capacity).
+  const changeDemand=(value:number)=>{ setDemandCfm(value); if(model.flowCfm>0) setLoadPercent(clamp(Math.round(value/model.flowCfm*100),0,100)); };
   const tariff=COPEL_A4_TARIFFS.find(item=>item.id===tariffId)??COPEL_A4_TARIFFS[0];
   const industry=INDUSTRIES[industryId];
 
@@ -200,9 +222,9 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
         <label className="v2-dx-check"><input type="checkbox" checked={useNameplate} onChange={e=>setUseNameplate(e.target.checked)}/><span>Tenho os dados da placa do compressor</span></label>
       </div>
       {useNameplate&&<div className="v2-dx-inputs v2-dx-inputs-three">
-        <Input label="Ar que o compressor produz" hint="Na placa aparece como vazão ou FAD." suffix={flowUnit==="cfm"?"cfm":"m³/min"} value={nameplateFlow} min={0} step={flowUnit==="cfm"?1:.1} onChange={setNameplateFlow}/>
+        <Input label="Ar que o compressor produz" suffix={flowUnit==="cfm"?"cfm":"m³/min"} value={nameplateFlow} min={0} step={flowUnit==="cfm"?1:.1} onChange={setNameplateFlow}/>
         <label className="v2-dx-field"><span>Unidade</span><div><select value={flowUnit} onChange={e=>setFlowUnit(e.target.value as FlowUnit)}><option value="cfm">cfm</option><option value="m3min">m³/min</option></select></div></label>
-        <Input label="Potência do compressor" hint="Na placa, em kW." suffix="kW" value={nameplateKw} min={0} step={.1} onChange={setNameplateKw}/>
+        <Input label="Potência do compressor" suffix="kW" value={nameplateKw} min={0} step={.1} onChange={setNameplateKw}/>
       </div>}
       <div className="v2-dx-compressor-summary"><span>{model.basis}</span><b>{number(model.flowCfm,0)} cfm</b><b>{number(model.packageKw,1)} kW em carga</b><b>{number(model.noLoadKw,1)} kW em alívio</b><b>{number(model.specificKw100Cfm,1)} kW/100 cfm</b></div>
     </div>
@@ -218,14 +240,14 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
         </div>}
         {active==="flow"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Wind/><div><span>RELATÓRIO 01</span><h3>Vazão, demanda e vazamentos</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Ar que a fábrica consome" hint="Se não souber, deixe o valor sugerido." suffix="cfm" value={demandCfm} min={0} onChange={setDemandCfm}/><Input label="Ar perdido em vazamentos" hint="Sem manutenção da rede, costuma passar de 20%." suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas por ano com a rede ligada" hint="2 turnos, 5 dias por semana ≈ 4.000 h." suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Ar que a fábrica consome" suffix="cfm" value={demandCfm} min={0} onChange={changeDemand}/><Input label="Ar perdido em vazamentos" suffix="%" value={leakInputPercent} min={0} max={100} onChange={setLeakInputPercent}/><Input label="Horas por ano com a rede ligada" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/></div>
           <StatTiles tiles={[{label:"Capacidade de referência",value:number(model.flowCfm,0)+" cfm"},{label:"Reserva nominal",value:number(result.reserveCfm,0)+" cfm",note:number(result.reservePercent,0)+"% da capacidade",tone:result.reserveCfm<0?"risk":undefined},{label:"Ar perdido em vazamentos",value:number(result.leakCfm,1)+" cfm",note:number(result.leakPercent,0)+"% da demanda",tone:result.leakPercent>=10?"risk":undefined},{label:"Custo dos vazamentos",value:money(result.leakCost),note:"por ano"}]}/>
           <div className="v2-dx-chart"><Meter label="Capacidade de referência" value={model.flowCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(model.flowCfm,0)+" cfm"} tone="good"/><Meter label="Demanda total informada" value={demandCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(demandCfm,0)+" cfm"} tone={demandCfm>model.flowCfm?"risk":"default"}/><Meter label="Parte perdida em vazamentos" value={result.leakCfm} max={Math.max(model.flowCfm,demandCfm)} display={number(result.leakCfm,1)+" cfm"} tone="risk"/></div>
           <Opportunities items={opportunities} report="flow"/>
         </div>}
         {active==="energy"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Bolt/><div><span>RELATÓRIO 02</span><h3>Uso e custo de energia</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas por ano com o compressor ligado" hint="2 turnos, 5 dias por semana ≈ 4.000 h." suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo produzindo ar" hint="No painel: horas em carga ÷ horas totais." suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Horas por ano com o compressor ligado" suffix="h" value={hours} min={0} max={8760} onChange={v=>setHours(clamp(v,0,8760))}/><Input label="Tempo produzindo ar" suffix="%" value={loadPercent} min={0} max={100} onChange={v=>setLoadPercent(clamp(v,0,100))}/><div className="v2-dx-readonly"><span>Tarifa aplicada</span><b>R$ {number(tariff.value,5)}/kWh</b></div></div>
           <StatTiles tiles={[{label:"Potência média",value:number(result.averageKw,1)+" kW"},{label:"Energia anual",value:number(result.annualKwh/1000,1)+" MWh"},{label:"Custo anual",value:money(result.annualCost)},{label:"Gasto em alívio",value:money(result.unloadCost),note:number(100-loadPercent,0)+"% do tempo sem produzir ar",tone:result.unloadCost>0&&control==="loadUnload"?"risk":undefined}]}/>
           <div className="v2-dx-visual-block"><b>Tempo do compressor</b><div className="v2-dx-load-track" role="img" aria-label={"Em carga "+number(loadPercent,0)+"%, em alívio "+number(100-loadPercent,0)+"%"}><i style={{width:loadPercent+"%"}}/><em style={{width:(100-loadPercent)+"%"}}/></div><div className="v2-dx-legend"><span><i/> Em carga {number(loadPercent,0)}%</span><span><i/> Em alívio {number(100-loadPercent,0)}%</span></div></div>
           {energyBars}
@@ -234,14 +256,14 @@ export function DiagnosticReportStudio({aside}:{aside?:ReactNode}={}){
         </div>}
         {active==="pressure"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Gauge/><div><span>RELATÓRIO 03</span><h3>Pressão, queda e oportunidade</h3></div></div>
-          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Pressão no compressor" hint="Manômetro do reservatório ou painel do compressor." suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Pressão na máquina mais distante" hint="Manômetro da máquina que mais sente falta de ar." suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Pressão que as máquinas precisam" hint="Manual da máquina mais exigente. Costuma ser 6 bar." suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
+          <div className="v2-dx-inputs v2-dx-inputs-three"><Input label="Pressão no compressor" suffix="bar" value={supplyBar} min={0} max={1000} step={.1} onChange={setSupplyBar}/><Input label="Pressão na máquina mais distante" suffix="bar" value={pointBar} min={0} max={1000} step={.1} onChange={setPointBar}/><Input label="Pressão que as máquinas precisam" suffix="bar" value={targetBar} min={0} max={1000} step={.1} onChange={setTargetBar}/></div>
           <div className="v2-dx-pressure-line"><div><Gauge/><span>Origem</span><b>{number(supplyBar,1)} bar</b></div><i><em style={{width:clamp(100-result.pressureDropPercent,5,100)+"%"}}/></i><div><ArrowDownRight/><span>Ponto de uso</span><b>{number(pointBar,1)} bar</b></div></div>
           <StatTiles tiles={[{label:"Queda na rede",value:number(result.pressureDropPercent,1)+"%",note:number(result.pressureDrop,2)+" bar · referência até 10%",tone:result.pressureDropPercent>=NETWORK_DROP_LIMIT_PERCENT?"risk":undefined},{label:"Pressão que pode baixar",value:number(result.setpointReduction,2)+" bar",note:number(result.pressureSavingPercent,1)+"% de energia"},{label:"Economia possível",value:money(result.pressureSaving),note:"por ano"}]}/>
           <Opportunities items={opportunities} report="pressure"/>
         </div>}
         {active==="quality"&&<div className="v2-dx-report-panel">
           <div className="v2-dx-report-title"><Droplets/><div><span>RELATÓRIO 04</span><h3>Qualidade do ar e ponto de orvalho</h3></div></div>
-          <div className="v2-dx-inputs"><Input label="Ponto de orvalho medido" hint="Temperatura em que a umidade vira água. Veja no painel do secador." suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="Ponto de orvalho que o processo exige" hint="Secador comum: +3 °C. Processos sensíveis: −40 °C." suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
+          <div className="v2-dx-inputs"><Input label="Ponto de orvalho medido" suffix="°C" value={pdpMeasured} min={-200} max={200} onChange={setPdpMeasured}/><Input label="Ponto de orvalho que o processo exige" suffix="°C" value={pdpRequired} min={-200} max={200} onChange={setPdpRequired}/></div>
           <div className="v2-dx-visual-block"><b>Ponto de orvalho (umidade do ar)</b><div className="v2-dx-pdp-track"><span>−40 °C</span><div className="v2-dx-pdp-axis"><i style={{left:clamp((pdpMeasured+40)/80*100,0,100)+"%"}} title={"Medido: "+number(pdpMeasured,0)+" °C"}/><em style={{left:clamp((pdpRequired+40)/80*100,0,100)+"%"}} title={"Requerido: "+number(pdpRequired,0)+" °C"}/></div><span>+40 °C</span></div><div className="v2-dx-legend"><span><i/> Medido {number(pdpMeasured,0)} °C</span><span><i/> Requerido {number(pdpRequired,0)} °C</span></div></div>
           <div className="v2-dx-quality-grid"><article><Droplets/><span>Água</span><b>{result.pdpGap>0?"Investigar":"Dentro do informado"}</b><p>Umidade, drenos e secador.</p></article><article><ShieldCheck/><span>Óleo</span><b>Exige medição</b><p>Não se presume pelo tipo de compressor.</p></article><article><Activity/><span>Partículas</span><b>Exige medição</b><p>Filtros, rede e ponto de coleta.</p></article></div>
           <Opportunities items={opportunities} report="quality"/>

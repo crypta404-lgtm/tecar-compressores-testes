@@ -64,7 +64,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
   const leakCost = leakPower * hours * tariff;
   const pressureDrop = Math.max(0, supplyBar - pointBar);
   const pressureDropPercent = supplyBar > 0 ? (pressureDrop / supplyBar) * 100 : 0;
-  const setpointReduction = Math.max(0, supplyBar - targetBar);
+  const setpointReduction = Math.max(0, pointBar - targetBar);
   const pressureSavingPercent = setpointReduction / BAR_PER_PERCENT;
   const pressureSaving = ((averageKw * pressureSavingPercent) / 100) * hours * tariff;
   const pdpGap = pdpMeasured - pdpRequired;
@@ -84,7 +84,7 @@ export function computePrelaudo(input: PrelaudoInputs) {
     ],
     pressure: [
       `Queda na rede = ${number(supplyBar, 1)} bar − ${number(pointBar, 1)} bar = ${number(pressureDrop, 2)} bar (${number(pressureDropPercent, 1)}% da origem)`,
-      `Pressão que pode baixar = ${number(supplyBar, 1)} bar − ${number(targetBar, 1)} bar = ${number(setpointReduction, 2)} bar`,
+      `Pressão que pode baixar = ${number(pointBar, 1)} bar (na máquina mais distante) − ${number(targetBar, 1)} bar (necessária) = ${number(setpointReduction, 2)} bar`,
       `Economia de energia = ${number(setpointReduction, 2)} bar ÷ ${number(BAR_PER_PERCENT, 3)} bar por 1% = ${number(pressureSavingPercent, 1)}%`,
       `Referência anual = ${number(averageKw, 2)} kW médio × ${number(pressureSavingPercent, 1)}% × ${number(hours, 0)} h × ${t} = ${money(pressureSaving)}`,
     ],

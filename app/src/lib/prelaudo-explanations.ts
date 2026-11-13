@@ -54,13 +54,13 @@ function alertWhy(item: Opportunity, result: PrelaudoResult, ctx: Context): stri
       ];
     case "setpoint":
       return [
-        `A rede está saindo com ${number(ctx.supplyBar, 1)} bar e o processo precisa de ${number(ctx.targetBar, 1)} bar: são ${number(result.setpointReduction, 2)} bar a mais do que o necessário.`,
+        `A máquina mais distante recebe ${number(ctx.pointBar, 1)} bar e precisa de ${number(ctx.targetBar, 1)} bar: são ${number(result.setpointReduction, 2)} bar a mais do que o necessário.`,
         "Comprimir mais alto exige mais energia: cerca de 1% a mais a cada 0,14 bar, ou perto de 7% por bar. Além disso, com pressão maior, os vazamentos e os usos sem regulador consomem mais ar (demanda artificial), e válvulas, mangueiras e vedações sofrem mais.",
         "Na prática, a pressão alta costuma ser um remédio para queda de pressão na rede ou para picos de consumo. Corrigir a causa (rede, reservatório, controle) permite baixar a pressão sem faltar ar na máquina mais distante.",
       ];
     case "network":
       return [
-        `Entre a saída do reservatório (${number(ctx.supplyBar, 1)} bar) e o ponto crítico (${number(ctx.pointBar, 1)} bar) a rede perde ${number(result.pressureDropPercent, 1)}% da pressão. A referência é ficar abaixo de ${NETWORK_DROP_LIMIT_PERCENT}%.`,
+        `Entre o compressor (${number(ctx.supplyBar, 1)} bar) e a máquina mais distante (${number(ctx.pointBar, 1)} bar) a rede perde ${number(result.pressureDropPercent, 1)}% da pressão. A referência é ficar abaixo de ${NETWORK_DROP_LIMIT_PERCENT}%.`,
         "Queda alta indica tubulação estreita para a vazão, filtros saturados, conexões restritivas ou rede sem anel. Cada bar perdido na rede precisa ser gerado a mais no compressor, e isso custa energia o ano todo.",
       ];
     case "capacity":
