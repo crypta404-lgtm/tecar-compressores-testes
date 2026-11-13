@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageFrame, PageHero, ContactBand } from "@/components/site-v2";
 import { Activity, CalendarCheck, Wrench } from "lucide-react";
-import { EdCards, EdHead, EdSection, EdSplit, EdSteps } from "@/components/editorial";
+import { EdCards, EdHead, EdSection, EdSplit } from "@/components/editorial";
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/manutencao")({head:()=>pageMeta("/manutencao","Manutenção de Compressores | TecAr","Assistência técnica multimarcas, manutenção preventiva, corretiva, diagnóstico e suporte NR13 para sistemas de ar comprimido.","/assets/v2/tecar-service.png"),component:Page});
 function Page(){return <PageFrame>
@@ -13,10 +13,6 @@ function Page(){return <PageFrame>
   {icon:Wrench,title:"Corretiva",text:"Diagnóstico técnico e intervenção para restabelecer a operação com clareza sobre a causa da falha."},
   {icon:Activity,title:"Diagnóstico",text:"Uso de ferramentas e medições para aumentar a precisão antes da substituição de componentes."},
  ]}/>
-</EdSection>
-<EdSection tone="paper">
- <EdHead side kicker="GESTÃO PREVENTIVA" title="O histórico precisa trabalhar a favor da manutenção." text="A TecAr organiza a programação e o acompanhamento das intervenções para antecipar necessidades e reduzir o risco de corretivas provocadas por falta de manutenção."/>
- <EdSteps steps={[{title:"Identificação do equipamento e histórico"},{title:"Planejamento da preventiva"},{title:"Execução e registro técnico"},{title:"Acompanhamento da próxima necessidade"}]}/>
 </EdSection>
 <EdSection><EdSplit image="/assets/unique/generated/pressure-vessel-inspection.webp" alt="Imagem ilustrativa de medição em vaso de pressão, criada por IA">
  <span className="v2-kicker">NR13</span><h2>Reservatórios e vasos de pressão exigem atenção técnica.</h2>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageFrame, PageHero, ContactBand } from "@/components/site-v2";
 import { CalendarRange, FileSignature, PiggyBank, Siren, Timer, Wind } from "lucide-react";
-import { EdCards, EdHead, EdSection, EdSteps } from "@/components/editorial";
+import { EdCards, EdHead, EdSection } from "@/components/editorial";
 import { pageMeta } from "@/lib/page-meta";
 export const Route=createFileRoute("/locacao")({head:()=>pageMeta("/locacao","Locação de Compressores | TecAr","Locação emergencial e contratos de longo prazo para compressores, secadores e reservatórios de ar comprimido.","/assets/v2/rental.png"),component:Page});
 function Page(){return <PageFrame>
@@ -13,10 +13,6 @@ function Page(){return <PageFrame>
   {icon:CalendarRange,title:"Longo prazo",text:"Contratos a partir de um ano para transformar parte do investimento em custo operacional previsível."},
   {icon:Wind,title:"Venda de ar",text:"Modelo em que a necessidade de geração é tratada como serviço, com foco na disponibilidade do sistema."},
  ]}/>
-</EdSection>
-<EdSection tone="paper">
- <EdHead side kicker="PROCESSO" title="Do levantamento à operação" text="A escolha depende de vazão, pressão, qualidade do ar, regime de trabalho, espaço disponível e criticidade do processo."/>
- <EdSteps steps={[{title:"Demanda"},{title:"Dimensionamento"},{title:"Instalação"},{title:"Operação"},{title:"Suporte"}]}/>
 </EdSection>
 <EdSection>
  <EdHead side title="Equipamentos disponíveis para locação" text="A disponibilidade varia conforme potência, pressão e configuração. Consulte a equipe para dimensionar o conjunto adequado."/>

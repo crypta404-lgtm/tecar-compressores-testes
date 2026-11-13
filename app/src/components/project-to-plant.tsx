@@ -35,12 +35,6 @@ const STAGES = [
   { title: "Em operação", text: "A casa de máquinas pronta, entregando o ar que o processo precisa, com o desempenho projetado." },
 ];
 
-const PINS = [
-  { label: "Compressores", x: 72, y: 46 },
-  { label: "Reservatório", x: 38, y: 34 },
-  { label: "Filtros", x: 49, y: 44 },
-  { label: "Rede de distribuição", x: 26, y: 12 },
-];
 
 function Box({ item }: { item: Item }) {
   const style = { left: `${item.x}%`, top: `${item.y}%`, width: `${item.w}%`, height: `${item.d}%`, "--h": item.h } as CSSProperties;
@@ -62,8 +56,15 @@ export function ProjectToPlant() {
     io.observe(el); return () => io.disconnect();
   }, []);
 
+  const [touched, setTouched] = useState(false);
   const current = STAGES[stage];
   return <div className="ptp" ref={root} data-stage={stage} data-drawn={drawn ? "true" : undefined}>
+    <div className="ptp-steps" role="group" aria-label="Etapas do projeto">
+      {STAGES.map((st, i) => <button key={st.title} type="button" className="ptp-step" aria-pressed={stage === i} data-next={!touched && i === 1 ? "true" : undefined} onClick={() => { setStage(i); setTouched(true); }}>
+        <i>{i + 1}</i><span>{st.title}</span>
+      </button>)}
+    </div>
+    <p className="ptp-step-text" aria-live="polite">{current.text}</p>
     <div className="ptp-stage">
       <div className="ptp-scene" aria-hidden="true">
         <div className="ptp-sheet">
@@ -96,17 +97,9 @@ export function ProjectToPlant() {
       </div>
       <figure className="ptp-photo">
         <img src="/assets/unique/generated/compressor-hero-v2.webp" alt="Casa de máquinas com compressores, reservatório, filtros e rede em alumínio azul" loading="lazy" />
-        {PINS.map((p) => <span key={p.label} style={{ left: `${p.x}%`, top: `${p.y}%` }}>{p.label}</span>)}
         <figcaption>Imagem ilustrativa</figcaption>
       </figure>
     </div>
 
-    <div className="ptp-controls">
-      <div className="ptp-copy" aria-live="polite"><span>{String(stage + 1).padStart(2, "0")} · {current.title}</span><p>{current.text}</p></div>
-      <div className="ptp-ruler">
-        <input type="range" min={0} max={3} step={1} value={stage} onChange={(e) => setStage(Number(e.target.value))} aria-label="Etapa do projeto" aria-valuetext={current.title} />
-        <ol>{STAGES.map((s, i) => <li key={s.title}><button type="button" aria-pressed={stage === i} onClick={() => setStage(i)}><i>{i + 1}</i>{s.title}</button></li>)}</ol>
-      </div>
-    </div>
   </div>;
 }
